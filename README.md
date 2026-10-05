@@ -1,6 +1,6 @@
 # Done is a claim
 
-**18 rules for coding agents, each one paid for by a real failure.**
+**18 rules and 3 skills for coding agents, each one paid for by a real failure.**
 
 Your agent says "done". Usually it is. Sometimes the tests never ran, the exit code belonged to `tail`, or the fix reached one call site out of four. These rules make an agent show its evidence before it says the word.
 
@@ -43,6 +43,25 @@ Already have an `AGENTS.md` or `CLAUDE.md`? Paste the rules under your own.
 
 **Never**
 18. Never run a destructive command to answer a question.
+
+## Skills
+
+Three skills for the moments the rules are hardest to follow:
+
+| Skill | Use it when |
+|---|---|
+| [reading-measurements](skills/reading-measurements/SKILL.md) | before reporting any figure: an exit code, a test count, a green, a list size |
+| [whose-red](skills/whose-red/SKILL.md) | tests fail and someone has to decide: the change, or main? |
+| [public-claims](skills/public-claims/SKILL.md) | writing a README, release notes or a launch post with numbers in it |
+
+For Claude Code, copy a skill's folder into `.claude/skills/` in your repository, or into `~/.claude/skills/` for every project:
+
+```bash
+git clone https://github.com/Grit-77/done-is-a-claim
+cp -r done-is-a-claim/skills/* ~/.claude/skills/
+```
+
+Each skill is one Markdown file, so any other agent can be pointed at it directly.
 
 ## Rules are not a gate
 
