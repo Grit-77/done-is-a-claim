@@ -75,4 +75,4 @@ Have a rule that cost you a real failure? Open an issue with the incident: what 
 
 ## Licence
 
-Apache-2.0. Made by [Grit](https://grit.grit-77.workers.dev), Ankara.
+Apache-2.0. Made by [Grit](https://grit.grit-77.workers.dev), Ankara. Also from us: [cinematic-site](https://github.com/Grit-77/cinematic-site), a Claude Code skill for websites that ship checked.
