@@ -1,5 +1,7 @@
 # Done is a claim
 
+![Done is a claim: 18 rules for coding agents, each one paid for by a real failure. An AGENTS.md file open beside the title, showing rules 3 to 6.](assets/card.png)
+
 **18 rules and 3 skills for coding agents, each one paid for by a real failure.**
 
 Your agent says "done". Usually it is. Sometimes the tests never ran, the exit code belonged to `tail`, or the fix reached one call site out of four. These rules make an agent show its evidence before it says the word.

@@ -1,0 +1,25 @@
+name: Propose a rule
+description: A rule for coding agents, with the real failure behind it
+title: "Rule: "
+labels: ["new rule"]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: The rule
+      description: One imperative sentence an agent can follow.
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: What the agent claimed
+    validations:
+      required: true
+  - type: textarea
+    id: truth
+    attributes:
+      label: What was actually true, and how you found out
+      description: The command, output or number that showed the difference.
+    validations:
+      required: true
