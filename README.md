@@ -1,12 +1,14 @@
 # Done is a claim
 
-![Done is a claim: 18 rules for coding agents, each one paid for by a real failure. An AGENTS.md file open beside the title, showing rules 3 to 6.](assets/card.png)
+**English** · [Türkçe](README.tr.md)
+
+![DONE-IS-A-CLAIM: an AGENTS.md window with rules 3 to 6, over a white card wall with one gate.](assets/card.jpg)
 
 **18 rules and 3 skills for coding agents, each one paid for by a real failure.**
 
 Your agent says "done". Usually it is. Sometimes the tests never ran, the exit code belonged to `tail`, or the fix reached one call site out of four. These rules make an agent show its evidence before it says the word.
 
-We wrote them while running Claude Code and Codex agents on our own repository. Between 14 and 29 September 2026 a server re-ran the acceptance command of **3,489** agent tasks: **2,282** passed on that first independent re-run, and **736** tasks had passed their own test while turning the full suite red on main. Every rule below comes with the incident behind it in [INCIDENTS.md](INCIDENTS.md).
+We wrote them while running Claude Code and Codex agents on our own repository. Between 14 and 29 September 2026 a server re-ran the acceptance command of **3,489** agent tasks: **2,282** passed on that first independent re-run, and **736** tasks had passed their own test while turning the full suite red on main. Every rule below comes with the incident behind it in [INCIDENTS.md](INCIDENTS.md), and every figure with its source in [CLAIMS.md](CLAIMS.md).
 
 ## Use it
 
@@ -75,4 +77,4 @@ Have a rule that cost you a real failure? Open an issue with the incident: what 
 
 ## Licence
 
-Apache-2.0. Made by [Grit](https://grit.grit-77.workers.dev), Ankara. Also from us: [cinematic-site](https://github.com/Grit-77/cinematic-site), a Claude Code skill for websites that ship checked.
+Apache-2.0. Made by [Grit](https://grit.grit-77.workers.dev), Ankara. Also from us: [cinematic-site](https://github.com/Grit-77/cinematic-site), a skill set for websites that ship checked.
