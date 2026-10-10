@@ -189,8 +189,7 @@ these checks does not prove that an agent follows the instructions.
 
 This repository supplies instructions, small local tools, examples and evaluation material. It does
 not intercept an agent's tools, block a merge or enforce a deployment policy.
-Use your project's actual test and release gates for enforcement. Grit's separate
-[RADAR project](https://github.com/Grit-77/radar) explores that operational layer.
+Use your project's actual test and release gates for enforcement.
 
 ## Bring the failure that taught you
 
