@@ -20,13 +20,24 @@ bağlı yerel araçlar. Küçük işler daha kısa yoldan ilerler.
 
 ## Başlayın
 
+Kod yazan ajanınıza şu isteği verin:
+
+> https://github.com/Grit-77/done-is-a-claim bunu kur. Sonra neyin değiştiğini,
+> ne işe yaradığını ve nasıl kullanmaya başlayacağımı basitçe anlat.
+
+**Kurulumu yapan ajan için:** [INSTALL.md](INSTALL.md) yönergesini izle.
+Kullanılan ajanı ve kurulum kapsamını belirle, mevcut çalışmayı koru, sonucu
+doğrula ve kullanıcının dilinde kısa bir açıklamayla bitir.
+
+### Elle kurulum
+
 Tüm skill’leri native plugin olarak kurun:
 
 **Claude Code**
 
 ```bash
-claude plugin marketplace add Grit-77/done-is-a-claim
-claude plugin install done-is-a-claim@done-is-a-claim-marketplace --scope project
+claude plugin marketplace add Grit-77/done-is-a-claim --scope local
+claude plugin install done-is-a-claim@done-is-a-claim-marketplace --scope local
 ```
 
 **Codex**

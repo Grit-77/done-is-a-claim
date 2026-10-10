@@ -20,13 +20,24 @@ work it tested. Small tasks take a shorter path.
 
 ## Get started
 
+Give your coding agent this request:
+
+> Install https://github.com/Grit-77/done-is-a-claim. Then explain simply what
+> changed, what it helps with, and how I start using it.
+
+**For the installing agent:** follow [INSTALL.md](INSTALL.md). Identify the
+current host and installation scope, preserve existing work, verify the result,
+and finish with a short explanation in the user's language.
+
+### Manual installation
+
 Install all skills as a native plugin:
 
 **Claude Code**
 
 ```bash
-claude plugin marketplace add Grit-77/done-is-a-claim
-claude plugin install done-is-a-claim@done-is-a-claim-marketplace --scope project
+claude plugin marketplace add Grit-77/done-is-a-claim --scope local
+claude plugin install done-is-a-claim@done-is-a-claim-marketplace --scope local
 ```
 
 **Codex**

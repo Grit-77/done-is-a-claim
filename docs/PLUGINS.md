@@ -1,7 +1,7 @@
 # Native plugin installation
 
 The `done-is-a-claim` plugin ships the connected skills in this repository as one
-optional package, version **1.4.0**. Its marketplace is
+optional package, version **1.5.0**. Its marketplace is
 `done-is-a-claim-marketplace`. Installing it makes instructions available to the
 agent. It provides no MCP server, credentials, executable hooks, or tool intercepts.
 The compatibility manifest's `hooks: {}` registers no hooks.
@@ -14,6 +14,10 @@ installed skill was selected or followed in a live session.
 For observed native loading and task outcomes, and an executable exercise to
 repeat on your own host, see [real session tests](NATIVE-TESTS.md). That guide
 keeps successful loading separate from blocked or successful task execution.
+
+Giving the repository link to an agent with an installation request? Start with
+the [agent installation guide](../INSTALL.md), including the plain-language
+explanation to give after verified installation.
 
 ## Codex
 
@@ -66,17 +70,17 @@ codex plugin marketplace remove done-is-a-claim-marketplace
 
 ## Claude Code
 
-Register the marketplace, then install into the current project's settings:
+From the adopting project, register and enable the plugin in local settings:
 
 ```bash
-claude plugin marketplace add Grit-77/done-is-a-claim
-claude plugin install done-is-a-claim@done-is-a-claim-marketplace --scope project
+claude plugin marketplace add Grit-77/done-is-a-claim --scope local
+claude plugin install done-is-a-claim@done-is-a-claim-marketplace --scope local
 ```
 
-Marketplace registration changes Claude's marketplace configuration. The
-explicit install scope records the plugin in this project's settings. Use
-`--scope local` for settings local to this checkout, or `--scope user` only when
-you want it across projects. Check your team's settings before committing a
+Both explicit scopes apply to settings local to this checkout. Reuse an existing
+matching marketplace instead of registering it again. Use `--scope project` on
+both commands when you explicitly want shared project settings, or `--scope user`
+when you want user scope. Check your team's settings before committing a
 project-scope installation. These commands do not copy rules into `CLAUDE.md`.
 
 Restart Claude Code. In the project session, invoke:
@@ -98,18 +102,18 @@ installing into settings:
 claude --plugin-dir .
 ```
 
-Update the marketplace and the project installation:
+Update the marketplace and the local installation:
 
 ```bash
 claude plugin marketplace update done-is-a-claim-marketplace
-claude plugin update done-is-a-claim@done-is-a-claim-marketplace --scope project
+claude plugin update done-is-a-claim@done-is-a-claim-marketplace --scope local
 ```
 
-Restart after updating. For an installation made with `local` or `user` scope,
+Restart after updating. For an installation made with `project` or `user` scope,
 use that same scope when updating or uninstalling:
 
 ```bash
-claude plugin uninstall done-is-a-claim@done-is-a-claim-marketplace --scope project
+claude plugin uninstall done-is-a-claim@done-is-a-claim-marketplace --scope local
 ```
 
 ## Rules and tools are opt-in
