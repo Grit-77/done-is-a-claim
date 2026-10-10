@@ -114,6 +114,21 @@ actual behavior are separate checks. See [plugin validation limits](docs/PLUGINS
 and the [workflow](docs/WORKFLOW.md). No upstream code or skill text is vendored.
 Superpowers retains its MIT license; this original material uses Apache-2.0.
 
+## Executable native exercise
+
+The [native session procedure](docs/NATIVE-TESTS.md) separates installation,
+observed loading and independently measured task acceptance. Author-run native
+sessions motivated a portable CSV exercise with an external verifier. The fixture,
+verifier and tests are original code, not a wrapper around another project's runner.
+
+[Superpowers' pinned native test guide](https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/tests/claude-code/README.md)
+and [explicit-skill runner](https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/tests/explicit-skill-requests/run-test.sh)
+were studied on 2026-10-10 for the distinction between discovery and integration.
+Here, the portable tool never launches a model or changes native configuration;
+the operator uses their normal host/account and records the native evidence
+separately. A successful artifact check does not prove skill invocation or a
+reduction in agent errors. Source licenses remain with their respective projects.
+
 ## Illustrations and checks
 
 - [The false-green demo](examples/false_green.py) is a synthetic, runnable example.

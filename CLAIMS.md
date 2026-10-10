@@ -37,11 +37,19 @@ are synthetic, not additional production incidents.
 ## Publicly inspectable structure
 
 The README's **18 rules** can be counted as numbered entries in [AGENTS.md](AGENTS.md).
-Its **8 skills** are the eight `skills/*/SKILL.md` files. These are inventory counts,
+Its **13 skills** are the thirteen `skills/*/SKILL.md` files. These are inventory counts,
 not quality or effectiveness scores. The repository checker validates structure;
 the behavioral evaluation pack separately describes what an agent should do.
 
 Source and adaptation notes for the new workflows are in [SOURCES.md](SOURCES.md).
+
+## Native session observations
+
+[The native test guide](docs/NATIVE-TESTS.md) separates package installation,
+actual skill loading and independently checked task results. These are bounded,
+author-observed runs on named versions. Raw session transcripts remain local;
+the published summary is not an independently audited benchmark. The portable
+CSV exercise lets readers perform their own run with their own host and account.
 
 ## Not claimed
 
