@@ -2,7 +2,12 @@
 
 **English** · [Türkçe](README.tr.md)
 
-![Done is a claim. Show the receipt. Field notes for coding agents, by Grit.](assets/receipt.svg)
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/receipt.svg">
+  <img src="assets/receipt-stamp.gif" alt="Done is a claim. A red SHOW THE RECEIPT stamp lands on the ivory cover.">
+</picture>
+
+[Static cover](assets/receipt.svg)
 
 **Your agent says “done”. What would prove it?**
 
@@ -17,17 +22,8 @@ to the work it tested. Plain Markdown. Use the pieces you need.
 A command fails. The process reading its output succeeds. Report the wrong exit
 code, and a failed check becomes a green report.
 
-<details>
-<summary><strong>Play the evidence demo</strong> — expand for the animation</summary>
-
-![A synthetic verifier fails with exit 1 while its output summarizer exits 0. The receipt records FAIL and the verifier's own exit code.](assets/false-green.gif)
-
-[Static frame](assets/false-green.png) · [Runnable source](examples/false_green.py)
-
-The animation uses output captured from the included synthetic demo. It is not a
-production log or a benchmark. It plays once; reload to replay.
-
-</details>
+[Runnable source](examples/false_green.py). This is a synthetic demonstration,
+not a production log or a benchmark.
 
 Run it yourself from the cloned repository's root with Python 3.10+:
 

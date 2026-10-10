@@ -2,7 +2,12 @@
 
 [English](README.md) · **Türkçe**
 
-![Bitti demek bir iddiadır. Kanıtını göster. Grit'ten kod yazan ajanlar için saha notları.](assets/receipt.svg)
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/receipt.svg">
+  <img src="assets/receipt-stamp.gif" alt="Done is a claim. Kırmızı SHOW THE RECEIPT damgası kırık beyaz kapağın üzerine basılıyor.">
+</picture>
+
+[Hareketsiz kapak](assets/receipt.svg)
 
 **Ajanınız “bitti” diyor. Bunu ne kanıtlar?**
 
@@ -18,18 +23,8 @@ parçaları kullanın.
 Bir komut başarısız olur. Çıktısını okuyan süreç ise başarıyla tamamlanır. Yanlış
 çıkış kodunu raporlarsanız başarısız bir kontrol, raporda yeşile döner.
 
-<details>
-<summary><strong>Kanıt demosunu oynatın</strong> — animasyon için açın</summary>
-
-![Sentetik doğrulayıcı çıkış kodu 1 ile başarısız olurken çıktıyı özetleyen süreç 0 ile tamamlanıyor. Sonuç kaydı FAIL durumunu ve doğrulayıcının kendi çıkış kodunu gösteriyor.](assets/false-green.gif)
-
-[Sabit kare](assets/false-green.png) · [Çalıştırılabilir kaynak](examples/false_green.py)
-
-Animasyon, depodaki sentetik demonun kaydedilmiş çıktısını kullanır. Bir üretim
-sistemi günlüğü veya performans ölçümü değildir. Bir kez oynar; yeniden oynatmak
-için sayfayı yenileyin.
-
-</details>
+[Çalıştırılabilir kaynak](examples/false_green.py). Bu sentetik bir örnektir;
+üretim sistemi günlüğü veya performans ölçümü değildir.
 
 Klonladığınız reponun kökünde, Python 3.10 veya üzeriyle kendiniz çalıştırın:
 
