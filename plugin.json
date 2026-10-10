@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "done-is-a-claim",
+  "version": "1.3.0",
+  "description": "Evidence-first workflows for acceptance, verification, reviews, handoffs and delivery.",
+  "author": { "name": "Grit", "url": "https://github.com/Grit-77" },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Grit-77/done-is-a-claim",
+  "repository": "https://github.com/Grit-77/done-is-a-claim",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Done is a claim",
+        "shortDescription": "Show the receipt",
+        "longDescription": "Connected skills for defining acceptance, investigating failures, reviewing work, checking evidence freshness and reporting verified delivery. Instructions guide the agent; project tools and release gates provide enforcement.",
+        "developerName": "Grit",
+        "category": "Developer Tools",
+        "defaultPrompt": "Use Done is a claim to define acceptance, choose the relevant workflow and attach current evidence to the result."
+      }
+    }
+  }
+}

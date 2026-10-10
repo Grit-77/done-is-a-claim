@@ -11,12 +11,84 @@
 
 **Ajanınız “bitti” diyor. Bunu ne kanıtlar?**
 
-Kod yazan ajanlar için gerçek olaylardan çıkarılmış 18 kural ve belirli sorunlara
-odaklanan 8 skill. Ajana açık bir kabul hedefi verin, gerçek sonucu isteyin ve
-kanıtı test edilen çalışmaya bağlı tutun. Kurallar ve skill’ler düz Markdown;
-yerel araçlar isteğe bağlı. İhtiyacınız olan parçaları kullanın.
+Kod yazan ajanlar için kanıta dayalı geliştirme akışı: **anla → planla → uygula →
+hata ayıkla → incele → doğrula → teslim et**. Birbirine bağlı 13 skill, gerçek
+olaylardan çıkarılmış 18 kural ve kanıtı test edilen çalışmaya bağlayan isteğe
+bağlı yerel araçlar. Küçük işler daha kısa yoldan ilerler.
 
-[Başlayın](#başlayın) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün) · [Olayları okuyun](INCIDENTS.md)
+[Başlayın](#başlayın) · [İş akışını görün](docs/WORKFLOW.md) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün)
+
+## Başlayın
+
+Tüm skill’leri native plugin olarak kurun:
+
+**Claude Code**
+
+```bash
+claude plugin marketplace add Grit-77/done-is-a-claim
+claude plugin install done-is-a-claim@done-is-a-claim-marketplace --scope project
+```
+
+**Codex**
+
+```bash
+codex plugin marketplace add Grit-77/done-is-a-claim
+codex plugin add done-is-a-claim@done-is-a-claim-marketplace
+```
+
+Yeni bir oturum açın. Claude Code’da `/done-is-a-claim:using-done-is-a-claim`
+komutunu kullanın; Codex’te `/skills` veya `$` seçicisinden
+`using-done-is-a-claim` skill’ini seçin.
+[Plugin kapsamı, güncelleme ve doğrulama sınırları →](docs/PLUGINS.md)
+
+Proje içine kopyalamak veya yalnızca kuralları kullanmak için repoyu klonlayın:
+
+```bash
+git clone https://github.com/Grit-77/done-is-a-claim.git
+cd done-is-a-claim
+```
+
+| Kullandığınız ajan | Projenize ekleyin |
+|---|---|
+| Codex veya `AGENTS.md` okuyan bir ajan | [AGENTS.md](AGENTS.md) dosyasını projenin köküne kopyalayın. |
+| Claude Code | [AGENTS.md](AGENTS.md) ile onu `@AGENTS.md` üzerinden içeri aktaran [CLAUDE.md](CLAUDE.md) dosyasını kopyalayın. |
+| Mevcut talimatlarınız varsa | İlgili kuralları dosyanıza ekleyin. Projeye özel komutları ve kısıtları koruyun. |
+
+Tek kural dosyasıyla başlayabilirsiniz. Native plugin kurulumu, bu kuralları
+projenizin talimat dosyalarına eklemez.
+[macOS, Linux veya Windows için kurulum seçenekleri →](docs/INSTALL.md)
+
+Mevcut dosyaların üzerine yazmadan proje içine iş akışını kurmak için bu klonun
+kökünde aşağıdaki planı çalıştırın. `../my-project` yerine mevcut proje yolunuzu yazın:
+
+```bash
+python tools/install_skills.py --project ../my-project --agent codex --profile workflow --dry-run
+```
+
+Kurmak için `--dry-run` seçeneğini kaldırın. Claude Code için `--agent claude-code`
+kullanın. Mevcut skill hedefleri reddedilir; proje talimatlarınız korunur.
+Profilleri ve tek tek skill’leri görmek için `--list` kullanın. Açıkça verilen
+`--update`, kurucunun oluşturduğu değişmemiş kopyaları yedekleyerek günceller;
+yerel değişiklik varsa işlemi reddeder.
+
+Kendi projenizde ilk olarak şu isteği deneyin:
+
+> Bu iş için using-done-is-a-claim kullan. Gözlemlenebilir kabul koşulunu belirle,
+> işin boyutuna uygun şekilde uygula ve incele. Gerçek sonucu, test edilen
+> girdileri ve eksik kontrolleri bildir. Verdiğim yetki kapsamında ilerlemeyi sürdür.
+
+Bu, ajanın isteği anlayıp anlamadığını kontrol eder. Talimatlara uymasını zorunlu
+kılmaz.
+
+## Tek akış, kısa yollar
+
+[using-done-is-a-claim](skills/using-done-is-a-claim/SKILL.md) ile başlayın.
+Kapsamlı işler planlama ve uygulamadan geçer; beklenmeyen sonuçlar hata ayıklamaya
+yönlenir. İnceleme bulguları düzeltme ve yeniden kontrolle kapanır. Küçük ve açık
+bir değişiklik doğrudan uygulama, inceleme ve doğrulamaya gider. Alt ajanlar
+isteğe bağlıdır; bağımsız inceleyici yoksa öz incelemenin sınırı açıkça belirtilir.
+
+[Akış şeması ve örnek görev →](docs/WORKFLOW.md)
 
 ## Yanlış bir yeşil sonucu görün
 
@@ -45,43 +117,6 @@ python examples/wrong_delivery.py
 
 Geçici yerel dosyalar kullanır. Sıfır çıkış kodu, bu tuzakların gösterildiğini
 belirtir; gerçek bir teslimin başarılı olduğunu değil.
-
-## Başlayın
-
-```bash
-git clone https://github.com/Grit-77/done-is-a-claim.git
-cd done-is-a-claim
-```
-
-| Kullandığınız ajan | Projenize ekleyin |
-|---|---|
-| Codex veya `AGENTS.md` okuyan bir ajan | [AGENTS.md](AGENTS.md) dosyasını projenin köküne kopyalayın. |
-| Claude Code | [AGENTS.md](AGENTS.md) ile onu `@AGENTS.md` üzerinden içeri aktaran [CLAUDE.md](CLAUDE.md) dosyasını kopyalayın. |
-| Mevcut talimatlarınız varsa | İlgili kuralları dosyanıza ekleyin. Projeye özel komutları ve kısıtları koruyun. |
-
-Tek kural dosyasıyla başlayabilirsiniz. İsteğe bağlı skill'ler, belirli bir
-sorunla karşılaştığınızda konuyu daha ayrıntılı ele alır.
-[macOS, Linux veya Windows'ta skill kurulumu →](docs/INSTALL.md)
-
-Mevcut dosyaların üzerine yazmadan proje içine bir skill kurmak için bu klonun
-kökünde aşağıdaki planı çalıştırın. `../my-project` yerine mevcut proje yolunuzu yazın:
-
-```bash
-python tools/install_skills.py --project ../my-project --agent codex --skill reading-measurements --dry-run
-```
-
-Kurmak için `--dry-run` seçeneğini kaldırın. Claude Code için `--agent claude-code`
-kullanın. Mevcut skill hedefleri reddedilir; proje talimatlarınız korunur.
-
-Kendi projenizde ilk olarak şu isteği deneyin:
-
-> Proje talimatlarını oku. Değişiklik yapmadan önce bu işin kabul komutunu ve
-> komutun kontrol ettiği, kullanıcının görebileceği sonucu belirle. Sonucu
-> raporlarken test edilen sürümü, gerçek çıktıyı ve kontrol etmediğin noktaları
-> belirt.
-
-Bu, ajanın isteği anlayıp anlamadığını kontrol eder. Talimatlara uymasını zorunlu
-kılmaz.
 
 ## Komutun sonucunu kaydedin
 
@@ -128,6 +163,11 @@ kullanın. Yapılmayan kontrol de raporda yer almalıdır.
 
 | Karşılaştığınız durum | Kullanılacak skill | Karar vermenize yardımcı olduğu soru |
 |---|---|---|
+| İşe tek bir giriş noktasından başlamak istiyorsunuz | [using-done-is-a-claim](skills/using-done-is-a-claim/SKILL.md) | Görev, yetki ve mevcut kanıta göre yararlı sonraki adım ne? |
+| Değişiklik kapsamlı veya bağımlılıklar içeriyor | [planning-changes](skills/planning-changes/SKILL.md) | Hangi görevler, sorumlular ve gözlemler istenen sonuca ulaştırır? |
+| Planda uygulanabilir, yetkilendirilmiş işler var | [executing-plans](skills/executing-plans/SKILL.md) | Şimdi ne ilerleyebilir, her görevi hangi kanıt kapatır? |
+| Davranış beklentiyle çelişiyor | [debugging-with-evidence](skills/debugging-with-evidence/SKILL.md) | Olası nedenleri hangi deney ayırt eder? |
+| Değişiklik incelemeye hazır | [reviewing-changes](skills/reviewing-changes/SKILL.md) | Gerçek değişiklik isteği karşılıyor mu; bulgular giderilip yeniden kontrol edildi mi? |
 | İşin hangi durumda “geçti” sayılacağı belirsiz | [acceptance-design](skills/acceptance-design/SKILL.md) | Bu kontrol, kullanıcının gerçekten önemsediği sınırı aşıyor mu? |
 | Bir rakam ikna edici görünüyor | [reading-measurements](skills/reading-measurements/SKILL.md) | Bu çıktı neyi kanıtlıyor, neyi belirsiz bırakıyor? |
 | Dalınızda bir test başarısız oluyor | [whose-red](skills/whose-red/SKILL.md) | Yeni bir hataya, mevcut bir hataya veya henüz çözülememiş bir nedene işaret eden karşılaştırılabilir kanıt var mı? |
@@ -188,6 +228,7 @@ Deponun kendisini kontrol etmek için:
 ```bash
 python tools/run_tests.py
 python tools/check_repository.py
+python tools/check_package.py
 ```
 
 Test çalıştırıcısı, hiç test bulunmamasını ve testlerin tamamının atlanmasını

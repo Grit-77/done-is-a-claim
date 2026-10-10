@@ -19,3 +19,5 @@ jobs:
         run: python tools/run_tests.py
       - name: Check repository structure
         run: python tools/check_repository.py
+      - name: Check plugin package
+        run: python tools/check_package.py

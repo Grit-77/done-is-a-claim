@@ -11,12 +11,82 @@
 
 **Your agent says “done”. What would prove it?**
 
-18 incident-backed rules and 8 focused skills for coding agents. Give the agent a
-clear acceptance target, ask for the actual result, and keep the evidence attached
-to the work it tested. Plain Markdown guidance, with optional local tools. Use the
-pieces you need.
+An evidence-first development workflow for coding agents: **understand → plan →
+implement → diagnose → review → verify → deliver**. 13 connected skills, 18
+incident-backed rules, and optional tools that keep the evidence attached to the
+work it tested. Small tasks take a shorter path.
 
-[Get started](#get-started) · [Choose a skill](#choose-a-skill) · [Try the demo](#watch-a-false-green) · [Read the incidents](INCIDENTS.md)
+[Get started](#get-started) · [Follow the workflow](docs/WORKFLOW.md) · [Choose a skill](#choose-a-skill) · [Try the demo](#watch-a-false-green)
+
+## Get started
+
+Install all skills as a native plugin:
+
+**Claude Code**
+
+```bash
+claude plugin marketplace add Grit-77/done-is-a-claim
+claude plugin install done-is-a-claim@done-is-a-claim-marketplace --scope project
+```
+
+**Codex**
+
+```bash
+codex plugin marketplace add Grit-77/done-is-a-claim
+codex plugin add done-is-a-claim@done-is-a-claim-marketplace
+```
+
+Start a fresh session. In Claude Code, invoke
+`/done-is-a-claim:using-done-is-a-claim`; in Codex, select
+`using-done-is-a-claim` through `/skills` or the `$` skill picker.
+[Plugin scope, updates and validation limits →](docs/PLUGINS.md)
+
+Prefer project-local copies or the rules alone? Clone the repository:
+
+```bash
+git clone https://github.com/Grit-77/done-is-a-claim.git
+cd done-is-a-claim
+```
+
+| You use | Add to your project |
+|---|---|
+| Codex or an agent that reads `AGENTS.md` | Copy [AGENTS.md](AGENTS.md) to the project root. |
+| Claude Code | Copy [AGENTS.md](AGENTS.md) and [CLAUDE.md](CLAUDE.md), which imports it with `@AGENTS.md`. |
+| Existing instructions | Merge the relevant rules into your file. Keep your project-specific commands and constraints. |
+
+You can start with that one rules file. Native plugin installation does not add
+these rules to the adopting project's instructions.
+[Installation options on macOS, Linux or Windows →](docs/INSTALL.md)
+
+Want the workflow in your project without overwriting existing files? From this clone,
+replace `../my-project` with your existing project path and preview the copy:
+
+```bash
+python tools/install_skills.py --project ../my-project --agent codex --profile workflow --dry-run
+```
+
+Then omit `--dry-run` to install. For Claude Code, use `--agent claude-code`.
+Existing skill destinations are refused; your project instructions stay untouched.
+Use `--list` to see profiles and individual skills. Explicit `--update` can replace
+unmodified installer-owned copies while retaining backups; local edits are refused.
+
+Try this first request in your own project:
+
+> Use using-done-is-a-claim for this task. Identify observable acceptance, take a
+> proportionate path through implementation and review, and report the actual
+> result, tested inputs and remaining gaps. Continue within my existing authorization.
+
+This checks whether the agent understood the request. It does not enforce compliance.
+
+## One workflow, short paths
+
+Start with [using-done-is-a-claim](skills/using-done-is-a-claim/SKILL.md). It routes
+substantial work through planning and execution, sends unexpected results into
+diagnosis, and closes review findings with fixes and fresh checks. A clear, small
+change goes straight from inspection to implementation, review and verification.
+Workers are optional; an unavailable reviewer is reported as a self-review limit.
+
+[See the flow and a worked task →](docs/WORKFLOW.md)
 
 ## Watch a false green
 
@@ -45,40 +115,6 @@ python examples/wrong_delivery.py
 
 It uses temporary local fixtures. Exit zero means the traps were demonstrated,
 not that a real delivery succeeded.
-
-## Get started
-
-```bash
-git clone https://github.com/Grit-77/done-is-a-claim.git
-cd done-is-a-claim
-```
-
-| You use | Add to your project |
-|---|---|
-| Codex or an agent that reads `AGENTS.md` | Copy [AGENTS.md](AGENTS.md) to the project root. |
-| Claude Code | Copy [AGENTS.md](AGENTS.md) and [CLAUDE.md](CLAUDE.md), which imports it with `@AGENTS.md`. |
-| Existing instructions | Merge the relevant rules into your file. Keep your project-specific commands and constraints. |
-
-You can start with that one rules file. The optional skills add depth when a
-particular problem comes up. [Install a skill on macOS, Linux or Windows →](docs/INSTALL.md)
-
-Want a project-local skill without overwriting existing files? From this clone,
-replace `../my-project` with your existing project path and preview the copy:
-
-```bash
-python tools/install_skills.py --project ../my-project --agent codex --skill reading-measurements --dry-run
-```
-
-Then omit `--dry-run` to install. For Claude Code, use `--agent claude-code`.
-Existing skill destinations are refused; your project instructions stay untouched.
-
-Try this first request in your own project:
-
-> Read the project instructions. Before making changes, identify the acceptance
-> command for this task and the user-visible result it checks. When reporting the
-> result, include the tested revision, actual output and anything you did not check.
-
-This checks whether the agent understood the request. It does not enforce compliance.
 
 ## Get a real receipt
 
@@ -122,6 +158,11 @@ as small, reusable formats. A missing check belongs in the report.
 
 | When this happens | Use this skill | It helps you decide |
 |---|---|---|
+| You want one entry point for the task | [using-done-is-a-claim](skills/using-done-is-a-claim/SKILL.md) | What is the next useful step, given the task, authority and available evidence? |
+| The change has dependencies or substantial scope | [planning-changes](skills/planning-changes/SKILL.md) | Which bounded tasks, owners and observations will reach the requested outcome? |
+| A plan has ready, authorized work | [executing-plans](skills/executing-plans/SKILL.md) | What can proceed now, and what evidence closes each task? |
+| Behavior contradicts expectations | [debugging-with-evidence](skills/debugging-with-evidence/SKILL.md) | Which experiment distinguishes the plausible causes? |
+| A change is ready for review | [reviewing-changes](skills/reviewing-changes/SKILL.md) | Does the actual diff meet the request, and are findings resolved and rechecked? |
 | The task's “pass” condition is vague | [acceptance-design](skills/acceptance-design/SKILL.md) | Does this check cross the boundary the user actually cares about? |
 | A number looks convincing | [reading-measurements](skills/reading-measurements/SKILL.md) | What does this output establish, and what does it leave unknown? |
 | A test fails on your branch | [whose-red](skills/whose-red/SKILL.md) | Is there comparable evidence for a regression, an existing failure or an unresolved cause? |
@@ -178,6 +219,7 @@ For the repository itself:
 ```bash
 python tools/run_tests.py
 python tools/check_repository.py
+python tools/check_package.py
 ```
 
 The test runner rejects empty or entirely skipped suites. The checks exercise the

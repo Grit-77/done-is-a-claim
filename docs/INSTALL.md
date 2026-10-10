@@ -1,5 +1,9 @@
 # Install only what you need
 
+For native Claude Code and Codex plugin installation, see [PLUGINS.md](PLUGINS.md).
+The plugin exposes the complete skill catalog. This page covers project-local
+copies, selected profiles and manual rule adoption.
+
 Clone this repository somewhere separate from the project you want to work on:
 
 ```bash
@@ -19,11 +23,35 @@ Inspect the printed destinations, then run the same command without `--dry-run`
 to copy the skill. Use `--agent claude-code` for Claude Code, or repeat `--agent`
 to select both. Repeat `--skill` to select more than one skill.
 
+To see available skills and profiles without writing anything:
+
+```bash
+python tools/install_skills.py --list
+```
+
+| Profile | Selection |
+|---|---|
+| `workflow` | All 13 skills, starting with `using-done-is-a-claim` |
+| `evidence` | The eight focused acceptance, measurement, collection, freshness, claims, resume and delivery skills |
+| `review` | Entry and review, plus measurement, failure attribution, freshness, public claims and delivery |
+
+Install the connected workflow for one or both agents:
+
+```bash
+python tools/install_skills.py --project ../my-project --agent codex --agent claude-code --profile workflow --dry-run
+```
+
+Omit `--dry-run` after reviewing the destinations. Repeat `--profile`, or combine
+it with `--skill`, to take their union without duplicate copies. The exact
+selections live in [profiles.json](../profiles.json).
+
 The installer preflights all selections and refuses existing skill destinations,
 including links. It does not merge or overwrite them. Each installed folder gets
 the license and a `PROVENANCE.json` containing the source revision when available
 and hashes of copied files. File hashes identify the copied bytes; a revision is
-not a signature or a guarantee that the source checkout was clean.
+not a signature or a guarantee that the source checkout was clean. Source skills
+with empty directories are refused before copying: the file manifest does not
+track empty directories, so accepting them would produce an unupdatable copy.
 
 This is project scope only. It preserves `AGENTS.md`, `CLAUDE.md`, settings and
 unselected skills. Add the core rules separately as described below. Interrupted
@@ -135,10 +163,43 @@ If the skill is missing, check that the installed layout is
 that skill loading is enabled by the host. Other agents can read the Markdown
 directly, but this repository does not claim automatic discovery for every agent.
 
-## Update or remove
+## Update copies without losing edits
 
-Review upstream diffs before copying a newer version. This repository installs no
-background updater. To remove a skill, remove only the specific folder you copied;
+Review and fetch the desired upstream changes in the source clone first. To
+upgrade copies previously made by this installer, including expanding an older
+installation to the complete workflow:
+
+```bash
+python tools/install_skills.py --project ../my-project --agent codex --profile workflow --update --dry-run
+```
+
+Inspect the plan, then omit `--dry-run`. Existing selected skills must have valid
+installer provenance and match every recorded file hash. Modified, missing or
+extra files are refused, as are links and unrelated folders. An edited skill must
+be reconciled manually; there is no force-overwrite flag. New selections can be
+installed in the same run. Existing project instructions and unselected skills
+stay untouched.
+
+Replaced folders are retained under the target project's
+`.local/done-is-a-claim/backups/`; the command prints their locations. Treat backups
+as local material and exclude that directory from version control according to
+your project's conventions. The installer does not edit your ignore rules.
+Inspect a retained folder before manually restoring it to its exact former
+destination; preserve the current copy separately rather than merging blindly.
+
+All selections are checked and staged before replacement, and destinations are
+checked again during publication. This is not an atomic transaction across
+multiple folders or a lock against concurrent writers. On an interrupted or failed
+run, inspect the reported installed paths and retained backups before retrying.
+Do not run two installers against the same destination at once.
+
+The provenance manifest and hashes are editable local records, not signatures.
+They help detect drift relative to the manifest; they cannot authenticate a
+package against an attacker who can rewrite both files and provenance.
+
+## Remove
+
+This repository installs no background updater. To remove a skill, remove only the specific folder you copied;
 do not delete the entire shared skills directory. Remove or revise the rules you
 merged into your project independently.
 

@@ -90,6 +90,30 @@ or prose is vendored. The cited projects retain their licenses, including
 in-toto's Apache-2.0, GitHub CLI's MIT, and the SLSA specification's
 [Community Specification License](https://github.com/slsa-framework/governance/blob/main/1._Community_Specification_License-v1.md).
 
+## Connected workflow and native packaging
+
+Reviewed on 2026-10-10. We studied
+[Superpowers v7.0.0 at bb92a77](https://github.com/obra/superpowers/tree/bb92a77741419a4ab5f06e711a283343f1ada0c3),
+especially its entry, planning, execution and review organization. That informed
+our decision to connect previously separate skills through one task entry point.
+The five new skills and three record templates here are original writing. They
+keep existing user authority, support a small-task path and inline execution, and
+make review findings return to fixes and affected checks. We do not claim feature
+parity, compatibility with its internal helpers or equivalent agent outcomes.
+
+| Source | Application here |
+|---|---|
+| [Superpowers entry skill](https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/skills/using-superpowers/SKILL.md) and [execution skill](https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/skills/executing-plans/SKILL.md) | A discoverable starting point and explicit transitions between tasks; our entry also works alone without sibling files. |
+| [OpenAI plugin building](https://developers.openai.com/plugins/build/plugins) | Portable manifest and native Codex catalog; skills-only distribution with no lifecycle hooks or services. |
+| [Claude Code plugin reference](https://code.claude.com/docs/en/plugins-reference) and [marketplaces](https://code.claude.com/docs/en/plugin-marketplaces) | Claude manifest, repository marketplace and documented native installation. |
+
+The project copier's profiles and conservative update mechanism are original
+Python code. Its editable provenance detects ordinary local drift; it is not
+package signing. Native package structure, native CLI validation and an agent's
+actual behavior are separate checks. See [plugin validation limits](docs/PLUGINS.md)
+and the [workflow](docs/WORKFLOW.md). No upstream code or skill text is vendored.
+Superpowers retains its MIT license; this original material uses Apache-2.0.
+
 ## Illustrations and checks
 
 - [The false-green demo](examples/false_green.py) is a synthetic, runnable example.
