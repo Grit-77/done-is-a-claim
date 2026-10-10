@@ -72,3 +72,28 @@ Use distinct fields in a [receipt](../templates/completion-receipt.md):
 A local commit does not prove a remote deployment. A passing test on an unchanged
 base does not prove that a worker implemented a requested feature. Keep the
 decision tied to the [original acceptance brief](../templates/acceptance-brief.md).
+
+## Reopen what was delivered
+
+Name the inspected source and the intended destination before comparing them.
+Read back that destination's actual artifact or revision. Keep these findings
+separate: the send attempt, its matching acknowledgement, the destination bytes
+or content, and the result of opening them in the intended consumer.
+
+For a local example:
+
+```bash
+python examples/wrong_delivery.py
+```
+
+This synthetic exercise performs real copies in temporary directories. It shows
+a stale same-named file copied successfully, a correct-copy control, and matching
+bytes that fail JSON parsing. Parsing JSON only establishes syntax in this demo;
+a real delivery may also need schema, rendering or application-specific checks.
+
+For a service that transforms uploaded content, compare the relevant content and
+revision instead of claiming byte equality. An acknowledgement for another
+operation is not evidence for the intended one, and system acceptance does not
+mean a human read a message. If read-back is unavailable, record that limit.
+The [checking-delivery skill](../skills/checking-delivery/SKILL.md) and updated
+[completion template](../templates/completion-receipt.md) give the full workflow.

@@ -11,7 +11,7 @@
 
 **Your agent says “done”. What would prove it?**
 
-18 incident-backed rules and 6 focused skills for coding agents. Give the agent a
+18 incident-backed rules and 8 focused skills for coding agents. Give the agent a
 clear acceptance target, ask for the actual result, and keep the evidence attached
 to the work it tested. Plain Markdown guidance, with optional local tools. Use the
 pieces you need.
@@ -34,6 +34,17 @@ python examples/false_green.py
 
 The demo succeeds when it exposes the mismatch. **The verifier inside it still
 fails.** That distinction is the point.
+
+A successful copy can also deliver the wrong artifact. The
+[delivery demo](examples/wrong_delivery.py) contrasts a stale copy, the correct
+copy, and identical bytes that still fail to parse:
+
+```bash
+python examples/wrong_delivery.py
+```
+
+It uses temporary local fixtures. Exit zero means the traps were demonstrated,
+not that a real delivery succeeded.
 
 ## Get started
 
@@ -82,6 +93,15 @@ Use `--input` to fingerprint selected files before and after the run. A zero exi
 records command success; it does not declare the user's task complete.
 [Usage, input scope and limits →](docs/RECEIPTS.md)
 
+Reusing a saved receipt after an edit or handoff? Compare it with the current
+project using the exact receipt path printed earlier:
+
+```bash
+python tools/check_receipt.py path/to/receipt.json --project .
+```
+
+[What this rechecks—and what a match cannot prove →](docs/RECHECK.md)
+
 ## What changes in the report
 
 | A claim | Evidence that can support it |
@@ -108,6 +128,8 @@ as small, reusable formats. A missing check belongs in the report.
 | A subagent reports success | [collecting-worker-results](skills/collecting-worker-results/SKILL.md) | Is there relevant work, was that work tested, and was it delivered? |
 | Work changed after a check | [evidence-freshness](skills/evidence-freshness/SKILL.md) | Does the receipt still describe the inputs you are about to act on? |
 | A README or launch post makes a claim | [public-claims](skills/public-claims/SKILL.md) | Can the reader trace it, and are the verification limits stated? |
+| You inherit unfinished work | [resuming-work](skills/resuming-work/SKILL.md) | Which checkpoint, artifacts and next action still apply in this checkout? |
+| A send or publication reports success | [checking-delivery](skills/checking-delivery/SKILL.md) | Does the actual destination contain the reviewed result, and can its consumer use it? |
 
 Each skill is a standalone `SKILL.md`. No Grit service, account or CLI is needed.
 

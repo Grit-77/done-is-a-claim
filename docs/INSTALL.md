@@ -115,9 +115,9 @@ collision refusal. The third-party CLI also maintains its own lockfiles and
 telemetry behavior; consult its documentation. Its `DISABLE_TELEMETRY=1` or
 `DO_NOT_TRACK=1` environment option disables telemetry.
 
-Version 1.7.2 was exercised with this repository as a local source, in an isolated
-project: source discovery found all six skills; selected copies for both agents
-matched the source. That smoke check does not establish behavior for future
+Version 1.7.2 was exercised with v1.1.0's layout as a local source, in an isolated
+project: source discovery found its six skills; selected copies for both agents
+matched the source. That historical smoke check does not establish behavior for future
 package versions or every host's agent-discovery policy.
 
 ## Check discovery

@@ -16,3 +16,5 @@ Read the [evaluation procedure](README.md) before comparing runs.
 | [E08](prompts/E08.md) | A launch statistic |
 | [E09](prompts/E09.md) | Missing does not mean unrelated |
 | [E10](prompts/E10.md) | An ambiguous retry |
+| [E11](prompts/E11.md) | A receipt for another delivery |
+| [E12](prompts/E12.md) | Resume the saved boundary |

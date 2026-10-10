@@ -3,6 +3,7 @@
 The optional [receipt tool](../tools/receipt.py) runs a command directly, saves its
 full merged output, and records the command's own exit code. It also records Git
 state when available and fingerprints the input files you explicitly select.
+New receipts bind the closed log's bytes with an additive `log_sha256` field.
 
 Requires Python 3.10+. It uses the standard library; Git metadata is optional.
 There is no provider account, upload, background process or network integration.
@@ -63,6 +64,13 @@ outside a Git repository can still run normally; Git is optional.
 A portable nonzero child status is retained; inspect the JSON for exact handling
 of signals or platform-specific codes. A failure to write evidence is a failure
 of the receipt tool, even if the child succeeded.
+
+## Reuse a receipt carefully
+
+Use [the receipt rechecker](RECHECK.md) before relying on saved evidence after a
+handoff or edit. It compares the log, selected files and recorded HEAD against an
+explicit current project, without rerunning the command. Old unbound logs and
+receipts with no selected files remain incomplete for freshness checking.
 
 ## Inspect a known failure
 

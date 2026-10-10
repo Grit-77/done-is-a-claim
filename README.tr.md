@@ -12,7 +12,7 @@
 **Ajanınız “bitti” diyor. Bunu ne kanıtlar?**
 
 Kod yazan ajanlar için gerçek olaylardan çıkarılmış 18 kural ve belirli sorunlara
-odaklanan 6 skill. Ajana açık bir kabul hedefi verin, gerçek sonucu isteyin ve
+odaklanan 8 skill. Ajana açık bir kabul hedefi verin, gerçek sonucu isteyin ve
 kanıtı test edilen çalışmaya bağlı tutun. Kurallar ve skill’ler düz Markdown;
 yerel araçlar isteğe bağlı. İhtiyacınız olan parçaları kullanın.
 
@@ -34,6 +34,17 @@ python examples/false_green.py
 
 Demo, farkı ortaya çıkardığında başarılıdır. **İçindeki doğrulayıcı yine de
 başarısızdır.** Demonun göstermek istediği ayrım budur.
+
+Başarılı bir kopyalama da yanlış dosyayı teslim edebilir.
+[Teslim demosu](examples/wrong_delivery.py), eski bir kopyayı, doğru kopyayı ve
+baytları aynı olduğu hâlde ayrıştırılamayan bir dosyayı karşılaştırır:
+
+```bash
+python examples/wrong_delivery.py
+```
+
+Geçici yerel dosyalar kullanır. Sıfır çıkış kodu, bu tuzakların gösterildiğini
+belirtir; gerçek bir teslimin başarılı olduğunu değil.
 
 ## Başlayın
 
@@ -87,6 +98,15 @@ karşılaştırmak için `--input` kullanın. Sıfır çıkış kodu komutun ba�
 tamamlandığını kaydeder; kullanıcının görevinin bittiğine karar vermez.
 [Kullanım, kontrol edilen girdiler ve sınırlar →](docs/RECEIPTS.md)
 
+Bir düzenleme veya devir sonrasında eski kaydı yeniden kullanacaksanız, aracın
+daha önce yazdırdığı `receipt.json` yolunu kullanarak güncel projeyle karşılaştırın:
+
+```bash
+python tools/check_receipt.py path/to/receipt.json --project .
+```
+
+[Neler yeniden kontrol edilir, eşleşme neleri kanıtlamaz? →](docs/RECHECK.md)
+
 ## Raporda ne değişir?
 
 | İddia | İddiayı destekleyebilecek kanıt |
@@ -114,6 +134,8 @@ kullanın. Yapılmayan kontrol de raporda yer almalıdır.
 | Bir alt ajan başarı bildiriyor | [collecting-worker-results](skills/collecting-worker-results/SKILL.md) | İlgili bir değişiklik var mı, test edildi mi ve teslim edildi mi? |
 | Kontrolden sonra iş değişti | [evidence-freshness](skills/evidence-freshness/SKILL.md) | Sonuç kaydı, işlem yapacağınız girdileri hâlâ doğru anlatıyor mu? |
 | Bir README veya duyuru iddia içeriyor | [public-claims](skills/public-claims/SKILL.md) | Okur iddianın kaynağına ulaşabiliyor mu ve doğrulamanın sınırları belirtilmiş mi? |
+| Yarım kalan bir işi devralıyorsunuz | [resuming-work](skills/resuming-work/SKILL.md) | Hangi kayıt, çıktı ve sonraki adım bu çalışma kopyasında hâlâ geçerli? |
+| Bir gönderim veya yayımlama başarı bildiriyor | [checking-delivery](skills/checking-delivery/SKILL.md) | Gerçek hedefte incelenen sonuç mu var ve kullanılabiliyor mu? |
 
 Her skill bağımsız bir `SKILL.md` dosyasıdır. Grit servisi, hesabı veya CLI'ı
 gerekmez. Skill metinleri İngilizcedir.
