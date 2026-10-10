@@ -1,0 +1,22 @@
+{
+  "source": "examples/false_green.py",
+  "source_sha256": "3f916abe198dde05e1969480f7c33ab8174296c9244f3340d74e340f557223ba",
+  "renderer_sha256": "b3a0a733ea92cc3d406a34e4111bef6c3b345263ec23a098d7e4fe53a89db206",
+  "synthetic": true,
+  "label": "Synthetic demo, not incident raw log.",
+  "verifier": {
+    "output": "SYNTHETIC verifier: FAIL (expected 2, got 3)\n",
+    "exit_code": 1
+  },
+  "summarizer": {
+    "output": "SYNTHETIC summarizer: displayed final line\nSYNTHETIC verifier: FAIL (expected 2, got 3)\n",
+    "exit_code": 0
+  },
+  "verdict": {
+    "state": "FAIL",
+    "exit_code": 1,
+    "reason": "Verifier exited 1; summarizer exit 0 does not verify the fixture."
+  },
+  "demo_exit_meaning": "expected mismatch demonstrated; not fixture success",
+  "note": "Local interpreter paths omitted. Run the source with --json for full argv."
+}

@@ -1,0 +1,21 @@
+name: Repository structure
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Test structural checker
+        run: python tools/run_tests.py
+      - name: Check repository structure
+        run: python tools/check_repository.py
