@@ -107,7 +107,8 @@ def main():
     frames[0].save(assets / "false-green.gif", save_all=True, append_images=frames[1:],
                    duration=durations, disposal=1, optimize=True)
     frame(2).save(assets / "false-green.png", optimize=True)
-    (assets / "demo-evidence.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+    (assets / "demo-evidence.json").write_text(
+        json.dumps(evidence, indent=2) + "\n", encoding="utf-8", newline="\n")
     for name in ("false-green.gif", "false-green.png", "demo-evidence.json"):
         print(f"{name}: {(assets / name).stat().st_size} bytes")
 

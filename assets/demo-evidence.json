@@ -1,7 +1,7 @@
 {
   "source": "examples/false_green.py",
   "source_sha256": "3f916abe198dde05e1969480f7c33ab8174296c9244f3340d74e340f557223ba",
-  "renderer_sha256": "44509ab350fc12242d8c61b3464cee3a407dbb6319d9eb5934d9e529b81f8d8e",
+  "renderer_sha256": "b3a0a733ea92cc3d406a34e4111bef6c3b345263ec23a098d7e4fe53a89db206",
   "synthetic": true,
   "label": "Synthetic demo, not incident raw log.",
   "verifier": {
