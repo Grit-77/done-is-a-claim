@@ -243,8 +243,7 @@ içeri aktarımları doğrular. [CI](.github/workflows/check.yml), Windows ve Li
 Bu depo talimatlar, küçük yerel araçlar, örnekler ve değerlendirme malzemeleri sunar. Ajanın araç
 çağrılarına müdahale etmez, birleştirme işlemini engellemez veya dağıtım
 politikasını zorunlu kılmaz. Kuralları uygulatmak için projenizin gerçek test ve yayımlama
-kontrollerini kullanın. Grit'in ayrı
-[RADAR projesi](https://github.com/Grit-77/radar) bu operasyon katmanını araştırır.
+kontrollerini kullanın.
 
 ## Size ders olan hatayı getirin
 
