@@ -18,6 +18,31 @@ work it tested. Small tasks take a shorter path.
 
 [Get started](#get-started) · [Follow the workflow](docs/WORKFLOW.md) · [Choose a skill](#choose-a-skill) · [Try the demo](#watch-a-false-green)
 
+## Watch a false green
+
+Try the local example with **Python 3.10+**:
+
+```bash
+git clone https://github.com/Grit-77/done-is-a-claim.git
+cd done-is-a-claim
+python examples/false_green.py
+```
+
+**Synthetic demo:** the verifier fails with exit **1**; the summarizer displays
+its output and exits **0**. The receipt follows the verifier and says **FAIL**.
+The demo itself exits **0** because it exposed the mismatch—not because the
+verifier passed.
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/demo/false-green-recorded.png">
+  <img src="assets/demo/false-green-recorded.gif" alt="Recorded synthetic output: verifier exit 1, summarizer exit 0, receipt FAIL. Demo exit 0 means the mismatch was demonstrated.">
+</picture>
+
+[Runnable source](examples/false_green.py) · [Static proof](assets/demo/false-green-recorded.png) · [Recording and limits](docs/demo-recording.md)
+
+Recorded output excerpts, paced for reading. This is a synthetic demonstration,
+not a production log or an agent-performance benchmark.
+
 ## Get started
 
 Give your coding agent this request:
@@ -52,12 +77,7 @@ Start a fresh session. In Claude Code, invoke
 `using-done-is-a-claim` through `/skills` or the `$` skill picker.
 [Plugin scope, updates and validation limits →](docs/PLUGINS.md)
 
-Prefer project-local copies or the rules alone? Clone the repository:
-
-```bash
-git clone https://github.com/Grit-77/done-is-a-claim.git
-cd done-is-a-claim
-```
+Prefer project-local copies or the rules alone? Use the clone from the demo above:
 
 | You use | Add to your project |
 |---|---|
@@ -111,22 +131,7 @@ The initial independent check deliberately fails even though the starter's narro
 tests pass. The tool creates and checks the fixture; you run the agent through
 your normal host and account. [Real session procedure and observed limits →](docs/NATIVE-TESTS.md)
 
-## Watch a false green
-
-A command fails. The process reading its output succeeds. Report the wrong exit
-code, and a failed check becomes a green report.
-
-[Runnable source](examples/false_green.py). This is a synthetic demonstration,
-not a production log or a benchmark.
-
-Run it yourself from the cloned repository's root with Python 3.10+:
-
-```bash
-python examples/false_green.py
-```
-
-The demo succeeds when it exposes the mismatch. **The verifier inside it still
-fails.** That distinction is the point.
+## Check the delivered artifact
 
 A successful copy can also deliver the wrong artifact. The
 [delivery demo](examples/wrong_delivery.py) contrasts a stale copy, the correct
@@ -150,6 +155,7 @@ python tools/receipt.py -- python tools/run_tests.py
 It writes a fresh `receipt.json` and `command.log` under `.local/receipts/`.
 Use `--input` to fingerprint selected files before and after the run. A zero exit
 records command success; it does not declare the user's task complete.
+Without selected inputs, the receipt remains incomplete for freshness rechecks.
 [Usage, input scope and limits →](docs/RECEIPTS.md)
 
 Reusing a saved receipt after an edit or handoff? Compare it with the current

@@ -18,6 +18,31 @@ bağlı yerel araçlar. Küçük işler daha kısa yoldan ilerler.
 
 [Başlayın](#başlayın) · [İş akışını görün](docs/WORKFLOW.md) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün)
 
+## Yanlış bir yeşil sonucu görün
+
+Yerel örneği **Python 3.10 veya üzeriyle** deneyin:
+
+```bash
+git clone https://github.com/Grit-77/done-is-a-claim.git
+cd done-is-a-claim
+python examples/false_green.py
+```
+
+**Sentetik demo:** doğrulayıcı **1** çıkış koduyla başarısız olur; özetleyici
+çıktıyı gösterir ve **0** ile çıkar. Kayıt, doğrulayıcının sonucunu izler ve
+**FAIL** der. Demonun kendisi, farkı ortaya çıkardığı için **0** ile çıkar;
+bu, doğrulayıcının geçtiği anlamına gelmez.
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/demo/false-green-recorded.png">
+  <img src="assets/demo/false-green-recorded.gif" alt="Kaydedilmiş sentetik çıktı: doğrulayıcı çıkışı 1, özetleyici çıkışı 0, kayıt FAIL. Demo çıkışı 0, farkın gösterildiğini belirtir.">
+</picture>
+
+[Çalıştırılabilir kaynak](examples/false_green.py) · [Hareketsiz kanıt](assets/demo/false-green-recorded.png) · [Kayıt ve sınırlar](docs/demo-recording.md)
+
+Kaydedilen çıktıdan alıntılar, okunabilmesi için yavaş gösterilir. Bu sentetik
+bir örnektir; üretim sistemi günlüğü veya ajan performansı ölçümü değildir.
+
 ## Başlayın
 
 Kod yazan ajanınıza şu isteği verin:
@@ -52,12 +77,8 @@ komutunu kullanın; Codex’te `/skills` veya `$` seçicisinden
 `using-done-is-a-claim` skill’ini seçin.
 [Plugin kapsamı, güncelleme ve doğrulama sınırları →](docs/PLUGINS.md)
 
-Proje içine kopyalamak veya yalnızca kuralları kullanmak için repoyu klonlayın:
-
-```bash
-git clone https://github.com/Grit-77/done-is-a-claim.git
-cd done-is-a-claim
-```
+Proje içine kopyalamak veya yalnızca kuralları kullanmak için yukarıdaki demo
+adımında oluşturduğunuz klonu kullanın:
 
 | Kullandığınız ajan | Projenize ekleyin |
 |---|---|
@@ -114,22 +135,7 @@ Araç yalnızca deneme projesini oluşturur ve kontrol eder; ajanı normal uygul
 ve hesabınız üzerinden siz çalıştırırsınız.
 [Gerçek oturum adımları ve gözlenen sınırlar →](docs/NATIVE-TESTS.md)
 
-## Yanlış bir yeşil sonucu görün
-
-Bir komut başarısız olur. Çıktısını okuyan süreç ise başarıyla tamamlanır. Yanlış
-çıkış kodunu raporlarsanız başarısız bir kontrol, raporda yeşile döner.
-
-[Çalıştırılabilir kaynak](examples/false_green.py). Bu sentetik bir örnektir;
-üretim sistemi günlüğü veya performans ölçümü değildir.
-
-Klonladığınız reponun kökünde, Python 3.10 veya üzeriyle kendiniz çalıştırın:
-
-```bash
-python examples/false_green.py
-```
-
-Demo, farkı ortaya çıkardığında başarılıdır. **İçindeki doğrulayıcı yine de
-başarısızdır.** Demonun göstermek istediği ayrım budur.
+## Teslim edilen dosyayı kontrol edin
 
 Başarılı bir kopyalama da yanlış dosyayı teslim edebilir.
 [Teslim demosu](examples/wrong_delivery.py), eski bir kopyayı, doğru kopyayı ve
@@ -155,6 +161,7 @@ Her çalıştırma için `.local/receipts/` altında yeni bir `receipt.json` ve
 `command.log` oluşturur. Seçtiğiniz dosyaların önceki ve sonraki parmak izlerini
 karşılaştırmak için `--input` kullanın. Sıfır çıkış kodu komutun başarıyla
 tamamlandığını kaydeder; kullanıcının görevinin bittiğine karar vermez.
+Seçilmiş girdiler yoksa kayıt, güncelliği yeniden kontrol etmek için eksik kalır.
 [Kullanım, kontrol edilen girdiler ve sınırlar →](docs/RECEIPTS.md)
 
 Bir düzenleme veya devir sonrasında eski kaydı yeniden kullanacaksanız, aracın
