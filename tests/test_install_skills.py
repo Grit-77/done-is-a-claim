@@ -4,7 +4,7 @@ import hashlib
 import importlib.util
 import io
 import json
-from contextlib import redirect_stderr
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 import shutil
 import subprocess
@@ -377,6 +377,333 @@ class InstallSkillsTests(unittest.TestCase):
         result = self.install("--update", "--skill", "second")
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(self.snapshot(), before)
+
+    def test_json_list_is_one_object_and_does_not_write(self):
+        before = self.snapshot(self.base)
+        result = self.run_install("--list", "--json")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["schema_version"], 1)
+        self.assertEqual(report["state"], "listed")
+        self.assertEqual(report["available_skills"], ["first", "second"])
+        self.assertEqual(report["available_profiles"], {"small": ["first"], "both": ["first", "second"]})
+        self.assertIsNone(report["source"]["version"])
+        self.assertIsNone(report["source"]["revision"])
+        self.assertEqual(report["installed_paths"], [])
+        self.assertEqual(self.snapshot(self.base), before)
+
+    def test_json_dry_run_deduplicates_multi_agent_profile_and_writes_nothing(self):
+        before = self.snapshot(self.base)
+        result = self.run_install("--project", self.project, "--agent", "codex", "--agent", "claude-code",
+                                  "--profile", "both", "--skill", "first", "--dry-run", "--json")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["state"], "planned")
+        self.assertEqual(len(report["planned"]), 4)
+        self.assertEqual({item["action"] for item in report["planned"]}, {"install"})
+        self.assertEqual(report["copied_count"], 0)
+        self.assertEqual(report["updated_count"], 0)
+        self.assertEqual(report["installed_paths"], [])
+        self.assertIsNone(report["next_step"])
+        self.assertEqual(self.snapshot(self.base), before)
+
+    def test_json_install_reports_actual_paths_source_and_keeps_instructions(self):
+        (self.project / "AGENTS.md").write_bytes(b"owner instructions")
+        (self.source / "plugin.json").write_text('{"version":"1.4.0"}')
+        git = self.source / ".git"
+        git.mkdir()
+        revision = "1234567890abcdef1234567890abcdef12345678"
+        (git / "HEAD").write_text(revision + "\n")
+        result = self.install("--agent", "claude-code", "--profile", "both", "--json")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["state"], "installed")
+        self.assertEqual(report["copied_count"], 4)
+        self.assertEqual(report["updated_count"], 0)
+        self.assertEqual(report["source"]["version"], "1.4.0")
+        self.assertEqual(report["source"]["revision"], revision)
+        self.assertEqual(len(report["installed_paths"]), 4)
+        for path in report["installed_paths"]:
+            self.assertTrue((Path(path) / "SKILL.md").is_file())
+        self.assertFalse(report["instructions_changed"])
+        self.assertFalse(report["activated"])
+        self.assertEqual((self.project / "AGENTS.md").read_bytes(), b"owner instructions")
+        self.assertIn("first", report["next_step"])
+        self.assertNotIn("using-done-is-a-claim", report["next_step"])
+
+    def test_json_update_counts_replacements_separately_and_reports_retained_backup(self):
+        self.assertEqual(self.install().returncode, 0)
+        old = self.snapshot(self.project / ".agents/skills/first")
+        (self.source / "skills/first/SKILL.md").write_bytes(b"new version")
+        before = self.snapshot(self.base)
+        dry_run = self.install("--update", "--skill", "second", "--dry-run", "--json")
+        self.assertEqual(dry_run.returncode, 0, dry_run.stderr)
+        planned = json.loads(dry_run.stdout)
+        self.assertEqual([item["action"] for item in planned["planned"]], ["update", "install"])
+        self.assertEqual(self.snapshot(self.base), before)
+        result = self.install("--update", "--skill", "second", "--json")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["copied_count"], 1)
+        self.assertEqual(report["updated_count"], 1)
+        self.assertEqual(len(report["installed_paths"]), 2)
+        self.assertEqual(len(report["backups"]), 1)
+        self.assertEqual(report["backups"][0]["destination"], str(self.project / ".agents/skills/first"))
+        self.assertEqual(self.snapshot(Path(report["backups"][0]["path"])), old)
+
+    def test_json_preflight_errors_are_parseable_and_write_nothing(self):
+        self.assertEqual(self.install().returncode, 0)
+        for arguments in (("--skill", "missing"), ("--profile", "missing"), (), ("--update",)):
+            with self.subTest(arguments=arguments):
+                if "--update" in arguments:
+                    (self.project / ".agents/skills/first/SKILL.md").write_bytes(b"owner edit")
+                before = self.snapshot(self.base)
+                result = self.install(*arguments, "--json")
+                self.assertEqual(result.returncode, 1, result.stderr)
+                report = json.loads(result.stdout)
+                self.assertEqual(report["state"], "failed")
+                self.assertTrue(report["error"])
+                self.assertEqual(report["installed_paths"], [])
+                self.assertEqual(report["copied_count"], 0)
+                self.assertEqual(report["updated_count"], 0)
+                self.assertIsNone(report["next_step"])
+                self.assertEqual(self.snapshot(self.base), before)
+
+    def test_plain_summary_selects_only_an_installed_entry_and_preserves_installed_lines(self):
+        shutil.copytree(ROOT / "skills", self.source / "skills", dirs_exist_ok=True)
+        result = self.install()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Installed: " + str(self.project / ".agents/skills/first"), result.stdout)
+        self.assertIn("Next step:", result.stdout)
+        self.assertIn("fresh", result.stdout.lower())
+        self.assertNotIn("using-done-is-a-claim", result.stdout)
+        result = self.run_install("--project", self.project, "--agent", "codex", "--skill", "using-done-is-a-claim")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        next_step = result.stdout.split("Next step:", 1)[1]
+        self.assertIn("using-done-is-a-claim", next_step)
+        self.assertIn("AGENTS.md", result.stdout)
+        self.assertIn("CLAUDE.md", result.stdout)
+        self.assertIn("activation", result.stdout.lower())
+        self.assertIn("What you can use:", result.stdout)
+
+    def test_json_partial_publish_reports_only_completed_paths_and_retained_original(self):
+        self.assertEqual(self.install("--skill", "second").returncode, 0)
+        old_second = self.snapshot(self.project / ".agents/skills/second")
+        module = self.load_installer()
+        rename = Path.rename
+        output = io.StringIO()
+        errors = io.StringIO()
+        argv = [str(self.source / "tools/install_skills.py"), "--project", str(self.project),
+                "--agent", "codex", "--skill", "first", "--skill", "second", "--update", "--json"]
+
+        def fail_second_publish(path, target):
+            if ".skill-install-" in str(path) and Path(target).parent.name == "second":
+                raise OSError("injected second publication failure")
+            return rename(path, target)
+
+        with patch.object(sys, "argv", argv), patch.object(Path, "rename", fail_second_publish), \
+                redirect_stdout(output), redirect_stderr(errors):
+            result = module.main()
+        self.assertEqual(result, 1)
+        report = json.loads(output.getvalue())
+        self.assertEqual(report["state"], "failed")
+        self.assertEqual(report["installed_paths"], [str(self.project / ".agents/skills/first")])
+        self.assertEqual(report["copied_count"], 0)
+        self.assertEqual(report["updated_count"], 1)
+        self.assertEqual(report["incomplete_path"], str(self.project / ".agents/skills/second"))
+        self.assertEqual(len(report["backups"]), 2)
+        self.assertEqual(self.snapshot(Path(report["backups"][1]["path"])), old_second)
+        self.assertIsNone(report["next_step"])
+        self.assertIn("injected second publication failure", report["error"])
+        self.assertEqual([item["skill"] for item in report["capabilities"]], ["first"])
+
+    def test_json_stage_failure_has_no_completed_or_incomplete_destinations(self):
+        module = self.load_installer()
+        output = io.StringIO()
+        before = self.snapshot(self.base)
+        argv = [str(self.source / "tools/install_skills.py"), "--project", str(self.project),
+                "--agent", "codex", "--skill", "first", "--json"]
+        with patch.object(sys, "argv", argv), patch.object(module.shutil, "copytree", side_effect=OSError("stage failed")), \
+                redirect_stdout(output), redirect_stderr(io.StringIO()):
+            result = module.main()
+        self.assertEqual(result, 1)
+        report = json.loads(output.getvalue())
+        self.assertEqual(report["state"], "failed")
+        self.assertEqual(report["installed_paths"], [])
+        self.assertEqual(report["backups"], [])
+        self.assertIsNone(report["incomplete_path"])
+        self.assertEqual(report["capabilities"], [])
+        self.assertEqual(self.snapshot(self.base), before)
+
+    def test_single_repository_skill_reports_only_its_capability_and_next_step(self):
+        shutil.copytree(ROOT / "skills/reading-measurements", self.source / "skills/reading-measurements")
+        result = self.run_install("--project", self.project, "--agent", "codex",
+                                  "--skill", "reading-measurements", "--json")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["skills"], ["reading-measurements"])
+        self.assertEqual([item["skill"] for item in report["capabilities"]], ["reading-measurements"])
+        self.assertIn("reading-measurements", report["next_step"])
+        self.assertNotIn("using-done-is-a-claim", report["next_step"])
+
+    def test_json_report_revision_matches_the_revision_used_for_published_provenance(self):
+        module = self.load_installer()
+        argv = [str(self.source / "tools/install_skills.py"), "--project", str(self.project),
+                "--agent", "codex", "--skill", "first", "--json"]
+        output = io.StringIO()
+        revision = "1234567890abcdef1234567890abcdef12345678"
+        with patch.object(sys, "argv", argv), patch.object(module, "source_revision", side_effect=["unknown", revision]), \
+                redirect_stdout(output):
+            result = module.main()
+        self.assertEqual(result, 0)
+        report = json.loads(output.getvalue())
+        provenance = json.loads((self.project / ".agents/skills/first/PROVENANCE.json").read_text())
+        self.assertEqual(provenance["source_revision"], revision)
+        self.assertEqual(report["source"]["revision"], revision)
+
+    def invoke_json_main(self, module, *arguments):
+        output = io.StringIO()
+        errors = io.StringIO()
+        argv = [str(self.source / "tools/install_skills.py"), "--project", str(self.project),
+                "--agent", "codex", "--skill", "first", "--json", *arguments]
+        with patch.object(sys, "argv", argv), redirect_stdout(output), redirect_stderr(errors):
+            code = module.main()
+        return code, json.loads(output.getvalue()), errors.getvalue()
+
+    def test_staging_uses_inherited_permissions_and_child_can_use_copied_files(self):
+        module = self.load_installer()
+        mkdir = module.os.mkdir
+        copytree = module.shutil.copytree
+
+        def normal_permissions(path, mode=0o777, *args, **kwargs):
+            if Path(path).name.startswith(".skill-install-") and mode == 0o700:
+                raise ValueError("native session cannot use restrictive staging permissions")
+            return mkdir(path, mode, *args, **kwargs)
+
+        def child_access(source, destination, *args, **kwargs):
+            result = copytree(source, destination, *args, **kwargs)
+            if Path(source).name == "first":
+                child = subprocess.run([sys.executable, "-c",
+                    "import pathlib,sys; p=pathlib.Path(sys.argv[1]); data=p.read_bytes(); p.write_bytes(data)",
+                    str(Path(destination) / "SKILL.md")], capture_output=True, text=True)
+                self.assertEqual(child.returncode, 0, child.stderr)
+            return result
+
+        with patch.object(module.os, "mkdir", normal_permissions), patch.object(module.shutil, "copytree", child_access):
+            code, report, _ = self.invoke_json_main(module)
+        self.assertEqual(code, 0, report)
+        self.assertEqual(report["copied_count"], 1)
+        self.assertTrue(report["staging"]["removed"])
+        self.assertIsNone(report["staging"]["retained_path"])
+        self.assertFalse(Path(report["staging"]["path"]).exists())
+
+    def test_unexpected_staging_material_is_retained_and_invalidates_completed_install(self):
+        module = self.load_installer()
+        copytree = module.shutil.copytree
+
+        def insert_user_material(source, destination, *args, **kwargs):
+            result = copytree(source, destination, *args, **kwargs)
+            if Path(source).name == "first":
+                (Path(destination).parent / "owner-file.txt").write_bytes(b"retain owner material")
+            return result
+
+        with patch.object(module.shutil, "copytree", insert_user_material):
+            code, report, errors = self.invoke_json_main(module)
+        self.assertEqual(code, 1)
+        self.assertEqual(report["state"], "failed")
+        self.assertEqual(report["copied_count"], 1)
+        self.assertEqual(report["installed_paths"], [str(self.project / ".agents/skills/first")])
+        self.assertIsNone(report["next_step"])
+        staging = Path(report["staging"]["retained_path"])
+        self.assertEqual((staging / "owner-file.txt").read_bytes(), b"retain owner material")
+        self.assertFalse(report["staging"]["removed"])
+        self.assertTrue(report["staging"]["error"])
+        self.assertIn(str(staging), errors)
+
+    def test_partial_staging_failure_removes_only_known_copied_material(self):
+        module = self.load_installer()
+        copytree = module.shutil.copytree
+        before = self.snapshot()
+
+        def fail_after_copy(source, destination, *args, **kwargs):
+            result = copytree(source, destination, *args, **kwargs)
+            if Path(source).name == "first":
+                raise OSError("failure after source copy")
+            return result
+
+        with patch.object(module.shutil, "copytree", fail_after_copy):
+            code, report, _ = self.invoke_json_main(module)
+        self.assertEqual(code, 1)
+        self.assertEqual(report["installed_paths"], [])
+        self.assertTrue(report["staging"]["removed"])
+        self.assertEqual(self.snapshot(), before)
+
+    def test_partial_staging_failure_retains_modified_known_filename(self):
+        module = self.load_installer()
+        copytree = module.shutil.copytree
+
+        def corrupt_then_fail(source, destination, *args, **kwargs):
+            result = copytree(source, destination, *args, **kwargs)
+            if Path(source).name == "first":
+                (Path(destination) / "SKILL.md").write_bytes(b"changed concurrently")
+                raise OSError("failure with changed stage")
+            return result
+
+        with patch.object(module.shutil, "copytree", corrupt_then_fail):
+            code, report, _ = self.invoke_json_main(module)
+        self.assertEqual(code, 1)
+        self.assertEqual(report["installed_paths"], [])
+        staging = Path(report["staging"]["retained_path"])
+        self.assertEqual((staging / "0/SKILL.md").read_bytes(), b"changed concurrently")
+        self.assertTrue((staging / "0/references/guide.txt").exists())
+
+    def test_cleanup_error_keeps_published_counts_and_reports_retained_staging(self):
+        module = self.load_installer()
+        rmdir = Path.rmdir
+
+        def fail_cleanup(path):
+            if path.name.startswith(".skill-install-"):
+                raise PermissionError("cleanup refused")
+            return rmdir(path)
+
+        with patch.object(Path, "rmdir", fail_cleanup):
+            code, report, _ = self.invoke_json_main(module)
+        self.assertEqual(code, 1)
+        self.assertEqual(report["state"], "failed")
+        self.assertEqual(report["copied_count"], 1)
+        self.assertTrue((self.project / ".agents/skills/first/SKILL.md").exists())
+        self.assertFalse(report["staging"]["removed"])
+        self.assertIn("cleanup refused", report["staging"]["error"])
+        self.assertIsNone(report["next_step"])
+
+    @unittest.skipUnless(sys.platform == "win32", "Windows junction fixture")
+    def test_staging_replaced_by_junction_retains_external_sentinel(self):
+        import _winapi
+        module = self.load_installer()
+        outside = self.base / "outside"
+        outside.mkdir()
+        (outside / "sentinel.txt").write_bytes(b"external owner material")
+        rename = Path.rename
+        replaced = []
+
+        def replace_after_publish(path, target):
+            result = rename(path, target)
+            if ".skill-install-" in str(path) and not any(path.parent.iterdir()):
+                staging = path.parent.parent
+                rename(staging, staging.with_name(staging.name + "-original"))
+                _winapi.CreateJunction(str(outside), str(staging))
+                replaced.append(staging)
+            return result
+
+        with patch.object(Path, "rename", replace_after_publish):
+            code, report, _ = self.invoke_json_main(module)
+        self.assertEqual(code, 1)
+        self.assertEqual(report["copied_count"], 1)
+        self.assertEqual((outside / "sentinel.txt").read_bytes(), b"external owner material")
+        self.assertEqual(len(list(outside.iterdir())), 1)
+        self.assertFalse(report["staging"]["removed"])
+        self.assertEqual(report["staging"]["retained_path"], str(replaced[0]))
+        replaced[0].rmdir()  # remove the test junction only, preserving its target
 
     def load_installer(self):
         spec = importlib.util.spec_from_file_location("installer_fixture", self.source / "tools/install_skills.py")

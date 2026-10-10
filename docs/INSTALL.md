@@ -1,5 +1,9 @@
 # Install only what you need
 
+For an agent handling “install this repository,” use the root
+[installation guide](../INSTALL.md). It covers host selection, preservation of
+existing work, result checks and a short explanation in the user's language.
+
 For native Claude Code and Codex plugin installation, see [PLUGINS.md](PLUGINS.md).
 The plugin exposes the complete skill catalog. This page covers project-local
 copies, selected profiles and manual rule adoption.
@@ -58,6 +62,57 @@ unselected skills. Add the core rules separately as described below. Interrupted
 filesystem operations can leave a partial installation; the error reports what
 was installed. No automatic cleanup deletes user material. Preflight is not a
 lock against another process changing the destination concurrently.
+
+Staging uses an exclusive project directory with the parent's ordinary inherited
+permissions. Cleanup removes only known staged names, types and bytes after
+checking their identities and containment. Unexpected, changed or linked content
+is retained and reported as a failure. It never changes ACLs or recursively
+deletes the staging tree. A cleanup failure can occur after copies completed;
+read the actual counts and retained path before deciding what to do next.
+
+An agent's sandbox may protect its own skill directories separately from ordinary
+project files. Use the host's normal approval flow for the exact installation
+command if necessary. If approval is unavailable, report the failing operation
+and run that command from an authorized terminal; do not disable protection or
+claim that a preview installed the skills.
+
+## Explain the result to the user
+
+Successful installation prints the paths written, actual copy/update counts,
+what the selected skills help with and the next step for a fresh session.
+It does not claim that the host has loaded the new skills. When an agent installs
+for someone, follow the [short welcome format](../INSTALL.md#4-finish-with-a-short-explanation)
+in their language: what changed, where, the practical benefit and how to start.
+Keep the raw file list and technical details out of that short explanation.
+
+For an installing agent or script, append `--json`:
+
+```bash
+python tools/install_skills.py --project ../my-project --agent codex --profile workflow --dry-run --json
+python tools/install_skills.py --project ../my-project --agent codex --profile workflow --json
+```
+
+Inspect the preview before executing; an already authorized installation does
+not require another routine approval. The schema-version-1 report is one JSON
+object on stdout. Operational diagnostics can also appear on stderr. Invalid
+CLI arguments retain argparse's usual exit 2 and do not promise a JSON object.
+
+| Field | Interpretation |
+|---|---|
+| `state` | `listed`, `planned`, `installed` or `failed`; a plan is not an installation |
+| `skills`, `agents` | Unique requested names and selected hosts |
+| `copied_count`, `updated_count`, `installed_paths` | Completed destination folders only; two agents can receive 26 copies of 13 skills |
+| `planned` | Intended actions, including actions that may remain unfinished after failure |
+| `backups`, `incomplete_path`, `error` | Retained material and failure information to inspect before retrying |
+| `staging` | Null when no staging occurred; otherwise its path, removal status and retained path/error |
+| `source` | Declared package version and observed revision when available; unknown values are null, and neither authenticates the copied bytes |
+| `capabilities` | Guidance for the selected skills, restricted to completed copies after a publication failure |
+| `instructions_changed`, `activated` | The copier does not modify instructions/settings; it does not verify runtime activation |
+| `next_step` | An actual selected skill to use after successful installation; null for previews and failures |
+
+`--list --json` also works without a project or writes. On failure, use the exit
+code and actual completed/retained paths; do not turn planned counts into a
+success message. Backups and editable provenance have the same limits as before.
 
 ## Rules
 
