@@ -190,6 +190,11 @@ def main(argv=None):
                         receipt["status"] = "command_succeeded"
                         receipt["wrapper_exit_code"] = 0
         receipt["finished_at"] = utc_now()
+        digest = hashlib.sha256()
+        with (folder / "command.log").open("rb") as stream:
+            for block in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(block)
+        receipt["log_sha256"] = digest.hexdigest()
         with (folder / "receipt.json").open("x", encoding="utf-8") as stream:
             json.dump(receipt, stream, indent=2, ensure_ascii=True)
             stream.write("\n")

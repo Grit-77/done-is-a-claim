@@ -56,7 +56,7 @@ Additional sources reviewed on 2026-10-10:
 
 | Source | Adaptation and boundary |
 |---|---|
-| [Vercel skills CLI](https://github.com/vercel-labs/skills) and [version 1.7.2 metadata](https://registry.npmjs.org/skills/1.7.2) | Document optional discovery and selected installation. An isolated local-source smoke checked the six folders and both selected agent copies. |
+| [Vercel skills CLI](https://github.com/vercel-labs/skills) and [version 1.7.2 metadata](https://registry.npmjs.org/skills/1.7.2) | Document optional discovery and selected installation. An isolated local-source smoke checked v1.1.0's six-skill layout and both selected agent copies. |
 | [Version-pinned installer source](https://github.com/vercel-labs/skills/blob/671e8c320810d36fed80fac5f1a2c1bf7e82d812/src/installer.ts) | Its replacement behavior motivated an original project installer that refuses destination collisions. No upstream installer code is copied. |
 | [OpenAI's historical gh-fix-ci skill](https://github.com/openai/skills/blob/main/skills/.curated/gh-fix-ci/SKILL.md) | A narrowly scoped script can return structured evidence and distinguish missing observations. The local receipt tool is original and has no GitHub/provider integration. |
 | [HumanLayer: small focused agents](https://github.com/humanlayer/12-factor-agents/blob/main/content/factor-10-small-focused-agents.md) and [explicit control flow](https://github.com/humanlayer/12-factor-agents/blob/main/content/factor-08-own-your-control-flow.md) | Keep capture, installation and semantic review distinct, with inspectable transitions and ordinary files. |
@@ -69,11 +69,35 @@ and side effects above were checked against the pinned Vercel version; later
 versions may differ. Popularity and installation telemetry do not establish active
 use or improved agent outcomes.
 
+## Rechecking evidence, resuming and delivery
+
+Reviewed on 2026-10-10. New portable workflows distinguish what was saved, what is
+true in the receiving checkout, and what exists at the delivery destination.
+
+| Source | Adaptation here | Evidence boundary |
+|---|---|---|
+| Grit session-handoff runbook and its synthetic scenario | [resuming-work](skills/resuming-work/SKILL.md) and the expanded handoff template | Internal operational guidance: read the final saved checkpoint back, reopen evidence and establish current ownership. Not a newly measured incident. |
+| Grit delivery acknowledgement code/tests and uncertain-launch handling | [checking-delivery](skills/checking-delivery/SKILL.md), delivery fields and scenarios | Static implementation/test inspection separates attempts and correlated acknowledgements. An acknowledgement does not prove destination usability or human reading. |
+| [in-toto Link model](https://in-toto.readthedocs.io/en/latest/model.html#link) | Keep command, selected artifact identities and execution output distinct; add a digest for the closed local log. | This is an original local record format, not an in-toto implementation or signed statement. |
+| [SLSA 1.2 artifact verification](https://slsa.dev/spec/v1.2/verifying-artifacts) | Compare observed bytes with recorded identities before reusing evidence. | SLSA also has trust and policy requirements. Editable local hash comparison is not SLSA verification or authenticity. |
+| [GitHub CLI release asset verification](https://cli.github.com/manual/gh_release_verify-asset) and [attestation verification](https://cli.github.com/manual/gh_attestation_verify) | Reopen the actual destination artifact and check the intended identity, then apply consumer-specific checks. | The local synthetic delivery demo adds no signing, GitHub or provider dependency. |
+
+The receipt rechecker is new original code. Internal Grit code and external
+specifications informed its separation of observations; they do not establish
+that this repository inherits another system's guarantees. Private source
+locations and raw operational records are not published here. No upstream code
+or prose is vendored. The cited projects retain their licenses, including
+in-toto's Apache-2.0, GitHub CLI's MIT, and the SLSA specification's
+[Community Specification License](https://github.com/slsa-framework/governance/blob/main/1._Community_Specification_License-v1.md).
+
 ## Illustrations and checks
 
 - [The false-green demo](examples/false_green.py) is a synthetic, runnable example.
   Its animation is generated from captured demo output, not invented terminal text.
 - [Evaluation cases](evals/README.md) are prompts and review rubrics, not a benchmark
   dataset or a claim of measured accuracy.
+- [The wrong-delivery demo](examples/wrong_delivery.py) uses real temporary local
+  copies and parsing with a positive control. It demonstrates mechanisms, not a
+  production delivery or improvement rate.
 - [Repository checks](tools/check_repository.py) validate local structure. Their
   result does not certify agent behavior, source truth or remote URL availability.

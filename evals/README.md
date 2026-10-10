@@ -36,6 +36,8 @@ do not turn it into a general success rate.
 | E08 | Internal task totals promoted to a public error rate | public-claims |
 | E09 | Missing path introduced by the change | whose-red |
 | E10 | Retry after an ambiguous external result | evidence-freshness |
+| E11 | Old acknowledgement and mismatched delivered bytes | checking-delivery |
+| E12 | Chat summary disagrees with the saved resume boundary | resuming-work |
 
 ## Report format
 

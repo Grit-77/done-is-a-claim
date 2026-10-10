@@ -1,6 +1,7 @@
 """Exercise command receipts using real subprocesses and temporary files."""
 
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -9,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 RUNNER = Path(__file__).resolve().parents[1] / "tools" / "receipt.py"
@@ -62,6 +64,25 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(receipt["status"], "command_failed")
         self.assertEqual(receipt["command"]["exit_code"], 7)
         self.assertEqual((folder / "command.log").read_bytes(), b"out\x00\xfferr")
+        self.assertEqual(receipt["log_sha256"], hashlib.sha256(b"out\x00\xfferr").hexdigest())
+
+    def test_log_digest_read_failure_is_explicit_write_failure(self):
+        # Windows prevents unlinking an open log; inject only the post-close read
+        # failure while preserving real command execution and evidence writes.
+        spec = importlib.util.spec_from_file_location("receipt_under_test", RUNNER)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        real_open = Path.open
+
+        def fail_log_read(path, mode="r", *args, **kwargs):
+            if path.name == "command.log" and mode == "rb":
+                raise OSError("fixture digest read failure")
+            return real_open(path, mode, *args, **kwargs)
+
+        with patch.object(Path, "open", fail_log_read):
+            result = module.main(["--cwd", str(self.cwd), "--", sys.executable, "-c", "pass"])
+        self.assertEqual(result, 2)
+        self.assertFalse(list((self.cwd / '.local/receipts').glob('*/receipt.json')))
 
     def test_argv_shell_characters_and_command_options_are_literal(self):
         arguments = ["$(echo BAD)", "a;b", "x & y", "`echo BAD`", "--input", "space value", 'a"b']
