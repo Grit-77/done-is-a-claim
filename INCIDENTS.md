@@ -1,6 +1,10 @@
 # Incidents
 
-The failure behind each rule in AGENTS.md. All of them happened in September 2026 while we ran Claude Code and Codex agents on Grit's own repository. Numbers are as measured on the day.
+The author's failure accounts behind the original rules in AGENTS.md, from
+September 2026 while running Claude Code and Codex agents on Grit's own repository.
+Numbers are reported from the internal records, not independently reproduced by
+this public repository. See [CLAIMS.md](CLAIMS.md) for the source mapping and limits.
+Rule wording may be refined without rewriting the historical account.
 
 ## The numbers that started it
 

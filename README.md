@@ -2,79 +2,157 @@
 
 **English** · [Türkçe](README.tr.md)
 
-![DONE-IS-A-CLAIM: an AGENTS.md window with rules 3 to 6, over a white card wall with one gate.](assets/card.jpg)
+![Done is a claim. Show the receipt. Field notes for coding agents, by Grit.](assets/receipt.svg)
 
-**18 rules and 3 skills for coding agents, each one paid for by a real failure.**
+**Your agent says “done”. What would prove it?**
 
-Your agent says "done". Usually it is. Sometimes the tests never ran, the exit code belonged to `tail`, or the fix reached one call site out of four. These rules make an agent show its evidence before it says the word.
+18 incident-backed rules and 6 focused skills for coding agents. Give the agent a
+clear acceptance target, ask for the actual result, and keep the evidence attached
+to the work it tested. Plain Markdown. Use the pieces you need.
 
-We wrote them while running Claude Code and Codex agents on our own repository. Between 14 and 29 September 2026 a server re-ran the acceptance command of **3,489** agent tasks: **2,282** passed on that first independent re-run, and **736** tasks had passed their own test while turning the full suite red on main. Every rule below comes with the incident behind it in [INCIDENTS.md](INCIDENTS.md), and every figure with its source in [CLAIMS.md](CLAIMS.md).
+[Get started](#get-started) · [Choose a skill](#choose-a-skill) · [Try the demo](#watch-a-false-green) · [Read the incidents](INCIDENTS.md)
 
-## Use it
+## Watch a false green
 
-Copy [AGENTS.md](AGENTS.md) into the root of your repository. Codex and other agents that read `AGENTS.md` pick it up as it is.
+A command fails. The process reading its output succeeds. Report the wrong exit
+code, and a failed check becomes a green report.
 
-For Claude Code, also copy [CLAUDE.md](CLAUDE.md). It holds one line, `@AGENTS.md`, which imports the rules.
+<details>
+<summary><strong>Play the evidence demo</strong> — expand for the animation</summary>
 
-Already have an `AGENTS.md` or `CLAUDE.md`? Paste the rules under your own.
+![A synthetic verifier fails with exit 1 while its output summarizer exits 0. The receipt records FAIL and the verifier's own exit code.](assets/false-green.gif)
 
-## The rules
+[Static frame](assets/false-green.png) · [Runnable source](examples/false_green.py)
 
-**Before you start**
-1. Write the acceptance command before the work, and never edit it to pass.
-2. Check that every path you were given exists.
+The animation uses output captured from the included synthetic demo. It is not a
+production log or a benchmark. It plays once; reload to replay.
 
-**Before you say "done"**
-3. Re-run the acceptance yourself, on the current revision, and quote its output.
-4. Run the whole suite, not only your test.
-5. Record the command's own exit code, not the pipe's.
-6. "No tests ran" is a failure.
-7. Unknown is not pass.
-8. Green means every check.
+</details>
 
-**When you report**
-9. Read the artefact, not the summary.
-10. A file that exists is not a file that works.
-11. Look at it yourself.
-12. Verify every citation.
-13. State the base, and re-check it before you publish.
-
-**When you write tests and fixes**
-14. A test that repeats a constant proves nothing.
-15. Fix the class, not the instance.
-16. Run a detector on a known-good case first.
-17. Register cleanup before the work it cleans up.
-
-**Never**
-18. Never run a destructive command to answer a question.
-
-## Skills
-
-Three skills for the moments the rules are hardest to follow:
-
-| Skill | Use it when |
-|---|---|
-| [reading-measurements](skills/reading-measurements/SKILL.md) | before reporting any figure: an exit code, a test count, a green, a list size |
-| [whose-red](skills/whose-red/SKILL.md) | tests fail and someone has to decide: the change, or main? |
-| [public-claims](skills/public-claims/SKILL.md) | writing a README, release notes or a launch post with numbers in it |
-
-For Claude Code, copy a skill's folder into `.claude/skills/` in your repository, or into `~/.claude/skills/` for every project:
+Run it yourself from the cloned repository's root with Python 3.10+:
 
 ```bash
-git clone https://github.com/Grit-77/done-is-a-claim
-cp -r done-is-a-claim/skills/* ~/.claude/skills/
+python examples/false_green.py
 ```
 
-Each skill is one Markdown file, so any other agent can be pointed at it directly.
+The demo succeeds when it exposes the mismatch. **The verifier inside it still
+fails.** That distinction is the point.
+
+## Get started
+
+```bash
+git clone https://github.com/Grit-77/done-is-a-claim.git
+cd done-is-a-claim
+```
+
+| You use | Add to your project |
+|---|---|
+| Codex or an agent that reads `AGENTS.md` | Copy [AGENTS.md](AGENTS.md) to the project root. |
+| Claude Code | Copy [AGENTS.md](AGENTS.md) and [CLAUDE.md](CLAUDE.md), which imports it with `@AGENTS.md`. |
+| Existing instructions | Merge the relevant rules into your file. Keep your project-specific commands and constraints. |
+
+You can start with that one rules file. The optional skills add depth when a
+particular problem comes up. [Install a skill on macOS, Linux or Windows →](docs/INSTALL.md)
+
+Try this first request in your own project:
+
+> Read the project instructions. Before making changes, identify the acceptance
+> command for this task and the user-visible result it checks. When reporting the
+> result, include the tested revision, actual output and anything you did not check.
+
+This checks whether the agent understood the request. It does not enforce compliance.
+
+## What changes in the report
+
+| A claim | Evidence that can support it |
+|---|---|
+| “The tests passed.” | The command, collected cases, actual result, its own exit status and the tested tree. |
+| “That failure was already on main.” | Comparable branch and clean-base runs, with matching failure signatures. |
+| “The worker finished.” | The worker's actual diff, checked inputs and acceptance result. Delivery is recorded separately. |
+| “The screenshot was saved.” | An image that decodes and has been visually inspected. |
+| “Ready to publish.” | The reviewed artifact still matches the artifact being published. |
+
+Use the [completion receipt](templates/completion-receipt.md),
+[acceptance brief](templates/acceptance-brief.md) and [handoff](templates/handoff.md)
+as small, reusable formats. A missing check belongs in the report.
+
+[Practical Bash and PowerShell evidence recipes →](docs/RECIPES.md)
+
+## Choose a skill
+
+| When this happens | Use this skill | It helps you decide |
+|---|---|---|
+| The task's “pass” condition is vague | [acceptance-design](skills/acceptance-design/SKILL.md) | Does this check cross the boundary the user actually cares about? |
+| A number looks convincing | [reading-measurements](skills/reading-measurements/SKILL.md) | What does this output establish, and what does it leave unknown? |
+| A test fails on your branch | [whose-red](skills/whose-red/SKILL.md) | Is there comparable evidence for a regression, an existing failure or an unresolved cause? |
+| A subagent reports success | [collecting-worker-results](skills/collecting-worker-results/SKILL.md) | Is there relevant work, was that work tested, and was it delivered? |
+| Work changed after a check | [evidence-freshness](skills/evidence-freshness/SKILL.md) | Does the receipt still describe the inputs you are about to act on? |
+| A README or launch post makes a claim | [public-claims](skills/public-claims/SKILL.md) | Can the reader trace it, and are the verification limits stated? |
+
+Each skill is a standalone `SKILL.md`. No Grit service, account or CLI is needed.
+
+## The field rules
+
+The complete wording lives in [AGENTS.md](AGENTS.md). Each original rule has a
+failure story in [INCIDENTS.md](INCIDENTS.md).
+
+| Moment | Rules |
+|---|---|
+| **Before you start** | **01** Define acceptance before the work. **02** Check the paths. |
+| **Before you say “done”** | **03** Re-run on the current work. **04** Check the wider suite. **05** Capture the command's own exit code. **06** No tests is no pass. **07** Unknown is not pass. **08** Read every required check. |
+| **When you report** | **09** Read the artifact. **10** Open what was written. **11** Look at it yourself. **12** Verify citations. **13** State the base and re-check it before publication. |
+| **When you test and fix** | **14** Test behavior, not agreement with a constant. **15** Fix the defect class. **16** Test the detector on a known-good case. **17** Register cleanup before the work. |
+| **Always preserve the work** | **18** Never use a destructive command to answer a question. |
+
+## Where this came from
+
+These rules grew out of running Claude Code and Codex on Grit's own repository.
+The original internal records report **3,489** task acceptance re-runs between
+14–29 September 2026, with **2,282** passing the first independent re-run. A
+separate internal count reports **736** tasks whose own acceptance passed while
+the full suite broke on main.
+
+**These are author-reported historical observations, not a public benchmark.** The
+raw internal logs are not included. Some unsuccessful re-runs were environment
+failures; these figures do not establish an agent-error rate or the effectiveness
+of this toolkit. [Claims and limits →](CLAIMS.md)
+
+The additional workflows distill Grit's operational runbooks. They are identified
+as guidance, not newly measured incidents. We also studied how related projects
+organize installation, skills and verification. [Sources and design decisions →](SOURCES.md)
+
+## Try to fool it
+
+An agent can repeat a rule and still make the wrong decision. The
+[scenario pack](evals/README.md) puts the instructions under pressure: a passing
+pipe, mismatched controls, a worker with no relevant changes, stale evidence and
+other traps. Run the prompts in fresh sessions and keep the responses.
+
+These are manual behavioral evaluations, not published success-rate claims.
+
+For the repository itself:
+
+```bash
+python tools/run_tests.py
+python tools/check_repository.py
+```
+
+The test runner rejects empty or entirely skipped suites. The checks exercise the
+tools and validate local document targets, skill metadata
+and imports. [CI](.github/workflows/check.yml) runs on Windows and Linux. Passing
+these checks does not prove that an agent follows the instructions.
 
 ## Rules are not a gate
 
-A rule in a prompt is advice: the agent can still skip it. We built that gate as a separate tool, RADAR, which refuses to close a task until its acceptance has passed again on the current revision. These rules are the part that fits in one file.
+This repository supplies instructions, examples and evaluation material. It does
+not intercept an agent's tools, block a merge or enforce a deployment policy.
+Use your project's actual test and release gates for enforcement. Grit's separate
+[RADAR project](https://github.com/Grit-77/radar) explores that operational layer.
 
-## Contributing
+## Bring the failure that taught you
 
-Have a rule that cost you a real failure? Open an issue with the incident: what the agent claimed, what was true, and the number or output that showed the difference. Rules without an incident are not added.
+A useful contribution starts with what the agent claimed, what was true, and the
+evidence that revealed the difference. [Propose a rule](https://github.com/Grit-77/done-is-a-claim/issues/new?template=new-rule.yml)
+or [read the contribution guide](CONTRIBUTING.md).
 
-## Licence
-
-Apache-2.0. Made by [Grit](https://grit.grit-77.workers.dev), Ankara. Also from us: [cinematic-site](https://github.com/Grit-77/cinematic-site), a skill set for websites that ship checked.
+[Apache-2.0](LICENSE) · Made by [Grit](https://github.com/Grit-77), Ankara.

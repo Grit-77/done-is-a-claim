@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" role="img" aria-labelledby="title desc">
+  <title id="title">Done is a claim. Show the receipt.</title>
+  <desc id="desc">An ivory and black editorial cover with a vermilion evidence stamp. Field notes for coding agents, by Grit.</desc>
+  <rect width="1280" height="440" fill="#f2efe7"/>
+  <path d="M0 0h16v440H0z" fill="#e54425"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#171916">
+    <text x="60" y="54" font-size="19" font-weight="700" letter-spacing="3">GRIT / FIELD NOTES FOR CODING AGENTS</text>
+    <path d="M60 80h1160" stroke="#171916" stroke-width="2"/>
+    <text x="54" y="202" font-size="112" font-weight="900" letter-spacing="-6">DONE IS</text>
+    <text x="54" y="313" font-size="112" font-weight="900" letter-spacing="-6">A CLAIM.</text>
+    <path d="M60 356h1160" stroke="#171916" stroke-width="2"/>
+    <text x="60" y="403" font-size="24">The work ends where the evidence begins.</text>
+    <text x="1220" y="403" text-anchor="end" font-size="19" font-weight="700" letter-spacing="2">OPEN FIELD MANUAL</text>
+  </g>
+  <g transform="translate(835 120) rotate(-6 175 100)">
+    <rect width="358" height="196" rx="3" fill="none" stroke="#c33218" stroke-width="5"/>
+    <rect x="10" y="10" width="338" height="176" rx="1" fill="none" stroke="#c33218" stroke-width="1.5"/>
+    <g fill="#c33218" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="48" text-anchor="middle" letter-spacing="1">
+      <text x="179" y="80">SHOW THE</text>
+      <text x="179" y="142">RECEIPT.</text>
+    </g>
+  </g>
+</svg>

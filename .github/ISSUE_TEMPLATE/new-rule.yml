@@ -23,3 +23,18 @@ body:
       description: The command, output or number that showed the difference.
     validations:
       required: true
+  - type: dropdown
+    id: evidence-type
+    attributes:
+      label: What kind of evidence is this?
+      options:
+        - Public reproduction with command and output
+        - Anonymized first-hand incident (raw records are private)
+        - Operational guidance or static review (not a reproduced incident)
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: When should this rule not apply?
+      description: Give a counterexample or limit so one failure does not become an overbroad instruction.

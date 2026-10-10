@@ -1,8 +1,14 @@
 # Claims
 
-Every figure in this repository, with where it comes from. The incidents come from Grit's internal records, written
-on the day each one happened; the lesson name is the record's id. A figure that cannot be traced here is removed,
-not softened.
+The historical figures below are author-reported observations from Grit's internal
+records. The lesson names identify those records; they are not public links. Raw
+logs are not included, so a reader cannot independently recompute these totals
+from this repository. They describe one internal workflow, not a public benchmark
+or a measured benefit of installing these instructions.
+
+The original account and record mapping are preserved from repository revision
+`d942730912a212a2341eb1c298ad775c674ea3aa`. This update clarifies their verification
+status; it does not claim a new recount of the private logs.
 
 | Figure | Where it appears | Receipt |
 |---|---|---|
@@ -24,10 +30,29 @@ not softened.
 
 ## Not claims
 
-Rule numbers (1-18), dates, version numbers in examples, and the counts of files in this repository.
+Rule numbers, dates and version numbers used to identify an example are labels.
+The [demo](examples/false_green.py), templates and [evaluation cases](evals/README.md)
+are synthetic, not additional production incidents.
+
+## Publicly inspectable structure
+
+The README's **18 rules** can be counted as numbered entries in [AGENTS.md](AGENTS.md).
+Its **6 skills** are the six `skills/*/SKILL.md` files. These are inventory counts,
+not quality or effectiveness scores. The repository checker validates structure;
+the behavioral evaluation pack separately describes what an agent should do.
+
+Source and adaptation notes for the new workflows are in [SOURCES.md](SOURCES.md).
 
 ## Not claimed
 
 - A rate of wrong agent work. Part of the 1,207 tasks that did not pass the first re-run failed for environment
   reasons (missing tools, host errors), so they are not all defects.
 - How often the gate rejects good work. It was never measured.
+- A reduction in failure rate caused by these instructions, or a success rate for
+  the evaluation scenarios. No controlled outcome study is published here.
+
+## Revision note — 2026-10-10
+
+Moved the historical figures behind an explicit author-report label in both
+READMEs; retained their original values and internal source mapping; distinguished
+new operational guidance and synthetic demonstrations from incident evidence.
