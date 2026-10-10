@@ -1,7 +1,7 @@
 # Native plugin installation
 
 The `done-is-a-claim` plugin ships the connected skills in this repository as one
-optional package, version **1.3.0**. Its marketplace is
+optional package, version **1.4.0**. Its marketplace is
 `done-is-a-claim-marketplace`. Installing it makes instructions available to the
 agent. It provides no MCP server, credentials, executable hooks, or tool intercepts.
 The compatibility manifest's `hooks: {}` registers no hooks.
@@ -10,6 +10,10 @@ The command syntax below was checked against **Codex CLI 0.160.1** and
 **Claude Code 2.1.289**. Availability depends on the host and its plugin policy;
 older clients may need an update. A validated package is not evidence that an
 installed skill was selected or followed in a live session.
+
+For observed native loading and task outcomes, and an executable exercise to
+repeat on your own host, see [real session tests](NATIVE-TESTS.md). That guide
+keeps successful loading separate from blocked or successful task execution.
 
 ## Codex
 

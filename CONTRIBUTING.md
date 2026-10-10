@@ -37,6 +37,7 @@ Requires Python 3.10 or newer. From the repository root:
 ```bash
 python tools/run_tests.py
 python tools/check_repository.py
+python tools/check_package.py
 git diff --check
 ```
 
@@ -44,7 +45,9 @@ These checks exercise the repository checker and check document structure. They
 reject empty test discovery and suites where every test is skipped. They
 do not measure whether an agent follows a skill. For behavior changes, also run
 the relevant [evaluation scenarios](evals/README.md) in a fresh session and report
-the actual response and limitations. Open both READMEs in a Markdown renderer
+the actual response and limitations. For native loading or actual edits, follow
+the [native session procedure](docs/NATIVE-TESTS.md); distinguish registration,
+skill loading and independently verified task acceptance. Open both READMEs in a Markdown renderer
 when changing presentation.
 
 Use the [completion receipt](templates/completion-receipt.md) in your PR. Include

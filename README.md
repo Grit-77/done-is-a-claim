@@ -88,6 +88,18 @@ Workers are optional; an unavailable reviewer is reported as a self-review limit
 
 [See the flow and a worked task →](docs/WORKFLOW.md)
 
+Want to test your installation on real work? From this repository's clone, create a small broken CSV project,
+let your installed skill handle it, then check the result independently:
+
+```bash
+python tools/native_smoke.py create --project ../claim-smoke
+python tools/native_smoke.py verify --project ../claim-smoke --json
+```
+
+The initial independent check deliberately fails even though the starter's narrow
+tests pass. The tool creates and checks the fixture; you run the agent through
+your normal host and account. [Real session procedure and observed limits →](docs/NATIVE-TESTS.md)
+
 ## Watch a false green
 
 A command fails. The process reading its output succeeds. Report the wrong exit

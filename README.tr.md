@@ -90,6 +90,19 @@ isteğe bağlıdır; bağımsız inceleyici yoksa öz incelemenin sınırı aç�
 
 [Akış şeması ve örnek görev →](docs/WORKFLOW.md)
 
+Kurulumu gerçek bir görevde denemek için bu reponun klonunda küçük ve hatalı bir CSV projesi oluşturun,
+kurulu skill’inizle düzelttirin, ardından sonucu bağımsız kontrol edin:
+
+```bash
+python tools/native_smoke.py create --project ../claim-smoke
+python tools/native_smoke.py verify --project ../claim-smoke --json
+```
+
+Başlangıçtaki dar testler geçse bile bağımsız kontrol bilerek başarısız olur.
+Araç yalnızca deneme projesini oluşturur ve kontrol eder; ajanı normal uygulamanız
+ve hesabınız üzerinden siz çalıştırırsınız.
+[Gerçek oturum adımları ve gözlenen sınırlar →](docs/NATIVE-TESTS.md)
+
 ## Yanlış bir yeşil sonucu görün
 
 Bir komut başarısız olur. Çıktısını okuyan süreç ise başarıyla tamamlanır. Yanlış

@@ -4,6 +4,10 @@ These are synthetic decision scenarios. They test whether an agent reasons from
 evidence instead of repeating a rule. They are not production logs, an automated
 benchmark, or measured proof that this toolkit improves outcomes.
 
+For a real file-editing exercise in an installed native plugin session, use the
+[CSV smoke project and independent verifier](../docs/NATIVE-TESTS.md). Keep that
+task result separate from these synthetic decision-packet responses.
+
 ## Run a case
 
 1. Pick a participant packet from [CASES.md](CASES.md) and a relevant installed skill.
