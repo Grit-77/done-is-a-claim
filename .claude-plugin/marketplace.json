@@ -1,0 +1,13 @@
+{
+  "name": "done-is-a-claim-marketplace",
+  "description": "Connected evidence-first development skills from Done is a claim.",
+  "owner": { "name": "Grit" },
+  "plugins": [
+    {
+      "name": "done-is-a-claim",
+      "source": "./",
+      "version": "1.3.0",
+      "description": "Evidence-first workflows for acceptance, verification, reviews, handoffs and delivery."
+    }
+  ]
+}

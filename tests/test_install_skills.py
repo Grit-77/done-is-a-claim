@@ -1,13 +1,17 @@
 """Project installs must preserve existing material and carry verifiable copies."""
 
 import hashlib
+import importlib.util
+import io
 import json
+from contextlib import redirect_stderr
 from pathlib import Path
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,6 +33,7 @@ class InstallSkillsTests(unittest.TestCase):
             (folder / "SKILL.md").write_bytes(f"---\nname: {name}\ndescription: fixture\n---\n".encode())
             (folder / "references" / "guide.txt").write_bytes(b"fixture\x00\xff\n")
         shutil.copyfile(ROOT / "LICENSE", self.source / "LICENSE")
+        (self.source / "profiles.json").write_text(json.dumps({"small": ["first"], "both": ["first", "second"]}))
         self.project = self.base / "project"
         self.project.mkdir()
 
@@ -224,6 +229,245 @@ class InstallSkillsTests(unittest.TestCase):
         result = self.install("--skill", "second")
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(self.snapshot(), {})
+
+    def test_source_empty_directory_refuses_initial_install_before_writes(self):
+        (self.source / "skills/first/empty").mkdir()
+        before = self.snapshot(self.base)
+        result = self.install()
+        self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("empty", result.stderr.lower())
+        self.assertEqual(self.snapshot(self.base), before)
+
+    def test_later_source_empty_directory_refuses_every_selection_before_writes(self):
+        (self.source / "skills/second/nested/empty").mkdir(parents=True)
+        before = self.snapshot(self.base)
+        result = self.install("--skill", "second", "--agent", "claude-code")
+        self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("empty", result.stderr.lower())
+        self.assertEqual(self.snapshot(self.base), before)
+
+    def test_list_needs_no_target_and_performs_no_writes(self):
+        before = self.snapshot(self.base)
+        result = self.run_install("--list")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        for name in ("first", "second", "small", "both"):
+            self.assertIn(name, result.stdout)
+        self.assertEqual(self.snapshot(self.base), before)
+
+    def test_profiles_compose_with_skills_and_deduplicate(self):
+        result = self.run_install("--project", self.project, "--agent", "codex",
+                                  "--profile", "small", "--profile", "both", "--skill", "first")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stdout.count("Installed:"), 2)
+        self.assertTrue((self.project / ".agents/skills/second/SKILL.md").is_file())
+
+    def test_unknown_profile_and_missing_profile_member_write_nothing(self):
+        for profile in ("missing", "broken"):
+            (self.source / "profiles.json").write_text(json.dumps({"broken": ["first", "missing"]}))
+            result = self.run_install("--project", self.project, "--agent", "codex", "--profile", profile)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(self.snapshot(), {})
+
+    def test_update_retains_backup_and_installs_new_selection(self):
+        self.assertEqual(self.install().returncode, 0)
+        old = self.snapshot(self.project / ".agents/skills/first")
+        (self.source / "skills/first/SKILL.md").write_bytes(b"new version")
+        result = self.install("--update", "--skill", "second")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual((self.project / ".agents/skills/first/SKILL.md").read_bytes(), b"new version")
+        self.assertTrue((self.project / ".agents/skills/second/SKILL.md").is_file())
+        backups = list((self.project / ".local/done-is-a-claim/backups").glob("*/*"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(self.snapshot(backups[0]), old)
+        self.assertIn(str(backups[0]), result.stdout)
+
+    def test_repository_profiles_upgrade_eight_evidence_skills_to_thirteen_workflow_skills(self):
+        shutil.copytree(ROOT / "skills", self.source / "skills", dirs_exist_ok=True)
+        shutil.copyfile(ROOT / "profiles.json", self.source / "profiles.json")
+        arguments = ("--project", self.project, "--agent", "codex")
+        first = self.run_install(*arguments, "--profile", "evidence")
+        self.assertEqual(first.returncode, 0, first.stdout + first.stderr)
+        installed = self.project / ".agents/skills"
+        before = {path.name: self.snapshot(path) for path in installed.iterdir()}
+        self.assertEqual(set(before), {"acceptance-design", "reading-measurements", "whose-red",
+                                      "evidence-freshness", "public-claims", "checking-delivery",
+                                      "collecting-worker-results", "resuming-work"})
+        result = self.run_install(*arguments, "--profile", "workflow", "--update")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual({path.name for path in installed.iterdir()}, set(before) | {
+            "using-done-is-a-claim", "planning-changes", "executing-plans",
+            "debugging-with-evidence", "reviewing-changes"})
+        backups = list((self.project / ".local/done-is-a-claim/backups").glob("*/*"))
+        self.assertEqual(len(backups), 8)
+        for backup in backups:
+            self.assertEqual(self.snapshot(backup), before[backup.name[len(".agents-"):]])
+        review_project = self.base / "review-project"
+        review_project.mkdir()
+        review = self.run_install("--project", review_project, "--agent", "claude-code", "--profile", "review")
+        self.assertEqual(review.returncode, 0, review.stdout + review.stderr)
+        self.assertEqual({path.name for path in (review_project / ".claude/skills").iterdir()}, {
+            "using-done-is-a-claim", "reviewing-changes", "reading-measurements", "whose-red",
+            "evidence-freshness", "public-claims", "checking-delivery"})
+
+    def test_update_dry_run_checks_existing_and_new_without_writes(self):
+        self.assertEqual(self.install().returncode, 0)
+        before = self.snapshot(self.base)
+        result = self.install("--update", "--dry-run", "--skill", "second")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Would update:", result.stdout)
+        self.assertIn("Would install:", result.stdout)
+        self.assertEqual(self.snapshot(self.base), before)
+
+    def test_update_rejects_drift_before_any_new_install_or_backup(self):
+        for change in ("modified", "missing", "extra", "empty-directory", "provenance"):
+            with self.subTest(change=change):
+                if (self.project / ".agents").exists():
+                    shutil.rmtree(self.project / ".agents")
+                self.assertEqual(self.install().returncode, 0)
+                destination = self.project / ".agents/skills/first"
+                if change == "modified":
+                    (destination / "SKILL.md").write_bytes(b"my edits")
+                elif change == "missing":
+                    (destination / "LICENSE").unlink()
+                elif change == "extra":
+                    (destination / "my-file").write_bytes(b"keep")
+                elif change == "empty-directory":
+                    (destination / "my-folder").mkdir()
+                else:
+                    (destination / "PROVENANCE.json").unlink()
+                before = self.snapshot()
+                result = self.install("--update", "--skill", "second")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(self.snapshot(), before)
+
+    def test_update_rejects_unknown_and_malformed_provenance(self):
+        self.assertEqual(self.install().returncode, 0)
+        provenance = self.project / ".agents/skills/first/PROVENANCE.json"
+        original = json.loads(provenance.read_text())
+        variants = [[], {}, {**original, "source_repository": "https://other.invalid"},
+                    {**original, "skill": "second"}, {**original, "source_revision": 12},
+                    {**original, "extra": "unknown"}, {**original, "files_sha256": []},
+                    {**original, "files_sha256": {"../escape": "0" * 64}},
+                    {**original, "files_sha256": {"SKILL.md": True}}]
+        for value in variants:
+            with self.subTest(value=value):
+                provenance.write_text(json.dumps(value))
+                before = self.snapshot()
+                result = self.install("--update")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(self.snapshot(), before)
+
+    def test_update_rejects_links_in_installed_tree(self):
+        self.assertEqual(self.install().returncode, 0)
+        destination = self.project / ".agents/skills/first"
+        original = destination / "references/guide.txt"
+        original.unlink()
+        self.make_link(original, self.source / "skills/first/references/guide.txt", directory=False)
+        result = self.install("--update", "--skill", "second")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertTrue(original.is_symlink())
+        self.assertFalse((destination.parent / "second").exists())
+
+    def test_update_rejects_unsafe_backup_ancestor_during_preflight(self):
+        self.assertEqual(self.install().returncode, 0)
+        (self.project / ".local").write_bytes(b"my file")
+        before = self.snapshot()
+        result = self.install("--update", "--skill", "second")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(self.snapshot(), before)
+
+    def load_installer(self):
+        spec = importlib.util.spec_from_file_location("installer_fixture", self.source / "tools/install_skills.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    def test_stage_failure_never_publishes_or_moves_originals(self):
+        self.assertEqual(self.install().returncode, 0)
+        module = self.load_installer()
+        project, selections = module.preflight(self.source, self.project, ["codex"], ["first", "second"], True)
+        before = self.snapshot()
+        copytree = shutil.copytree
+
+        def fail_second(source, destination, *args, **kwargs):
+            if Path(source).name == "second":
+                raise OSError("injected staging failure")
+            return copytree(source, destination, *args, **kwargs)
+
+        with patch.object(module.shutil, "copytree", side_effect=fail_second), redirect_stderr(io.StringIO()):
+            result = module.install(self.source, project, selections)
+        self.assertEqual(result, 1)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_recheck_after_staging_blocks_drift_before_any_publication(self):
+        self.assertEqual(self.install().returncode, 0)
+        module = self.load_installer()
+        project, selections = module.preflight(self.source, self.project, ["codex"], ["first", "second"], True)
+        copytree = shutil.copytree
+        original = self.project / ".agents/skills/first/SKILL.md"
+
+        def edit_during_stage(source, destination, *args, **kwargs):
+            result = copytree(source, destination, *args, **kwargs)
+            if Path(source).name == "second":
+                original.write_bytes(b"concurrent user edit")
+            return result
+
+        with patch.object(module.shutil, "copytree", side_effect=edit_during_stage), redirect_stderr(io.StringIO()):
+            result = module.install(self.source, project, selections)
+        self.assertEqual(result, 1)
+        self.assertEqual(original.read_bytes(), b"concurrent user edit")
+        self.assertFalse((original.parent.parent / "second").exists())
+        self.assertFalse((self.project / ".local").exists())
+
+    def test_exclusive_publish_rejects_new_empty_destination(self):
+        module = self.load_installer()
+        project, selections = module.preflight(self.source, self.project, ["codex"], ["first"])
+        original_mkdir = Path.mkdir
+        destination = self.project / ".agents/skills/first"
+
+        def race_mkdir(path, *args, **kwargs):
+            if path == destination:
+                original_mkdir(path)
+            return original_mkdir(path, *args, **kwargs)
+
+        with patch.object(Path, "mkdir", race_mkdir), redirect_stderr(io.StringIO()):
+            result = module.install(self.source, project, selections)
+        self.assertEqual(result, 1)
+        self.assertEqual(list(destination.iterdir()), [])
+
+    def test_partial_update_failure_retains_original_and_reports_backup(self):
+        self.assertEqual(self.install().returncode, 0)
+        old = self.snapshot(self.project / ".agents/skills/first")
+        module = self.load_installer()
+        project, selections = module.preflight(self.source, self.project, ["codex"], ["first"], True)
+        rename = Path.rename
+        errors = io.StringIO()
+
+        def fail_publish(path, target):
+            if ".skill-install-" in str(path):
+                raise OSError("injected publication failure")
+            return rename(path, target)
+
+        with patch.object(Path, "rename", fail_publish), redirect_stderr(errors):
+            result = module.install(self.source, project, selections)
+        self.assertEqual(result, 1)
+        backups = list((self.project / ".local/done-is-a-claim/backups").glob("*/*"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(self.snapshot(backups[0]), old)
+        self.assertIn(str(backups[0]), errors.getvalue())
+        self.assertIn("Incomplete destination retained:", errors.getvalue())
+        self.assertIn("installed destinations: none", errors.getvalue())
+
+    @unittest.skipUnless(sys.platform == "win32", "Windows junction fixture")
+    def test_update_rejects_installed_junction_without_symlink_privilege(self):
+        import _winapi
+        self.assertEqual(self.install().returncode, 0)
+        destination = self.project / ".agents/skills/first"
+        _winapi.CreateJunction(str(self.source / "skills/first/references"), str(destination / "alias"))
+        result = self.install("--update", "--skill", "second")
+        self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("junction", result.stderr.lower())
+        self.assertFalse((destination.parent / "second").exists())
 
 
 if __name__ == "__main__":

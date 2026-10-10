@@ -38,6 +38,12 @@ do not turn it into a general success rate.
 | E10 | Retry after an ambiguous external result | evidence-freshness |
 | E11 | Old acknowledgement and mismatched delivered bytes | checking-delivery |
 | E12 | Chat summary disagrees with the saved resume boundary | resuming-work |
+| E13 | Tiny task, entry skill only, no workers | using-done-is-a-claim |
+| E14 | Stage boundary invents a new approval requirement | executing-plans |
+| E15 | Review fix widens the affected behavior | reviewing-changes |
+| E16 | Repeated guess ignores the actual error | debugging-with-evidence |
+| E17 | A plan claims authority the human never gave | planning-changes |
+| E18 | Missing prerequisite and existing live ownership | executing-plans |
 
 ## Report format
 
