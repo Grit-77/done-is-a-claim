@@ -1,0 +1,40 @@
+name: Share a use report
+description: Tell us where the instructions or tools helped, failed, or confused you.
+title: "[Use report] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A concrete experience helps improve the toolkit. Share only material you can make public; remove credentials and private customer details from excerpts.
+  - type: input
+    id: environment
+    attributes:
+      label: Agent, version and operating system
+      placeholder: Codex or Claude Code, version, Windows/macOS/Linux
+    validations:
+      required: true
+  - type: input
+    id: selection
+    attributes:
+      label: Which rule, skill or tool did you use?
+      description: Include the repository revision or release when known.
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: What were you trying to do?
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: What actually happened?
+      description: Describe the behavior, relevant command/output and what you expected. Successes and failures are both useful.
+    validations:
+      required: true
+  - type: textarea
+    id: limits
+    attributes:
+      label: What remains uncertain?
+      description: For example, no comparison run, an intermittent failure, or evidence you cannot publish.

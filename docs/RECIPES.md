@@ -3,6 +3,10 @@
 These are templates. Replace the acceptance command with your project's real
 check; do not report these examples as executed verification.
 
+For automatic local capture without a shell pipeline, see the
+[receipt tool](RECEIPTS.md). The manual recipes below explain the same exit-code
+distinction and remain useful in existing scripts.
+
 ## Capture the producer's exit, then read the log
 
 Bash (works even when the surrounding script has `set -e`):

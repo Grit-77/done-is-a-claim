@@ -50,6 +50,25 @@ Sources retain their own licenses. In particular, a repository containing skills
 does not imply that every included skill has the same license. This repository's
 original material is covered by [Apache-2.0](LICENSE).
 
+## Adoption and executable evidence
+
+Additional sources reviewed on 2026-10-10:
+
+| Source | Adaptation and boundary |
+|---|---|
+| [Vercel skills CLI](https://github.com/vercel-labs/skills) and [version 1.7.2 metadata](https://registry.npmjs.org/skills/1.7.2) | Document optional discovery and selected installation. An isolated local-source smoke checked the six folders and both selected agent copies. |
+| [Version-pinned installer source](https://github.com/vercel-labs/skills/blob/671e8c320810d36fed80fac5f1a2c1bf7e82d812/src/installer.ts) | Its replacement behavior motivated an original project installer that refuses destination collisions. No upstream installer code is copied. |
+| [OpenAI's historical gh-fix-ci skill](https://github.com/openai/skills/blob/main/skills/.curated/gh-fix-ci/SKILL.md) | A narrowly scoped script can return structured evidence and distinguish missing observations. The local receipt tool is original and has no GitHub/provider integration. |
+| [HumanLayer: small focused agents](https://github.com/humanlayer/12-factor-agents/blob/main/content/factor-10-small-focused-agents.md) and [explicit control flow](https://github.com/humanlayer/12-factor-agents/blob/main/content/factor-08-own-your-control-flow.md) | Keep capture, installation and semantic review distinct, with inspectable transitions and ordinary files. |
+| [Superpowers: writing skills](https://github.com/obra/superpowers/blob/main/skills/writing-skills/SKILL.md) | Fresh-context pressure scenarios informed separating participant packets from evaluator rubrics. No comparative outcome claim is made. |
+
+The `openai/skills` repository now declares itself deprecated and points to
+[openai/plugins](https://github.com/openai/plugins). Its script pattern is cited as
+historical design material, not as current installation guidance. Package flags
+and side effects above were checked against the pinned Vercel version; later
+versions may differ. Popularity and installation telemetry do not establish active
+use or improved agent outcomes.
+
 ## Illustrations and checks
 
 - [The false-green demo](examples/false_green.py) is a synthetic, runnable example.
