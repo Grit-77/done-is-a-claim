@@ -48,10 +48,8 @@ def main():
     add(y=5, scale_x=1.035, scale_y=.965, duration=45)
     add(y=3, scale_x=1.02, scale_y=.982, duration=45)
     add(y=-2, scale_x=.998, scale_y=1.008, duration=50)
-    add(duration=4400)
-    # Quiet hold, then clear the impression before the next stamp.
-    for opacity in (.75, .5, .25, 0):
-        add(opacity=opacity, duration=50)
+    # End on the impression. A single short play keeps the README quiet to read.
+    add(duration=1700)
 
     renderer = """
 const fs = require('fs');
@@ -73,7 +71,7 @@ const svgs = JSON.parse(fs.readFileSync(0, 'utf8'));
     encoded = [frame.quantize(palette=palette, dither=Image.Dither.NONE) for frame in frames]
     destination = root / "assets/receipt-stamp.gif"
     encoded[0].save(destination, save_all=True, append_images=encoded[1:],
-                    duration=durations, loop=0, disposal=1, optimize=True)
+                    duration=durations, disposal=1, optimize=True)
     frames[17].save(root / "assets/receipt-stamp.png", optimize=True)
     print(f"Rendered {len(frames)} frames; {destination.stat().st_size} bytes.")
 

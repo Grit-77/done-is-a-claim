@@ -7,7 +7,7 @@
   <img src="assets/receipt-stamp.gif" alt="Done is a claim. Kırmızı SHOW THE RECEIPT damgası kırık beyaz kapağın üzerine basılıyor.">
 </picture>
 
-[Hareketsiz kapak](assets/receipt.svg)
+[Damgayı tekrar oynat](assets/receipt-stamp.gif) · [Hareketsiz kapak](assets/receipt.svg)
 
 **Ajanınız “bitti” diyor. Bunu ne kanıtlar?**
 

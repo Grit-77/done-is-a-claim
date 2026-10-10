@@ -2,7 +2,7 @@
 
 [receipt.svg](../assets/receipt.svg) is original vector artwork. The README's
 [animated cover](../assets/receipt-stamp.gif) gives its red stamp a short drop and
-compression, then a long hold before repeating. Readers requesting reduced motion
+compression, then stays on the final impression without looping. Readers requesting reduced motion
 receive the SVG through `picture`; a static-cover link is also present. A
 [PNG of the impression](../assets/receipt-stamp.png) is available for previews.
 

@@ -7,7 +7,7 @@
   <img src="assets/receipt-stamp.gif" alt="Done is a claim. A red SHOW THE RECEIPT stamp lands on the ivory cover.">
 </picture>
 
-[Static cover](assets/receipt.svg)
+[Replay stamp](assets/receipt-stamp.gif) · [Static cover](assets/receipt.svg)
 
 **Your agent says “done”. What would prove it?**
 
