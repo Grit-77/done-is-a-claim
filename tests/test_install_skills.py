@@ -21,7 +21,9 @@ class InstallSkillsTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
-        self.base = Path(temporary.name)
+        # tempfile may return a Windows 8.3 alias. Preflight resolves the
+        # project, so use the same canonical root for paths and race injection.
+        self.base = Path(temporary.name).resolve()
         self.source = self.base / "source"
         (self.source / "tools").mkdir(parents=True)
         tool = ROOT / "tools" / "install_skills.py"
@@ -424,14 +426,18 @@ class InstallSkillsTests(unittest.TestCase):
         project, selections = module.preflight(self.source, self.project, ["codex"], ["first"])
         original_mkdir = Path.mkdir
         destination = self.project / ".agents/skills/first"
+        race_injected = False
 
         def race_mkdir(path, *args, **kwargs):
+            nonlocal race_injected
             if path == destination:
                 original_mkdir(path)
+                race_injected = True
             return original_mkdir(path, *args, **kwargs)
 
         with patch.object(Path, "mkdir", race_mkdir), redirect_stderr(io.StringIO()):
             result = module.install(self.source, project, selections)
+        self.assertTrue(race_injected, "the concurrent destination must actually be created")
         self.assertEqual(result, 1)
         self.assertEqual(list(destination.iterdir()), [])
 
