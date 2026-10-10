@@ -13,8 +13,8 @@
 
 Kod yazan ajanlar için gerçek olaylardan çıkarılmış 18 kural ve belirli sorunlara
 odaklanan 6 skill. Ajana açık bir kabul hedefi verin, gerçek sonucu isteyin ve
-kanıtı test edilen çalışmaya bağlı tutun. Hepsi düz Markdown. İhtiyacınız olan
-parçaları kullanın.
+kanıtı test edilen çalışmaya bağlı tutun. Kurallar ve skill’ler düz Markdown;
+yerel araçlar isteğe bağlı. İhtiyacınız olan parçaları kullanın.
 
 [Başlayın](#başlayın) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün) · [Olayları okuyun](INCIDENTS.md)
 
@@ -52,6 +52,16 @@ Tek kural dosyasıyla başlayabilirsiniz. İsteğe bağlı skill'ler, belirli bi
 sorunla karşılaştığınızda konuyu daha ayrıntılı ele alır.
 [macOS, Linux veya Windows'ta skill kurulumu →](docs/INSTALL.md)
 
+Mevcut dosyaların üzerine yazmadan proje içine bir skill kurmak için bu klonun
+kökünde aşağıdaki planı çalıştırın. `../my-project` yerine mevcut proje yolunuzu yazın:
+
+```bash
+python tools/install_skills.py --project ../my-project --agent codex --skill reading-measurements --dry-run
+```
+
+Kurmak için `--dry-run` seçeneğini kaldırın. Claude Code için `--agent claude-code`
+kullanın. Mevcut skill hedefleri reddedilir; proje talimatlarınız korunur.
+
 Kendi projenizde ilk olarak şu isteği deneyin:
 
 > Proje talimatlarını oku. Değişiklik yapmadan önce bu işin kabul komutunu ve
@@ -61,6 +71,21 @@ Kendi projenizde ilk olarak şu isteği deneyin:
 
 Bu, ajanın isteği anlayıp anlamadığını kontrol eder. Talimatlara uymasını zorunlu
 kılmaz.
+
+## Komutun sonucunu kaydedin
+
+İsteğe bağlı yerel araçla komutun kendi çıkış kodunu, tam çıktısını ve Git durumunu
+kaydedin:
+
+```bash
+python tools/receipt.py -- python tools/run_tests.py
+```
+
+Her çalıştırma için `.local/receipts/` altında yeni bir `receipt.json` ve
+`command.log` oluşturur. Seçtiğiniz dosyaların önceki ve sonraki parmak izlerini
+karşılaştırmak için `--input` kullanın. Sıfır çıkış kodu komutun başarıyla
+tamamlandığını kaydeder; kullanıcının görevinin bittiğine karar vermez.
+[Kullanım, kontrol edilen girdiler ve sınırlar →](docs/RECEIPTS.md)
 
 ## Raporda ne değişir?
 
@@ -129,8 +154,9 @@ skill ve doğrulama düzenlerini de inceledik.
 Bir ajan kuralı tekrar edip yine de yanlış karar verebilir.
 [Senaryo paketi](evals/README.md), talimatları zor durumlarda sınar: başarılı
 görünen bir pipe, uyumsuz kontrol koşulları, ilgili hiçbir değişikliği olmayan
-bir alt ajan, güncelliğini yitirmiş kanıt ve başka tuzaklar. İstekleri yeni
-oturumlarda çalıştırın ve yanıtları saklayın.
+bir alt ajan, güncelliğini yitirmiş kanıt ve başka tuzaklar. Katılımcı istekleri
+değerlendirici cevap anahtarından ayrı dosyalardadır. İstekleri yeni oturumlarda
+çalıştırın ve yanıtları saklayın.
 
 Bunlar elle yürütülen davranış değerlendirmeleridir; yayımlanmış başarı oranı
 iddiaları değildir.
@@ -151,7 +177,7 @@ içeri aktarımları doğrular. [CI](.github/workflows/check.yml), Windows ve Li
 
 ## Kural, denetim kapısı değildir
 
-Bu depo talimatlar, örnekler ve değerlendirme malzemeleri sunar. Ajanın araç
+Bu depo talimatlar, küçük yerel araçlar, örnekler ve değerlendirme malzemeleri sunar. Ajanın araç
 çağrılarına müdahale etmez, birleştirme işlemini engellemez veya dağıtım
 politikasını zorunlu kılmaz. Kuralları uygulatmak için projenizin gerçek test ve yayımlama
 kontrollerini kullanın. Grit'in ayrı
@@ -163,5 +189,8 @@ Yararlı bir katkı, ajanın ne iddia ettiği, gerçekte ne olduğu ve aradaki f
 hangi kanıtın ortaya çıkardığıyla başlar.
 [Bir kural önerin](https://github.com/Grit-77/done-is-a-claim/issues/new?template=new-rule.yml)
 veya [katkı rehberini okuyun](CONTRIBUTING.md).
+
+Kendi projenizde denediniz mi? [Somut bir kullanım deneyimi paylaşın](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
+hangi parçayı kullandığınız, ne olduğu ve neyin belirsiz kaldığı.
 
 [Apache-2.0](LICENSE) · [Grit](https://github.com/Grit-77) tarafından hazırlandı, Ankara.

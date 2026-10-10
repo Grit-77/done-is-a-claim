@@ -13,7 +13,8 @@
 
 18 incident-backed rules and 6 focused skills for coding agents. Give the agent a
 clear acceptance target, ask for the actual result, and keep the evidence attached
-to the work it tested. Plain Markdown. Use the pieces you need.
+to the work it tested. Plain Markdown guidance, with optional local tools. Use the
+pieces you need.
 
 [Get started](#get-started) 路 [Choose a skill](#choose-a-skill) 路 [Try the demo](#watch-a-false-green) 路 [Read the incidents](INCIDENTS.md)
 
@@ -50,6 +51,16 @@ cd done-is-a-claim
 You can start with that one rules file. The optional skills add depth when a
 particular problem comes up. [Install a skill on macOS, Linux or Windows 鈫抅(docs/INSTALL.md)
 
+Want a project-local skill without overwriting existing files? From this clone,
+replace `../my-project` with your existing project path and preview the copy:
+
+```bash
+python tools/install_skills.py --project ../my-project --agent codex --skill reading-measurements --dry-run
+```
+
+Then omit `--dry-run` to install. For Claude Code, use `--agent claude-code`.
+Existing skill destinations are refused; your project instructions stay untouched.
+
 Try this first request in your own project:
 
 > Read the project instructions. Before making changes, identify the acceptance
@@ -57,6 +68,19 @@ Try this first request in your own project:
 > result, include the tested revision, actual output and anything you did not check.
 
 This checks whether the agent understood the request. It does not enforce compliance.
+
+## Get a real receipt
+
+Capture a command's own exit, full output and Git state with the optional local tool:
+
+```bash
+python tools/receipt.py -- python tools/run_tests.py
+```
+
+It writes a fresh `receipt.json` and `command.log` under `.local/receipts/`.
+Use `--input` to fingerprint selected files before and after the run. A zero exit
+records command success; it does not declare the user's task complete.
+[Usage, input scope and limits 鈫抅(docs/RECEIPTS.md)
 
 ## What changes in the report
 
@@ -122,7 +146,8 @@ organize installation, skills and verification. [Sources and design decisions 鈫
 An agent can repeat a rule and still make the wrong decision. The
 [scenario pack](evals/README.md) puts the instructions under pressure: a passing
 pipe, mismatched controls, a worker with no relevant changes, stale evidence and
-other traps. Run the prompts in fresh sessions and keep the responses.
+other traps. Participant prompts are separate from evaluator rubrics. Run the
+prompts in fresh sessions and keep the responses.
 
 These are manual behavioral evaluations, not published success-rate claims.
 
@@ -140,7 +165,7 @@ these checks does not prove that an agent follows the instructions.
 
 ## Rules are not a gate
 
-This repository supplies instructions, examples and evaluation material. It does
+This repository supplies instructions, small local tools, examples and evaluation material. It does
 not intercept an agent's tools, block a merge or enforce a deployment policy.
 Use your project's actual test and release gates for enforcement. Grit's separate
 [RADAR project](https://github.com/Grit-77/radar) explores that operational layer.
@@ -150,5 +175,8 @@ Use your project's actual test and release gates for enforcement. Grit's separat
 A useful contribution starts with what the agent claimed, what was true, and the
 evidence that revealed the difference. [Propose a rule](https://github.com/Grit-77/done-is-a-claim/issues/new?template=new-rule.yml)
 or [read the contribution guide](CONTRIBUTING.md).
+
+Tried it in your own project? [Share a concrete use report](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
+which piece you used, what happened, and what remains uncertain.
 
 [Apache-2.0](LICENSE) 路 Made by [Grit](https://github.com/Grit-77), Ankara.

@@ -6,12 +6,13 @@ benchmark, or measured proof that this toolkit improves outcomes.
 
 ## Run a case
 
-1. Pick a case in [CASES.md](CASES.md) and a relevant installed skill.
-2. Start a fresh session. Give it the case's **Prompt** and **Evidence** only,
-   together with the skill. Keep the evaluator rubric out of that session.
+1. Pick a participant packet from [CASES.md](CASES.md) and a relevant installed skill.
+2. Start a fresh session. Give it the selected packet together with the skill.
+   Keep [RUBRICS.md](RUBRICS.md) out of that session. Each packet contains only the
+   prompt and evidence; no expected verdict is embedded in it.
 3. Ask for the decision and the next justified action. Do not allow repository
    mutations; these cases require reasoning about supplied synthetic artifacts.
-4. Save the exact response. A separate reviewer uses the rubric to classify it as
+4. Save the exact response. A separate reviewer uses [the rubric](RUBRICS.md) to classify it as
    `meets`, `misses` or `inconclusive`, with the sentence supporting that decision.
 5. Record model and harness versions, skill revision, available tools, case ID and
    date. A plausible explanation is evidence of that response, not future behavior.

@@ -9,6 +9,11 @@ with the claim, what actually happened, and the evidence that separated them.
 Remove credentials, personal information and private customer details. An honest
 anonymized account is better than a raw log you cannot safely share.
 
+For installation trouble or a concrete experience using the toolkit, open a
+[use report](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml).
+Include the agent/version, selected skill or tool, observed behavior and what
+remains uncertain. A good report does not need to claim an improvement.
+
 For a core rule, add its incident to [INCIDENTS.md](INCIDENTS.md). For an optional
 workflow, identify the existing incident or public source it extends. Label a
 hypothetical example as synthetic; never present it as a production incident.
