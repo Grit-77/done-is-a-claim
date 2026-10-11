@@ -283,7 +283,7 @@ class InstallSkillsTests(unittest.TestCase):
         self.assertEqual(self.snapshot(backups[0]), old)
         self.assertIn(str(backups[0]), result.stdout)
 
-    def test_repository_profiles_upgrade_eight_evidence_skills_to_thirteen_workflow_skills(self):
+    def test_repository_profiles_upgrade_evidence_to_full_workflow_with_backups(self):
         shutil.copytree(ROOT / "skills", self.source / "skills", dirs_exist_ok=True)
         shutil.copyfile(ROOT / "profiles.json", self.source / "profiles.json")
         arguments = ("--project", self.project, "--agent", "codex")
@@ -298,7 +298,8 @@ class InstallSkillsTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual({path.name for path in installed.iterdir()}, set(before) | {
             "using-done-is-a-claim", "planning-changes", "executing-plans",
-            "debugging-with-evidence", "reviewing-changes"})
+            "debugging-with-evidence", "reviewing-changes", "implementing-with-tests",
+            "responding-to-review"})
         backups = list((self.project / ".local/done-is-a-claim/backups").glob("*/*"))
         self.assertEqual(len(backups), 8)
         for backup in backups:
@@ -309,7 +310,7 @@ class InstallSkillsTests(unittest.TestCase):
         self.assertEqual(review.returncode, 0, review.stdout + review.stderr)
         self.assertEqual({path.name for path in (review_project / ".claude/skills").iterdir()}, {
             "using-done-is-a-claim", "reviewing-changes", "reading-measurements", "whose-red",
-            "evidence-freshness", "public-claims", "checking-delivery"})
+            "evidence-freshness", "public-claims", "checking-delivery", "responding-to-review"})
 
     def test_update_dry_run_checks_existing_and_new_without_writes(self):
         self.assertEqual(self.install().returncode, 0)

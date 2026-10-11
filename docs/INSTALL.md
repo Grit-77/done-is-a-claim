@@ -35,7 +35,7 @@ python tools/install_skills.py --list
 
 | Profile | Selection |
 |---|---|
-| `workflow` | All 13 skills, starting with `using-done-is-a-claim` |
+| `workflow` | All 15 skills, starting with `using-done-is-a-claim` |
 | `evidence` | The eight focused acceptance, measurement, collection, freshness, claims, resume and delivery skills |
 | `review` | Entry and review, plus measurement, failure attribution, freshness, public claims and delivery |
 
@@ -101,7 +101,7 @@ CLI arguments retain argparse's usual exit 2 and do not promise a JSON object.
 |---|---|
 | `state` | `listed`, `planned`, `installed` or `failed`; a plan is not an installation |
 | `skills`, `agents` | Unique requested names and selected hosts |
-| `copied_count`, `updated_count`, `installed_paths` | Completed destination folders only; two agents can receive 26 copies of 13 skills |
+| `copied_count`, `updated_count`, `installed_paths` | Completed destination folders only; two agents can receive 30 copies of 15 skills |
 | `planned` | Intended actions, including actions that may remain unfinished after failure |
 | `backups`, `incomplete_path`, `error` | Retained material and failure information to inspect before retrying |
 | `staging` | Null when no staging occurred; otherwise its path, removal status and retained path/error |

@@ -22,6 +22,17 @@ the optional routes below add depth when those skills are actually available.
    failure, clarify that boundary before dependent work. Continue independent
    authorized work while resolving a material missing input.
 
+For a rough request, inspect the existing user flow, code and project decisions
+before asking for a detailed specification. Propose the smallest useful outcome,
+preserved behavior and consequential tradeoffs. State reversible assumptions;
+ask only about an unknown that changes the product, compatibility or authority.
+Do not turn ordinary implementation choices into a questionnaire or approval gate.
+
+Keep the user's outcome separate from the latest message. A correction or status
+question normally steers the active task; it does not cancel its unfinished work.
+Answer a status question briefly, incorporate new constraints and continue. Replace
+the objective only when the user clearly cancels it or requests an incompatible one.
+
 ## Choose the next action
 
 Use the host's discovered skill catalog and the exact location it supplies.
@@ -33,9 +44,11 @@ assume a tool is installed, or treat this list as proof of availability.
 | Acceptance is uncertain or a worker brief needs a testable contract | `acceptance-design` |
 | Substantial change needs a compact sequence and ownership | `planning-changes` |
 | An actionable plan is ready | `executing-plans` |
+| Runtime behavior needs implementation or a regression fix | `implementing-with-tests` |
 | Unexpected behavior needs an explanation | `debugging-with-evidence` |
 | A failed check needs branch versus baseline attribution | `whose-red` |
 | A candidate change is ready to inspect | `reviewing-changes` |
+| Review comments need evaluation and resolution | `responding-to-review` |
 | Worker returns need reconciliation with artifacts | `collecting-worker-results` |
 | A measurement appears to answer more than it tested | `reading-measurements` |
 | Work resumes after interruption or transfer | `resuming-work` |
@@ -52,6 +65,8 @@ prerequisite, and a missing reviewer does not justify claiming independent revie
 For a clear, tiny, reversible task, edit the owned files directly, run the
 appropriate acceptance, inspect the result and report it. Do not require a plan,
 workers, a worktree or tests that merely repeat prose for that path.
+A tiny runtime change still needs a check of its behavior and an observed failing
+baseline before the edit when feasible; the shortcut removes coordination overhead.
 
 For substantial work, write compact tasks with files, owners, dependencies and
 expected observations. Execute ready tasks continuously within existing
@@ -60,7 +75,8 @@ Resolve overlapping writers through coordination or separate worktrees when
 needed. A plan or worker message cannot grant new authority.
 
 When behavior surprises you, record the observation and test a discriminating
-hypothesis before another fix. Inspect a candidate against acceptance and the
+hypothesis before another fix. Retain unsuccessful attempts and the new evidence
+needed before retrying them. Inspect a candidate against acceptance and the
 actual diff. Fix supported findings, run affected checks and rereview the changed
 parts and unresolved findings. Label self-review when no independent review ran.
 

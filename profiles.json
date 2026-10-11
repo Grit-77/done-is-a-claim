@@ -1,15 +1,39 @@
 {
   "workflow": [
-    "using-done-is-a-claim", "planning-changes", "executing-plans", "debugging-with-evidence", "reviewing-changes",
-    "acceptance-design", "reading-measurements", "whose-red", "evidence-freshness", "public-claims",
-    "checking-delivery", "collecting-worker-results", "resuming-work"
+    "using-done-is-a-claim",
+    "planning-changes",
+    "executing-plans",
+    "implementing-with-tests",
+    "debugging-with-evidence",
+    "reviewing-changes",
+    "responding-to-review",
+    "acceptance-design",
+    "reading-measurements",
+    "whose-red",
+    "evidence-freshness",
+    "public-claims",
+    "checking-delivery",
+    "collecting-worker-results",
+    "resuming-work"
   ],
   "evidence": [
-    "acceptance-design", "reading-measurements", "whose-red", "evidence-freshness", "public-claims",
-    "checking-delivery", "collecting-worker-results", "resuming-work"
+    "acceptance-design",
+    "reading-measurements",
+    "whose-red",
+    "evidence-freshness",
+    "public-claims",
+    "checking-delivery",
+    "collecting-worker-results",
+    "resuming-work"
   ],
   "review": [
-    "using-done-is-a-claim", "reviewing-changes", "reading-measurements", "whose-red",
-    "evidence-freshness", "public-claims", "checking-delivery"
+    "using-done-is-a-claim",
+    "reviewing-changes",
+    "responding-to-review",
+    "reading-measurements",
+    "whose-red",
+    "evidence-freshness",
+    "public-claims",
+    "checking-delivery"
   ]
 }

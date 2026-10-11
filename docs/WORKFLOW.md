@@ -31,8 +31,10 @@ flowchart TD
 | Unclear meaning of success | [acceptance-design](../skills/acceptance-design/SKILL.md) | Observable behavior and a check that reaches it |
 | Dependencies or substantial changes | [planning-changes](../skills/planning-changes/SKILL.md) | Small tasks, ownership, dependencies and expected observations |
 | Ready work in an existing plan | [executing-plans](../skills/executing-plans/SKILL.md) | Actual changes, task evidence and remaining work |
+| Implementing behavior or fixing a bug | [implementing-with-tests](../skills/implementing-with-tests/SKILL.md) | A discriminating behavior check, observed baseline, implementation and regression result |
 | An unexpected result | [debugging-with-evidence](../skills/debugging-with-evidence/SKILL.md) | Reproduction, competing explanations and a discriminating experiment |
 | A candidate implementation | [reviewing-changes](../skills/reviewing-changes/SKILL.md) | Findings tied to requirements, locations and consequences |
+| Incoming review comments | [responding-to-review](../skills/responding-to-review/SKILL.md) | Evidence-backed dispositions, supported fixes and unresolved decisions |
 | Interrupted work | [resuming-work](../skills/resuming-work/SKILL.md) | Verified checkpoint, current ownership and next action |
 | Changed inputs or a delivery | [evidence-freshness](../skills/evidence-freshness/SKILL.md), then [checking-delivery](../skills/checking-delivery/SKILL.md) | Evidence for this tree and, if authorized, the actual destination |
 
@@ -41,6 +43,10 @@ collect worker results and qualify public claims. The
 [full catalog](../README.md#choose-a-skill) explains their triggers.
 
 ## Try it on a real change
+
+For feature work, bug fixes, incoming PR feedback and long-task steering, see
+[the daily-use requests](DAILY-WORK.md). They connect these steps without requiring
+the same ceremony for every change.
 
 After installing, select `using-done-is-a-claim` using your host's skill picker.
 For the Claude plugin, use `/done-is-a-claim:using-done-is-a-claim`.
@@ -81,7 +87,7 @@ text, change it, check the diff and links if affected, and report the result.
 
 ## What installation does
 
-The plugin exposes all 13 skills for discovery. The local copier supports the
+The plugin exposes all 15 skills for discovery. The local copier supports the
 `workflow`, `evidence` and `review` profiles listed in [profiles.json](../profiles.json).
 They are selections, not different enforcement levels. The plugin has no lifecycle
 hooks, servers or automatic instruction-file edits. Invoke the entry skill to

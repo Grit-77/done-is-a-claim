@@ -129,6 +129,28 @@ the operator uses their normal host/account and records the native evidence
 separately. A successful artifact check does not prove skill invocation or a
 reduction in agent errors. Source licenses remain with their respective projects.
 
+## Daily development loops
+
+Reviewed on 2026-10-11. The two daily-work skills and the expanded entry,
+execution and resumption guidance are original writing. We studied these
+specific decisions rather than copying upstream skill bodies or helper code:
+
+| Source | Decision used here |
+|---|---|
+| [Superpowers test-driven development](https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/skills/test-driven-development/SKILL.md) and [writing good tests](https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/skills/test-driven-development/writing-good-tests.md) | Distinguish a meaningful behavior failure from a broken harness, derive expectations independently, and keep regression checks in the implementation loop. Our guidance preserves existing work and does not manufacture red for preservation or prose changes. |
+| [Superpowers receiving code review](https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/skills/receiving-code-review/SKILL.md) | Inspect feedback against current code and requirements before implementing a suggestion; substantiate disagreements. |
+| [Superpowers brainstorming](https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/skills/brainstorming/SKILL.md) | Scale shaping to uncertainty and distinguish user requirements from agent choices. We retain existing authorization instead of adding a universal design-approval gate. |
+| [GSD quick workflow](https://github.com/gsd-build/get-shit-done/blob/bdcaab2c752d9a33a1a1ca9acf3a3c81fb991815/commands/gsd/quick.md) and [pause workflow](https://github.com/gsd-build/get-shit-done/blob/bdcaab2c752d9a33a1a1ca9acf3a3c81fb991815/get-shit-done/workflows/pause-work.md) | Keep a short task path and preserve useful continuation context. We add no parallel project-state system or automatic commits. |
+| [Anthropic code-review example](https://github.com/anthropics/claude-code/blob/2301018b1f61073c501a8e7a4813ef48c239163b/plugins/code-review/commands/code-review.md) | Treat locally prepared findings and an authorized public comment as separate actions. No source text or code is included. |
+
+Selected private Grit operating guidance also informed context-first intake and
+retaining an unsuccessful attempt's result and retry condition. This is a portable
+adaptation of workflow ideas, not a reproduced Grit deployment or a claim of measured
+effectiveness. Private source locations and raw records remain local. Existing
+Superpowers-derived material encountered there is credited to the public lineage
+above, not presented as original Grit work. Upstream licenses remain with their
+projects; no upstream code or skill prose is vendored in this release.
+
 ## Illustrations and checks
 
 - [The false-green demo](examples/false_green.py) is a synthetic, runnable example.

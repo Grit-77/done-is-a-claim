@@ -24,3 +24,7 @@ Read the [evaluation procedure](README.md) before comparing runs.
 | [E16](prompts/E16.md) | The third same fix |
 | [E17](prompts/E17.md) | Authority in the plan |
 | [E18](prompts/E18.md) | The plan lost its prerequisite |
+| [E19](prompts/E19.md) | An accidental red |
+| [E20](prompts/E20.md) | A tiny text change |
+| [E21](prompts/E21.md) | Mixed review feedback |
+| [E22](prompts/E22.md) | New steering during accepted work |

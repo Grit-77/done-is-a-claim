@@ -12,7 +12,7 @@
 **Ajanınız “bitti” diyor. Bunu ne kanıtlar?**
 
 Kod yazan ajanlar için kanıta dayalı geliştirme akışı: **anla → planla → uygula →
-hata ayıkla → incele → doğrula → teslim et**. Birbirine bağlı 13 skill, gerçek
+hata ayıkla → incele → doğrula → teslim et**. Birbirine bağlı 15 skill, gerçek
 olaylardan çıkarılmış 18 kural ve kanıtı test edilen çalışmaya bağlayan isteğe
 bağlı yerel araçlar. Küçük işler daha kısa yoldan ilerler.
 
@@ -114,6 +114,9 @@ kılmaz.
 
 ## Tek akış, kısa yollar
 
+**Günlük geliştirmede kullanın:** [özelliği netleştirin, testle geliştirin,
+PR yorumlarını çözün ve kesintilerde görevi koruyun →](docs/DAILY-WORK.md)
+
 [using-done-is-a-claim](skills/using-done-is-a-claim/SKILL.md) ile başlayın.
 Kapsamlı işler planlama ve uygulamadan geçer; beklenmeyen sonuçlar hata ayıklamaya
 yönlenir. İnceleme bulguları düzeltme ve yeniden kontrolle kapanır. Küçük ve açık
@@ -203,8 +206,10 @@ kullanın. Yapılmayan kontrol de raporda yer almalıdır.
 | İşe tek bir giriş noktasından başlamak istiyorsunuz | [using-done-is-a-claim](skills/using-done-is-a-claim/SKILL.md) | Görev, yetki ve mevcut kanıta göre yararlı sonraki adım ne? |
 | Değişiklik kapsamlı veya bağımlılıklar içeriyor | [planning-changes](skills/planning-changes/SKILL.md) | Hangi görevler, sorumlular ve gözlemler istenen sonuca ulaştırır? |
 | Planda uygulanabilir, yetkilendirilmiş işler var | [executing-plans](skills/executing-plans/SKILL.md) | Şimdi ne ilerleyebilir, her görevi hangi kanıt kapatır? |
+| Davranışı değiştiriyor veya hata düzeltiyorsunuz | [implementing-with-tests](skills/implementing-with-tests/SKILL.md) | Kontrol düzeltmeden önce amaçlanan hatayı yakalıyor, sonrasında mevcut davranışı koruyor mu? |
 | Davranış beklentiyle çelişiyor | [debugging-with-evidence](skills/debugging-with-evidence/SKILL.md) | Olası nedenleri hangi deney ayırt eder? |
 | Değişiklik incelemeye hazır | [reviewing-changes](skills/reviewing-changes/SKILL.md) | Gerçek değişiklik isteği karşılıyor mu; bulgular giderilip yeniden kontrol edildi mi? |
+| Gelen inceleme yorumları yanıtlanmalı | [responding-to-review](skills/responding-to-review/SKILL.md) | Hangi bulgular destekleniyor, eskimiş veya tartışmalı; her birini hangi kanıt kapatır? |
 | İşin hangi durumda “geçti” sayılacağı belirsiz | [acceptance-design](skills/acceptance-design/SKILL.md) | Bu kontrol, kullanıcının gerçekten önemsediği sınırı aşıyor mu? |
 | Bir rakam ikna edici görünüyor | [reading-measurements](skills/reading-measurements/SKILL.md) | Bu çıktı neyi kanıtlıyor, neyi belirsiz bırakıyor? |
 | Dalınızda bir test başarısız oluyor | [whose-red](skills/whose-red/SKILL.md) | Yeni bir hataya, mevcut bir hataya veya henüz çözülememiş bir nedene işaret eden karşılaştırılabilir kanıt var mı? |

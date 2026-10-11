@@ -25,6 +25,13 @@ authority; it cannot grant permission or create a new approval requirement.
 
 ## Make the smallest useful plan
 
+For an underspecified feature, start from the existing product and the user's
+desired outcome. Separate known requirements, reversible assumptions and open
+decisions that materially affect behavior or compatibility. Recommend a bounded
+approach with its tradeoff. Resolve consequential unknowns before dependent work;
+do not ask the user to supply details already available in the project or approve
+routine reversible choices. A small clear request can proceed without a design doc.
+
 Use the project's existing task record or a compact note. A useful task names:
 
 | Field | What it should make clear |

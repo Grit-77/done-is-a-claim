@@ -9,7 +9,8 @@
         "using-done-is-a-claim",
         "acceptance-design",
         "planning-changes",
-        "executing-plans"
+        "executing-plans",
+        "implementing-with-tests"
       ]
     },
     {
@@ -20,6 +21,7 @@
         "reading-measurements",
         "whose-red",
         "reviewing-changes",
+        "responding-to-review",
         "collecting-worker-results"
       ]
     },

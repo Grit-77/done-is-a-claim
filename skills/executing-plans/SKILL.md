@@ -24,8 +24,14 @@ constraint blocks them. A plan is not evidence and cannot grant authority.
 
 ## Execute ready tasks
 
-Take the next task whose dependencies are satisfied. Inspect its files, make
-the bounded change and run its specified check. Read the output and artifact,
+Take the next task whose dependencies are satisfied. For a behavior change or
+bug fix, use host-discovered `implementing-with-tests` when available: establish
+a discriminating behavior check, observe the intended failure before changing
+production behavior when feasible, then implement and verify. Existing passing
+preservation checks stay green; do not manufacture a failure for a prose edit.
+Without the skill, perform that bounded loop inline and report unrun boundaries.
+
+Inspect the files, make the bounded change and run its specified check. Read the output and artifact,
 including failures and collection counts; capture the producer's own exit code.
 Record what the observation supports, the tested inputs and any limitation.
 
@@ -48,11 +54,25 @@ independent work that remains authorized.
 
 ## Adapt from observations
 
+Preserve the active objective when new messages add a constraint, correction or
+status question. Record a changed requirement explicitly and revise only the
+affected work; do not lose unfinished acceptance behind the latest message.
+Keep a compact note for a long task: objective, latest steering, decisions,
+current evidence, unresolved work and next action. Use the project's existing
+record or a short session/local note; do not publish private conversation context.
+Routine uninterrupted edits need no new ledger.
+
 Unexpected behavior calls for a discriminating investigation before another
 fix. Use discovered `debugging-with-evidence` or `whose-red` where relevant;
 otherwise record reproduction, hypotheses and a separating experiment inline.
 Update the plan when evidence changes dependencies or the approach. Preserve
 the original outcome and explain acceptance corrections rather than hiding them.
+
+After an unsuccessful attempt, retain what was tried, its actual result and
+what new evidence would justify retrying. Repeating an unchanged attempt is not
+a new experiment. Reopen a resolved finding when contrary evidence appears;
+the same failure persisting after its claimed fix is such evidence. Keep raw
+logs local and the continuation note short.
 
 ## Close the implementation loop
 
