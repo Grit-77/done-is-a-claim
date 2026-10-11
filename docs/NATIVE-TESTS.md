@@ -135,6 +135,37 @@ works, nor a comparison with Superpowers. Raw transcripts remain local because
 they include machine/account context. The CSV procedure supplies a repeatable
 exercise for independent testing; it does not retroactively change these runs.
 
+## Observed daily review sessions — 2026-10-11
+
+The author ran two fresh Codex sessions on the synthetic
+[review-feedback exercise](../examples/review-feedback/README.md), with the two
+daily skills installed as explicit project-local copies. Runtime metadata showed
+`gpt-6.1-sol`, high effort. These were task-level observations with existing host
+guidance present, not isolated comparisons or a native-plugin marketplace test.
+
+| Session | Observed loading and behavior | Boundary |
+|---|---|---|
+| Implementation, workspace-write sandbox with network disabled | Read both installed skills. Added two regression tests, observed both fail for missing zero-total customers, then changed the implementation and passed all five tests. Preserved first-seen order and refunds; drafted a disagreement with alphabetical sorting. | Used the initial v1.7 development candidate before instruction clarifications. This run does not certify later skill bytes. |
+| Fresh review-only session, read-only sandbox | Read both revised skills. Treated the corrected zero-total comment as stale and the sorting suggestion as disputed. Ran five passing tests, made no edits and kept earlier red/green assertions separate from current evidence. | Exercised the final skill candidate's review-only path; did not repeat an implementation task. |
+
+An independent local check ran the exact added tests against retained original
+code: both failed for the intended missing rows. The fixed implementation passed
+the authored suite and an external contract oracle checked against known-good
+and deliberately broken alternatives. Task, review and starter-test hashes stayed
+unchanged. Neither session posted replies. The final review left selected code,
+tests, instructions and other noncache files unchanged; Git metadata was excluded.
+
+The final loaded SHA-256 values were
+`27549196543f99d3c395c7a611de29145e1610a9e3255c0e9d18d12d0457062c`
+for `implementing-with-tests` and
+`00dc3569f74abf0d5e199e8e67886607f6d969b009896fa69fd3466e63b90b4f`
+for `responding-to-review`. The initial values were
+`f040d48337b982459e487736e0ddd4ba04d61ae4a95fdf30e67f96674928dfd8`
+and `f6fce22d7992bead42e874f79c3aecc2baeaeac53fe23117f45610a9a1658ab3`.
+The fixture had no committed HEAD, so retained hashes identify those inputs.
+Raw transcripts remain local. These samples do not establish that the skills
+caused the outcome, guarantee future behavior or demonstrate Superpowers parity.
+
 ## Share a bounded result
 
 Record date, OS, CLI and actual model metadata, plugin revision/version, skill

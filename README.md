@@ -12,7 +12,7 @@
 **Your agent says “done”. What would prove it?**
 
 An evidence-first development workflow for coding agents: **understand → plan →
-implement → diagnose → review → verify → deliver**. 13 connected skills, 18
+implement → diagnose → review → verify → deliver**. 15 connected skills, 18
 incident-backed rules, and optional tools that keep the evidence attached to the
 work it tested. Small tasks take a shorter path.
 
@@ -111,6 +111,9 @@ This checks whether the agent understood the request. It does not enforce compli
 
 ## One workflow, short paths
 
+**Use it during ordinary development:** [shape a feature, implement with tests,
+resolve PR feedback, and keep the task across interruptions →](docs/DAILY-WORK.md)
+
 Start with [using-done-is-a-claim](skills/using-done-is-a-claim/SKILL.md). It routes
 substantial work through planning and execution, sends unexpected results into
 diagnosis, and closes review findings with fixes and fresh checks. A clear, small
@@ -196,8 +199,10 @@ as small, reusable formats. A missing check belongs in the report.
 | You want one entry point for the task | [using-done-is-a-claim](skills/using-done-is-a-claim/SKILL.md) | What is the next useful step, given the task, authority and available evidence? |
 | The change has dependencies or substantial scope | [planning-changes](skills/planning-changes/SKILL.md) | Which bounded tasks, owners and observations will reach the requested outcome? |
 | A plan has ready, authorized work | [executing-plans](skills/executing-plans/SKILL.md) | What can proceed now, and what evidence closes each task? |
+| You are changing behavior or fixing a bug | [implementing-with-tests](skills/implementing-with-tests/SKILL.md) | Does the check catch the intended failure before the correction and preserve existing behavior afterward? |
 | Behavior contradicts expectations | [debugging-with-evidence](skills/debugging-with-evidence/SKILL.md) | Which experiment distinguishes the plausible causes? |
 | A change is ready for review | [reviewing-changes](skills/reviewing-changes/SKILL.md) | Does the actual diff meet the request, and are findings resolved and rechecked? |
+| Review comments need a response | [responding-to-review](skills/responding-to-review/SKILL.md) | Which findings are supported, stale or disputed, and what evidence closes each one? |
 | The task's “pass” condition is vague | [acceptance-design](skills/acceptance-design/SKILL.md) | Does this check cross the boundary the user actually cares about? |
 | A number looks convincing | [reading-measurements](skills/reading-measurements/SKILL.md) | What does this output establish, and what does it leave unknown? |
 | A test fails on your branch | [whose-red](skills/whose-red/SKILL.md) | Is there comparable evidence for a regression, an existing failure or an unresolved cause? |

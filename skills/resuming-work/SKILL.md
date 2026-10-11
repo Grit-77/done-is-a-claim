@@ -51,6 +51,11 @@ When stopping again, save one concrete next action, the exact unfinished
 boundary, relevant decisions and evidence a receiver can reopen. Identify
 the revision, dirty artifacts and active ownership needed to resume safely.
 
+Keep the original outcome and subsequent steering distinct. Include unsuccessful
+attempts only when their result and retry condition prevent repeated work. The
+latest status question must not replace the objective or erase unfinished work;
+an explicit cancellation or incompatible new request does change that boundary.
+
 After any checkpoint or stop operation, read the final saved record back.
 Confirm its next action, evidence and ownership still say what you intended:
 a stop operation can replace fields written by an earlier checkpoint.

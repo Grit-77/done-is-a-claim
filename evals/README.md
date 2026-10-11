@@ -48,6 +48,10 @@ do not turn it into a general success rate.
 | E16 | Repeated guess ignores the actual error | debugging-with-evidence |
 | E17 | A plan claims authority the human never gave | planning-changes |
 | E18 | Missing prerequisite and existing live ownership | executing-plans |
+| E19 | Collection failure mistaken for a behavior baseline | implementing-with-tests |
+| E20 | Artificial failing test for a prose-only correction | implementing-with-tests |
+| E21 | Valid, stale, conflicting and incomplete review suggestions | responding-to-review |
+| E22 | New steering drops unfinished original requirements | executing-plans / using-done-is-a-claim |
 
 ## Report format
 

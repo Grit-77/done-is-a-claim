@@ -6,10 +6,12 @@ evidence that the new checkout is ready.
 ```text
 Project: <repository identity and intended branch>
 Goal: <current user outcome>
+Latest steering: <new constraint or correction; distinguish it from a replaced goal>
 Revision: <commit and working-tree state>
 Worktree: <intended checkout; machine-local mapping if needed>
 Checkpoint: <record identity and revision; read-back time>
 Decisions: <only choices the next session must preserve>
+Unsuccessful attempts: <approach, observed result, condition for retry; if relevant>
 Completed: <artifact or behavior, with receipt>
 Remaining: <concrete unfinished work>
 Active workers: <owner, scope, branch; or none>

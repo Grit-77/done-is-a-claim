@@ -50,6 +50,12 @@ exonerate extra candidate failures or changed behavior. Use
 
 ## Resolve findings without losing the evidence
 
+When receiving external comments, use host-discovered `responding-to-review`
+if available. Otherwise compare each comment with the current candidate and
+contract inline. A stale location, confident reviewer or repeated bot comment
+does not establish a defect. Explain unsupported suggestions with evidence;
+continue independent supported fixes while consequential questions are unresolved.
+
 For a review-only assignment, return findings to the owner without editing.
 When fixes are authorized and within your ownership, correct supported defects.
 Delegate only within existing permission and available capabilities; coordinate
