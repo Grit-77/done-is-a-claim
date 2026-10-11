@@ -67,6 +67,10 @@ of the receipt tool, even if the child succeeded.
 
 ## Reuse a receipt carefully
 
+Want a PR-ready summary? [Generate Markdown from a receipt](REPORTS.md), with
+historical command outcome and current evidence freshness shown separately.
+The default report omits command arguments, raw logs, paths and filenames.
+
 Use [the receipt rechecker](RECHECK.md) before relying on saved evidence after a
 handoff or edit. It compares the log, selected files and recorded HEAD against an
 explicit current project, without rerunning the command. Old unbound logs and

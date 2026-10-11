@@ -13,6 +13,8 @@ For installation trouble or a concrete experience using the toolkit, open a
 [use report](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml).
 Include the agent/version, selected skill or tool, observed behavior and what
 remains uncertain. A good report does not need to claim an improvement.
+See [use reports and their evidence](docs/USE-REPORTS.md) for the distinction
+between synthetic demonstrations, author-observed sessions and independent use.
 
 For a core rule, add its incident to [INCIDENTS.md](INCIDENTS.md). For an optional
 workflow, identify the existing incident or public source it extends. Label a

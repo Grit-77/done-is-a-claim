@@ -16,7 +16,7 @@ hata ayıkla → incele → doğrula → teslim et**. Birbirine bağlı 13 skill
 olaylardan çıkarılmış 18 kural ve kanıtı test edilen çalışmaya bağlayan isteğe
 bağlı yerel araçlar. Küçük işler daha kısa yoldan ilerler.
 
-[Başlayın](#başlayın) · [İş akışını görün](docs/WORKFLOW.md) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün)
+[Başlayın](#başlayın) · [Kendi projenizde kullanın](docs/REPORTS.md) · [İş akışını görün](docs/WORKFLOW.md) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün)
 
 ## Yanlış bir yeşil sonucu görün
 
@@ -149,6 +149,12 @@ Geçici yerel dosyalar kullanır. Sıfır çıkış kodu, bu tuzakların göster
 belirtir; gerçek bir teslimin başarılı olduğunu değil.
 
 ## Komutun sonucunu kaydedin
+
+**Mevcut bir projeniz ve test komutunuz var mı?** [Kontrolü kaydedip bir sonraki
+PR'ınıza Markdown kanıt özeti ekleyin →](docs/REPORTS.md). Rapor, komutun geçmiş
+sonucunu kanıtın bugünkü durumundan ayrı gösterir. Argümanlar, ham günlük ve dosya
+adları varsayılan olarak gizlenir; araç hiçbir şey yayımlamaz ve işin bittiğine
+karar vermez.
 
 İsteğe bağlı yerel araçla komutun kendi çıkış kodunu, tam çıktısını ve Git durumunu
 kaydedin:
@@ -285,5 +291,7 @@ veya [katkı rehberini okuyun](CONTRIBUTING.md).
 
 Kendi projenizde denediniz mi? [Somut bir kullanım deneyimi paylaşın](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
 hangi parçayı kullandığınız, ne olduğu ve neyin belirsiz kaldığı.
+
+[Kullanım raporları ve kanıtlar](docs/USE-REPORTS.md) · [Kısa tanıtım metinleri](docs/LAUNCH-KIT.md)
 
 [Apache-2.0](LICENSE) · [Grit](https://github.com/Grit-77) tarafından hazırlandı, Ankara.

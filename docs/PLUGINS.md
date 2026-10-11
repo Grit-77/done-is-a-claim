@@ -1,7 +1,7 @@
 # Native plugin installation
 
 The `done-is-a-claim` plugin ships the connected skills in this repository as one
-optional package, version **1.5.0**. Its marketplace is
+optional package, version **1.6.0**. Its marketplace is
 `done-is-a-claim-marketplace`. Installing it makes instructions available to the
 agent. It provides no MCP server, credentials, executable hooks, or tool intercepts.
 The compatibility manifest's `hooks: {}` registers no hooks.
