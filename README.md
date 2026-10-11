@@ -16,7 +16,7 @@ implement → diagnose → review → verify → deliver**. 13 connected skills,
 incident-backed rules, and optional tools that keep the evidence attached to the
 work it tested. Small tasks take a shorter path.
 
-[Get started](#get-started) · [Follow the workflow](docs/WORKFLOW.md) · [Choose a skill](#choose-a-skill) · [Try the demo](#watch-a-false-green)
+[Get started](#get-started) · [Use in your project](docs/REPORTS.md) · [Follow the workflow](docs/WORKFLOW.md) · [Choose a skill](#choose-a-skill) · [Try the demo](#watch-a-false-green)
 
 ## Watch a false green
 
@@ -146,6 +146,12 @@ not that a real delivery succeeded.
 
 ## Get a real receipt
 
+**Already have a project and a test command?** [Capture your check and bring a
+Markdown evidence summary to your next PR →](docs/REPORTS.md). The report
+separates the command's historical result from current evidence freshness.
+Arguments, raw logs and filenames are omitted by default; it does not publish
+anything or declare your task complete.
+
 Capture a command's own exit, full output and Git state with the optional local tool:
 
 ```bash
@@ -270,5 +276,7 @@ or [read the contribution guide](CONTRIBUTING.md).
 
 Tried it in your own project? [Share a concrete use report](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
 which piece you used, what happened, and what remains uncertain.
+
+[Use reports and evidence](docs/USE-REPORTS.md) · [Copy a short introduction](docs/LAUNCH-KIT.md)
 
 [Apache-2.0](LICENSE) · Made by [Grit](https://github.com/Grit-77), Ankara.

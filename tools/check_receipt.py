@@ -236,8 +236,19 @@ def compare_git(project, before, after):
 def check(receipt_path, project):
     project = project.resolve(strict=True)
     require(project.is_dir(), "--project must be an existing directory")
+    return _check_loaded(receipt_path, project, load_receipt(receipt_path.absolute()))
+
+
+def _check_loaded(receipt_path, project, validated):
+    """Recheck a single metadata snapshot returned by load_receipt.
+
+    Callers must pass the strict parser's validated tuple, not raw JSON. File
+    and Git observations still happen separately and are not atomic.
+    """
+    project = project.resolve(strict=True)
+    require(project.is_dir(), "--project must be an existing directory")
     receipt_path = receipt_path.absolute()
-    value, before, after, changed = load_receipt(receipt_path)
+    value, before, after, changed = validated
     parent = receipt_path.parent.resolve(strict=True)
     log = compare_file(parent / "command.log", parent, value.get("log_sha256"), reject_link=True)
     if "log_sha256" not in value and log["state"] not in {"missing", "unavailable"}:

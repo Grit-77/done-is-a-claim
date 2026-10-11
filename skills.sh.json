@@ -1,0 +1,37 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Start a task",
+      "description": "Choose a path, define acceptance, plan and carry out authorized work.",
+      "skills": [
+        "using-done-is-a-claim",
+        "acceptance-design",
+        "planning-changes",
+        "executing-plans"
+      ]
+    },
+    {
+      "title": "Diagnose and review",
+      "description": "Investigate unexpected results, review changes and inspect worker returns.",
+      "skills": [
+        "debugging-with-evidence",
+        "reading-measurements",
+        "whose-red",
+        "reviewing-changes",
+        "collecting-worker-results"
+      ]
+    },
+    {
+      "title": "Verify and deliver",
+      "description": "Check evidence freshness, public claims, resumed work and delivery.",
+      "skills": [
+        "evidence-freshness",
+        "public-claims",
+        "resuming-work",
+        "checking-delivery"
+      ]
+    }
+  ]
+}
