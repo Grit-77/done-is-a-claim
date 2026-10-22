@@ -294,6 +294,9 @@ A useful contribution starts with what the agent claimed, what was true, and the
 evidence that revealed the difference. [Propose a rule](https://github.com/Grit-77/done-is-a-claim/issues/new?template=new-rule.yml)
 or [read the contribution guide](CONTRIBUTING.md).
 
+Want to work on the tools? Code, tests, installation fixes and architecture
+proposals are welcome. [Find a scoped technical contribution](CONTRIBUTING.md#find-a-technical-contribution).
+
 Tried it in your own project? [Share a concrete use report](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
 which piece you used, what happened, and what remains uncertain.
 

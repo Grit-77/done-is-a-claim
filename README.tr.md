@@ -309,6 +309,9 @@ hangi kanıtın ortaya çıkardığıyla başlar.
 [Bir kural önerin](https://github.com/Grit-77/done-is-a-claim/issues/new?template=new-rule.yml)
 veya [katkı rehberini okuyun](CONTRIBUTING.md).
 
+Araçları geliştirmek ister misiniz? Kod, test, kurulum düzeltmeleri ve mimari
+öneriler de bekliyoruz. [Sınırları belirli bir teknik katkı seçin](CONTRIBUTING.md#find-a-technical-contribution).
+
 Kendi projenizde denediniz mi? [Somut bir kullanım deneyimi paylaşın](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
 hangi parçayı kullandığınız, ne olduğu ve neyin belirsiz kaldığı.
 
