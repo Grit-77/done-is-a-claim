@@ -1,0 +1,62 @@
+{
+  "source": "GitHub public check-runs API, captured 2026-10-22",
+  "pr": "https://github.com/Grit-77/done-is-a-claim/pull/9",
+  "head_sha": "77700bc3cd767dbf96f66f5899e5d559241c73b9",
+  "checks": [
+    {
+      "name": "check (ubuntu-latest)",
+      "head_sha": "77700bc3cd767dbf96f66f5899e5d559241c73b9",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Grit-77/done-is-a-claim/actions/runs/39839834027/job/120037607096",
+      "started_at": "2026-10-22T19:24:51Z",
+      "completed_at": "2026-10-22T19:25:19Z"
+    },
+    {
+      "name": "check (windows-latest)",
+      "head_sha": "77700bc3cd767dbf96f66f5899e5d559241c73b9",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Grit-77/done-is-a-claim/actions/runs/39839834027/job/120037606687",
+      "started_at": "2026-10-22T19:24:51Z",
+      "completed_at": "2026-10-22T19:26:43Z"
+    },
+    {
+      "name": "Analyze (python)",
+      "head_sha": "77700bc3cd767dbf96f66f5899e5d559241c73b9",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Grit-77/done-is-a-claim/actions/runs/39839830001/job/120037599572",
+      "started_at": "2026-10-22T19:24:51Z",
+      "completed_at": "2026-10-22T19:25:45Z"
+    },
+    {
+      "name": "Analyze (actions)",
+      "head_sha": "77700bc3cd767dbf96f66f5899e5d559241c73b9",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Grit-77/done-is-a-claim/actions/runs/39839830001/job/120037598993",
+      "started_at": "2026-10-22T19:24:50Z",
+      "completed_at": "2026-10-22T19:25:26Z"
+    },
+    {
+      "name": "check (windows-latest)",
+      "head_sha": "77700bc3cd767dbf96f66f5899e5d559241c73b9",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Grit-77/done-is-a-claim/actions/runs/39839799791/job/120037484120",
+      "started_at": "2026-10-22T19:24:36Z",
+      "completed_at": "2026-10-22T19:26:15Z"
+    },
+    {
+      "name": "check (ubuntu-latest)",
+      "head_sha": "77700bc3cd767dbf96f66f5899e5d559241c73b9",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Grit-77/done-is-a-claim/actions/runs/39839799791/job/120037483810",
+      "started_at": "2026-10-22T19:24:36Z",
+      "completed_at": "2026-10-22T19:25:08Z"
+    }
+  ],
+  "limits": "Historical hosted checks on a documentation PR; no independent-user outcome or agent effectiveness comparison."
+}

@@ -162,6 +162,8 @@ not that a real delivery succeeded.
 
 ## Get a real receipt
 
+[Three field notes and a real PR: what did the check actually prove? →](docs/FIELD-NOTES.md)
+
 **Already have a project and a test command?** [Capture your check and bring a
 Markdown evidence summary to your next PR →](docs/REPORTS.md). The report
 separates the command's historical result from current evidence freshness.
