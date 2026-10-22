@@ -29,14 +29,14 @@ Raporun bir **geçmiş alt süreç çıkışı** ve bir **yeniden kontrol durumu
 | Raporlayıcı çıkışı | Yeniden kontrol durumu | Anlamı |
 | --- | --- | --- |
 | 0 | `matches` | Seçilen gözlemler eşleşir; kaydedilmiş komut hatası veya değişiklik yoktur. Bu, testlerin çalıştığını veya görevin tamamlandığını kanıtlamaz. |
-| 1 | `different` | Seçilen bir dosya, günlük veya Git HEAD farklı ya da eksik. |
+| 1 | `different` | Seçilen bir dosya veya günlük farklı ya da eksik, ya da Git HEAD farklı. |
 | 2 | `invalid` | Meta veri veya gerekli yerel gözlem geçersiz ya da kullanılamaz. Ayrıntılar için yerel yeniden denetleyiciyi kullanın. |
 | 3 | `recorded_failure` | Eşleşen mevcut gözlemler, geçmişteki komut hatasını, çalışmama durumunu veya girdi/HEAD değişimini korur. |
-| 4 | `incomplete` | Kanıtta gerekli kapsam veya gözlemler eksik; örneğin seçilmiş dosyalar veya bağlı günlük özeti yok. |
+| 4 | `incomplete` | Kanıtta gerekli kapsam veya gözlemler eksik; örneğin seçilmiş dosyalar veya bağlı günlük SHA-256 karması yok. |
 
 Bunlar, yakalanan alt sürecin çıkış kodu değil, **raporlayıcı** çıkışlarıdır. Farklılıklar eksikliğe, eksiklik de kaydedilmiş başarısızlığa göre önceliklidir; geçmiş sonuç her geçerli raporda görünmeye devam eder. Markdown'ı başarıyla yazdırmış olsa bile otomasyonda sıfır olmayan raporlayıcı sonucunu görünür tutun. [Tam yeniden kontrol anlamları](RECHECK.md).
 
-Tablo; seçilen girdi sayıları, günlük özetleri, isteğe bağlı Git commit özetleri ve doğrulanmış zaman damgalarını içerir. Dosya adlarını ve serbest biçimli hata metnini kasıtlı olarak çıkarır. Yerelde incelemek için şunu çalıştırın:
+Tablo; seçilen girdi sayılarını, günlük SHA-256 karmalarını, isteğe bağlı Git HEAD değerlerini ve doğrulanmış zaman damgalarını içerir. Dosya adlarını ve serbest biçimli hata metnini kasıtlı olarak çıkarır. Yerelde incelemek için şunu çalıştırın:
 
 ```bash
 python tools/check_receipt.py ../my-project/.local/receipts/run-EXAMPLE/receipt.json --project ../my-project --json
@@ -46,11 +46,11 @@ Bu tanı çıktısı yerel yollar ve dosya adları içerebilir. Paylaşmadan ön
 
 ## Yalnızca paylaşmak istediğiniz bilgileri paylaşın
 
-Varsayılan Markdown, komut bağımsız değişkenlerini, günlük içeriğini, yerel yolları, dosya adlarını ve serbest biçimli tanıları çıkarır. Buna rağmen zaman damgalarını, durum/sayıları, günlük özetlerini ve isteğe bağlı Git commit özetlerini açıklar. Bu araç bir gizli bilgi tarayıcısı veya her gözlemin paylaşmaya uygun olduğuna dair bir güvence değildir.
+Varsayılan Markdown, komut bağımsız değişkenlerini, günlük içeriğini, yerel yolları, dosya adlarını ve serbest biçimli tanıları çıkarır. Buna rağmen zaman damgalarını, durum/sayıları, günlük SHA-256 karmalarını ve isteğe bağlı Git HEAD değerlerini açıklar. Bu araç bir gizli bilgi tarayıcısı veya her gözlemin paylaşmaya uygun olduğuna dair bir güvence değildir.
 
 Kaydedilmiş bağımsız değişkenleri bilerek eklemek isterseniz `--include-command` kullanın. Bağımsız değişkenler gizli bilgi içerebilir. Bunlar kopyalayıp çalıştırılacak bir kabuk komutu olarak değil, kaçışlanmış ve sınırlı bir dizi olarak gösterilir. Paylaşmadan önce inceleyin; ham günlükler hiçbir zaman dahil edilmez.
 
-Kayıtlar düzenlenebilir yerel dosyalardır, imzalı tasdikler değildir. Eşleşen özetler, sağlanan kayıtla tutarlılığı gösterir; özgünlüğünü göstermez. Kontroller atomik değildir ve seçilen dosyalar, bitişik günlük ve isteğe bağlı Git HEAD ile sınırlıdır. Rapor, kabul koşullarınızın yeterince iyi olup olmadığına veya kullanıcının amaçladığı sonuca ulaşılıp ulaşılmadığına karar veremez.
+Kayıtlar düzenlenebilir yerel dosyalardır, imzalı tasdikler değildir. Eşleşen karmalar, sağlanan kayıtla tutarlılığı gösterir; özgünlüğünü göstermez. Kontroller atomik değildir ve seçilen dosyalar, bitişik günlük ve isteğe bağlı Git HEAD ile sınırlıdır. Rapor, kabul koşullarınızın yeterince iyi olup olmadığına veya kullanıcının amaçladığı sonuca ulaşılıp ulaşılmadığına karar veremez.
 
 ## Ajanınıza sorun
 

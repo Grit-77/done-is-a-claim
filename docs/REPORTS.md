@@ -46,7 +46,7 @@ still match. A command that returned `0` can have stale evidence after an edit.
 | Reporter exit | Recheck state | What it means |
 | --- | --- | --- |
 | 0 | `matches` | Selected observations match, with no recorded command failure or mutation. This does not establish that tests ran or the task is complete. |
-| 1 | `different` | A selected file, log or Git HEAD differs or is missing. |
+| 1 | `different` | A selected file or log differs or is missing, or Git HEAD differs. |
 | 2 | `invalid` | Metadata or a required local observation is invalid/unavailable. Use the local rechecker for details. |
 | 3 | `recorded_failure` | Matching current observations retain a historical command failure, failure to run, or input/HEAD mutation. |
 | 4 | `incomplete` | Evidence lacks required scope or observations, such as selected files or a bound log hash. |
