@@ -1,5 +1,7 @@
 # Bring a receipt to your next PR
 
+**English** · [Türkçe](REPORTS.tr.md)
+
 Run your project's real check, then turn its local receipt into a Markdown
 summary. No plugin or provider account is required for these optional tools;
 you need Python 3.10+ and a clone of this toolkit. Installing the skills alone

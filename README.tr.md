@@ -16,7 +16,7 @@ hata ayıkla → incele → doğrula → teslim et**. Birbirine bağlı 15 skill
 olaylardan çıkarılmış 18 kural ve kanıtı test edilen çalışmaya bağlayan isteğe
 bağlı yerel araçlar. Küçük işler daha kısa yoldan ilerler.
 
-[Başlayın](#başlayın) · [Kendi projenizde kullanın](docs/REPORTS.md) · [İş akışını görün](docs/WORKFLOW.md) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün)
+[Başlayın](#başlayın) · [Kendi projenizde kullanın](docs/REPORTS.tr.md) · [İş akışını görün](docs/WORKFLOW.md) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün)
 
 ## Başlayın
 
@@ -43,7 +43,7 @@ değişiklik isteğinize şunu ekleyin:
 **3. Sonucu inceleyin, sonra deneyiminizi paylaşın.** Hangi kontrolün çalıştığını,
 neyi gösterdiğini ve neyin doğrulanmadığını görebiliyor musunuz? Skill yüklenmediyse
 veya kontrol çalışmadıysa bunu açıkça belirtin. İsteğe bağlı komut kaydı için
-[mevcut proje rehberini](docs/REPORTS.md) izleyin; rehber İngilizcedir.
+[mevcut proje rehberini](docs/REPORTS.tr.md) izleyin.
 
 [İlk kullanım deneyiminizi paylaşın](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
 kullandığınız ajanı, sürümü veya revizyonu, görevi, gözlediğiniz sonucu ve
@@ -169,7 +169,7 @@ belirtir; gerçek bir teslimin başarılı olduğunu değil.
 [Üç kısa örnek ve gerçek bir PR: kontrol neyi kanıtladı? (İngilizce) →](docs/FIELD-NOTES.md)
 
 **Mevcut bir projeniz ve test komutunuz var mı?** [Kontrolü kaydedip bir sonraki
-PR'ınıza Markdown kanıt özeti ekleyin →](docs/REPORTS.md). Rapor, komutun geçmiş
+PR'ınıza Markdown kanıt özeti ekleyin →](docs/REPORTS.tr.md). Rapor, komutun geçmiş
 sonucunu kanıtın bugünkü durumundan ayrı gösterir. Argümanlar, ham günlük ve dosya
 adları varsayılan olarak gizlenir; araç hiçbir şey yayımlamaz ve işin bittiğine
 karar vermez.
