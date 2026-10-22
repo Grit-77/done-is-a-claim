@@ -18,41 +18,38 @@ bağlı yerel araçlar. Küçük işler daha kısa yoldan ilerler.
 
 [Başlayın](#başlayın) · [Kendi projenizde kullanın](docs/REPORTS.md) · [İş akışını görün](docs/WORKFLOW.md) · [Skill seçin](#skill-seçin) · [Demoyu deneyin](#yanlış-bir-yeşil-sonucu-görün)
 
-## Yanlış bir yeşil sonucu görün
-
-Yerel örneği **Python 3.10 veya üzeriyle** deneyin:
-
-```bash
-git clone https://github.com/Grit-77/done-is-a-claim.git
-cd done-is-a-claim
-python examples/false_green.py
-```
-
-**Sentetik demo:** doğrulayıcı **1** çıkış koduyla başarısız olur; özetleyici
-çıktıyı gösterir ve **0** ile çıkar. Kayıt, doğrulayıcının sonucunu izler ve
-**FAIL** der. Demonun kendisi, farkı ortaya çıkardığı için **0** ile çıkar;
-bu, doğrulayıcının geçtiği anlamına gelmez.
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="assets/demo/false-green-recorded.png">
-  <img src="assets/demo/false-green-recorded.gif" alt="Kaydedilmiş sentetik çıktı: doğrulayıcı çıkışı 1, özetleyici çıkışı 0, kayıt FAIL. Demo çıkışı 0, farkın gösterildiğini belirtir.">
-</picture>
-
-[Çalıştırılabilir kaynak](examples/false_green.py) · [Hareketsiz kanıt](assets/demo/false-green-recorded.png) · [Kayıt ve sınırlar](docs/demo-recording.md)
-
-Kaydedilen çıktıdan alıntılar, okunabilmesi için yavaş gösterilir. Bu sentetik
-bir örnektir; üretim sistemi günlüğü veya ajan performansı ölçümü değildir.
-
 ## Başlayın
 
-Kod yazan ajanınıza şu isteği verin:
+**Önerilen ilk kullanım: mevcut projenizde küçük bir görev.**
 
-> https://github.com/Grit-77/done-is-a-claim bunu kur. Sonra neyin değiştiğini,
-> ne işe yaradığını ve nasıl kullanmaya başlayacağımı basitçe anlat.
+**1. Kod yazan ajanınızla kurun.** Şu isteği verin:
+
+> https://github.com/Grit-77/done-is-a-claim deposunu INSTALL.md yönergesine göre
+> kur. Mevcut talimatlarımı ve ayarlarımı koru, kurulumu doğrula; neyin değiştiğini
+> ve nasıl kullanmaya başlayacağımı açıkla. Mevcut hesabımı ve izinlerimi kullan.
 
 **Kurulumu yapan ajan için:** [INSTALL.md](INSTALL.md) yönergesini izle.
 Kullanılan ajanı ve kurulum kapsamını belirle, mevcut çalışmayı koru, sonucu
 doğrula ve kullanıcının dilinde kısa bir açıklamayla bitir.
+
+**2. Projenizde yeni bir oturum açıp küçük bir görev seçin.** Gerçek hata veya
+değişiklik isteğinize şunu ekleyin:
+
+> Bu iş için using-done-is-a-claim kullan. Düzenleme yapmadan önce gözlemlenebilir
+> sonucu ve onu sınayacak kontrolü belirle. İşi boyutuna uygun şekilde uygula ve
+> incele. Gerçek sonucu, test edilen girdileri ve eksik kontrolleri bildir.
+> Verdiğim yetki kapsamında ilerlemeyi sürdür.
+
+**3. Sonucu inceleyin, sonra deneyiminizi paylaşın.** Hangi kontrolün çalıştığını,
+neyi gösterdiğini ve neyin doğrulanmadığını görebiliyor musunuz? Skill yüklenmediyse
+veya kontrol çalışmadıysa bunu açıkça belirtin. İsteğe bağlı komut kaydı için
+[mevcut proje rehberini](docs/REPORTS.md) izleyin; rehber İngilizcedir.
+
+[İlk kullanım deneyiminizi paylaşın](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
+kullandığınız ajanı, sürümü veya revizyonu, görevi, gözlediğiniz sonucu ve
+belirsizliği yazın. Başarısızlık veya anlaşılmayan bir adım da yararlı geri
+bildirimdir. Paylaşmadan önce özel bilgileri çıkarın. Talimatları kurmak, ajanın
+onlara uymasını zorunlu kılmaz.
 
 ### Elle kurulum
 
@@ -77,8 +74,8 @@ komutunu kullanın; Codex’te `/skills` veya `$` seçicisinden
 `using-done-is-a-claim` skill’ini seçin.
 [Plugin kapsamı, güncelleme ve doğrulama sınırları →](docs/PLUGINS.md)
 
-Proje içine kopyalamak veya yalnızca kuralları kullanmak için yukarıdaki demo
-adımında oluşturduğunuz klonu kullanın:
+Proje içine kopyalamak veya yalnızca kuralları kullanmak için
+[demo bölümündeki komutlarla](#yanlış-bir-yeşil-sonucu-görün) bu repoyu klonlayın:
 
 | Kullandığınız ajan | Projenize ekleyin |
 |---|---|
@@ -103,14 +100,30 @@ Profilleri ve tek tek skill’leri görmek için `--list` kullanın. Açıkça v
 `--update`, kurucunun oluşturduğu değişmemiş kopyaları yedekleyerek günceller;
 yerel değişiklik varsa işlemi reddeder.
 
-Kendi projenizde ilk olarak şu isteği deneyin:
+## Yanlış bir yeşil sonucu görün
 
-> Bu iş için using-done-is-a-claim kullan. Gözlemlenebilir kabul koşulunu belirle,
-> işin boyutuna uygun şekilde uygula ve incele. Gerçek sonucu, test edilen
-> girdileri ve eksik kontrolleri bildir. Verdiğim yetki kapsamında ilerlemeyi sürdür.
+Yerel örneği **Python 3.10 veya üzeriyle** deneyin:
 
-Bu, ajanın isteği anlayıp anlamadığını kontrol eder. Talimatlara uymasını zorunlu
-kılmaz.
+```bash
+git clone https://github.com/Grit-77/done-is-a-claim.git
+cd done-is-a-claim
+python examples/false_green.py
+```
+
+**Sentetik demo:** doğrulayıcı **1** çıkış koduyla başarısız olur; özetleyici
+çıktıyı gösterir ve **0** ile çıkar. Kayıt, doğrulayıcının sonucunu izler ve
+**FAIL** der. Demonun kendisi, farkı ortaya çıkardığı için **0** ile çıkar;
+bu, doğrulayıcının geçtiği anlamına gelmez.
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/demo/false-green-recorded.png">
+  <img src="assets/demo/false-green-recorded.gif" alt="Kaydedilmiş sentetik çıktı: doğrulayıcı çıkışı 1, özetleyici çıkışı 0, kayıt FAIL. Demo çıkışı 0, farkın gösterildiğini belirtir.">
+</picture>
+
+[Çalıştırılabilir kaynak](examples/false_green.py) · [Hareketsiz kanıt](assets/demo/false-green-recorded.png) · [Kayıt ve sınırlar](docs/demo-recording.md)
+
+Kaydedilen çıktıdan alıntılar, okunabilmesi için yavaş gösterilir. Bu sentetik
+bir örnektir; üretim sistemi günlüğü veya ajan performansı ölçümü değildir.
 
 ## Tek akış, kısa yollar
 

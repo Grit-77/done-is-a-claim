@@ -54,6 +54,39 @@ bir iş akışı.
 > izle, mevcut çalışmamı koru, kurulumu doğrula; sonra neyin değiştiğini ve nasıl
 > kullanmaya başlayacağımı açıkla. Mevcut hesabımı ve izinlerimi kullan.
 
+## First-use invitation
+
+Use this draft when you want feedback from someone who has a small task ready.
+It asks for an observation, not a positive testimonial. Review the community's
+current rules before posting. No outreach is performed by this document.
+
+> Your coding agent says “done”. What would prove it?
+>
+> I'm looking for first-use feedback on done-is-a-claim: instructions and local
+> tools for checking what an agent ran and what its result establishes. Try it
+> on one small task in a project you already have. Could you load the skill,
+> identify the acceptance check, and inspect the result? A failure or confusing
+> step is useful feedback too.
+>
+> [Start with one real task](https://github.com/Grit-77/done-is-a-claim#get-started) ·
+> [Share what happened](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml)
+
+## Demonstrate one failure mode
+
+Suggested title: **The verifier failed. The summary looked successful.**
+
+> A synthetic example in done-is-a-claim runs a verifier that exits 1 and a
+> summarizer that exits 0. The receipt follows the verifier and says FAIL.
+> The demo itself exits 0 because it demonstrated the mismatch. It is not a
+> production incident or an agent-performance benchmark.
+>
+> [Run the example and read its limits](https://github.com/Grit-77/done-is-a-claim#watch-a-false-green) ·
+> [Try the workflow on your own task](https://github.com/Grit-77/done-is-a-claim#get-started)
+
+For a follow-up, use a real report only after its author approves the text and
+the supporting result can be shared. Retain failed attempts and unverified
+steps. Do not turn installation, stars or clone counts into active-user claims.
+
 ## Try one boundary
 
 Start with the [entry skill](../skills/using-done-is-a-claim/SKILL.md) for a whole
@@ -75,6 +108,7 @@ your project. Run tools from the separate toolkit checkout.
 | Verifier 1; summarizer 0 | [Recording](demo-recording.md), [runnable source](../examples/false_green.py), [GIF](../assets/demo/false-green-recorded.gif) and [static proof](../assets/demo/false-green-recorded.png). Synthetic output, not a production incident or performance benchmark; recording identifies its source revision. |
 | Markdown reporter separates history and freshness | [Reporter source](../tools/report_receipt.py) and [usage and limits](REPORTS.md). Editable hash consistency covers selected evidence, not task completion or a signed attestation. |
 | Repository installation request | [Root installation guide](../INSTALL.md) and [native plugin guide](PLUGINS.md). Host, scope, loading and outcome need their own observations. |
+| First-use invitation | [Recommended first use](../README.md#get-started) and [use-report form](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml). This is a request for feedback, not evidence that independent users have tried the toolkit. |
 | Concrete use feedback | [Use-report form](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml) and [evidence categories](USE-REPORTS.md). Benefits, failures and uncertainty are welcome; no independent user outcome is implied. |
 
 ## Distribution boundaries
