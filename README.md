@@ -302,4 +302,15 @@ which piece you used, what happened, and what remains uncertain.
 
 [Use reports and evidence](docs/USE-REPORTS.md) · [Copy a short introduction](docs/LAUNCH-KIT.md)
 
+## More tools from the same maintainer
+
+- [Remember, Dammit.](https://github.com/Grit-77/remember-dammit#try-it-without-an-ai-client)
+  keeps selected notes and correction history in a local vault, with explicit
+  capture and recall. Source alpha; start with its synthetic memory demo.
+- [dotline](https://github.com/Grit-77/dotline/blob/main/docs/LOCAL-DEMO.md)
+  provides a small mailbox for agent messages. Start with its synthetic, manually
+  answered send → claim → reply demo before attempting native client setup.
+
+Choose each tool separately and follow its own setup and trust requirements.
+
 [Apache-2.0](LICENSE) · Made by [Grit](https://github.com/Grit-77), Ankara.

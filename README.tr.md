@@ -317,4 +317,15 @@ hangi parçayı kullandığınız, ne olduğu ve neyin belirsiz kaldığı.
 
 [Kullanım raporları ve kanıtlar](docs/USE-REPORTS.md) · [Kısa tanıtım metinleri](docs/LAUNCH-KIT.md)
 
+## Aynı geliştiricinin diğer araçları
+
+- [Remember, Dammit.](https://github.com/Grit-77/remember-dammit#try-it-without-an-ai-client)
+  seçilen notları ve düzeltme geçmişini yerel bir kasada tutar; kayıt ve hatırlama
+  açıkça istenir. Kaynak sürümü alfa aşamasındadır; sentetik bellek demosuyla başlayın.
+- [dotline](https://github.com/Grit-77/dotline/blob/main/docs/LOCAL-DEMO.md)
+  ajan mesajları için küçük bir posta kutusu sunar. Gerçek istemci kurulumundan önce
+  yanıtı elle verdiğiniz sentetik gönder → sahiplen → yanıtla demosunu deneyin.
+
+Her aracı ayrı seçin; kendi kurulum ve güven koşullarını izleyin.
+
 [Apache-2.0](LICENSE) · [Grit](https://github.com/Grit-77) tarafından hazırlandı, Ankara.
