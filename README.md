@@ -18,41 +18,37 @@ work it tested. Small tasks take a shorter path.
 
 [Get started](#get-started) · [Use in your project](docs/REPORTS.md) · [Follow the workflow](docs/WORKFLOW.md) · [Choose a skill](#choose-a-skill) · [Try the demo](#watch-a-false-green)
 
-## Watch a false green
-
-Try the local example with **Python 3.10+**:
-
-```bash
-git clone https://github.com/Grit-77/done-is-a-claim.git
-cd done-is-a-claim
-python examples/false_green.py
-```
-
-**Synthetic demo:** the verifier fails with exit **1**; the summarizer displays
-its output and exits **0**. The receipt follows the verifier and says **FAIL**.
-The demo itself exits **0** because it exposed the mismatch—not because the
-verifier passed.
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="assets/demo/false-green-recorded.png">
-  <img src="assets/demo/false-green-recorded.gif" alt="Recorded synthetic output: verifier exit 1, summarizer exit 0, receipt FAIL. Demo exit 0 means the mismatch was demonstrated.">
-</picture>
-
-[Runnable source](examples/false_green.py) · [Static proof](assets/demo/false-green-recorded.png) · [Recording and limits](docs/demo-recording.md)
-
-Recorded output excerpts, paced for reading. This is a synthetic demonstration,
-not a production log or an agent-performance benchmark.
-
 ## Get started
 
-Give your coding agent this request:
+**Recommended first use: one small task in a project you already have.**
 
-> Install https://github.com/Grit-77/done-is-a-claim. Then explain simply what
-> changed, what it helps with, and how I start using it.
+**1. Install with your coding agent.** Give it this request:
+
+> Install https://github.com/Grit-77/done-is-a-claim. Follow INSTALL.md, preserve
+> my existing instructions and settings, verify the installation, and explain
+> what changed and how I start using it. Use my current account and permissions.
 
 **For the installing agent:** follow [INSTALL.md](INSTALL.md). Identify the
 current host and installation scope, preserve existing work, verify the result,
 and finish with a short explanation in the user's language.
+
+**2. Open a fresh session in your project and choose a small task.** Include
+your actual bug or change request, then add:
+
+> Use using-done-is-a-claim for this task. Before editing, identify the observable
+> result and the check that can test it. Take a proportionate path through the
+> work and review. Report the actual result, tested inputs and remaining gaps.
+> Continue within my existing authorization.
+
+**3. Inspect the result, then tell us what happened.** Can you identify the
+check that ran, what it established, and anything still unverified? If the
+skill did not load or the check could not run, keep that visible. For an optional
+saved command receipt, follow [the existing-project guide](docs/REPORTS.md).
+
+[Share a first-use report](https://github.com/Grit-77/done-is-a-claim/issues/new?template=use-report.yml):
+include your client, release or revision, task, observed result and uncertainty.
+A failure or confusing step is useful feedback too. Remove private information
+before sharing. Installing instructions does not enforce agent compliance.
 
 ### Manual installation
 
@@ -77,7 +73,7 @@ Start a fresh session. In Claude Code, invoke
 `using-done-is-a-claim` through `/skills` or the `$` skill picker.
 [Plugin scope, updates and validation limits →](docs/PLUGINS.md)
 
-Prefer project-local copies or the rules alone? Use the clone from the demo above:
+Prefer project-local copies or the rules alone? Use a [toolkit clone](#watch-a-false-green):
 
 | You use | Add to your project |
 |---|---|
@@ -101,13 +97,30 @@ Existing skill destinations are refused; your project instructions stay untouche
 Use `--list` to see profiles and individual skills. Explicit `--update` can replace
 unmodified installer-owned copies while retaining backups; local edits are refused.
 
-Try this first request in your own project:
+## Watch a false green
 
-> Use using-done-is-a-claim for this task. Identify observable acceptance, take a
-> proportionate path through implementation and review, and report the actual
-> result, tested inputs and remaining gaps. Continue within my existing authorization.
+Try the local example with **Python 3.10+**:
 
-This checks whether the agent understood the request. It does not enforce compliance.
+```bash
+git clone https://github.com/Grit-77/done-is-a-claim.git
+cd done-is-a-claim
+python examples/false_green.py
+```
+
+**Synthetic demo:** the verifier fails with exit **1**; the summarizer displays
+its output and exits **0**. The receipt follows the verifier and says **FAIL**.
+The demo itself exits **0** because it exposed the mismatch—not because the
+verifier passed.
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/demo/false-green-recorded.png">
+  <img src="assets/demo/false-green-recorded.gif" alt="Recorded synthetic output: verifier exit 1, summarizer exit 0, receipt FAIL. Demo exit 0 means the mismatch was demonstrated.">
+</picture>
+
+[Runnable source](examples/false_green.py) · [Static proof](assets/demo/false-green-recorded.png) · [Recording and limits](docs/demo-recording.md)
+
+Recorded output excerpts, paced for reading. This is a synthetic demonstration,
+not a production log or an agent-performance benchmark.
 
 ## One workflow, short paths
 
