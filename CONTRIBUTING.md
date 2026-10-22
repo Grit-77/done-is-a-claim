@@ -1,6 +1,27 @@
 # Contributing
 
-Bring a failure that taught you something an agent can act on.
+Bring a failure that taught you something an agent can act on, or improve the
+tools that make those failures inspectable. Code, tests, installation fixes,
+evaluation scenarios and architecture proposals are welcome alongside prose.
+
+## Find a technical contribution
+
+Browse [open help-wanted work](https://github.com/Grit-77/done-is-a-claim/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22help%20wanted%22).
+Each scoped issue describes the current boundary and the evidence needed to
+change it. For a larger CLI, receipt-format or architecture change, comment with
+the user problem, a small proposed contract and how you would test it before
+writing the implementation. Alternatives and simplifications are welcome.
+
+For a small reproducible fix, a focused PR with a regression test is enough.
+State your intended scope on an existing issue so contributors can coordinate.
+If someone already has work in progress, discuss the overlap before opening a
+competing implementation. Report what you actually tested and what remains open;
+an agent-generated summary alone is not evidence.
+
+Contributions receive review against their scope, compatibility and evidence.
+Larger product changes can be proposed here; acceptance depends on the reviewed
+design and implementation. Keep author attribution accurate and credit reviews
+and reproductions for the work they actually contributed.
 
 ## A useful proposal
 
