@@ -87,6 +87,27 @@ For a follow-up, use a real report only after its author approves the text and
 the supporting result can be shared. Retain failed attempts and unverified
 steps. Do not turn installation, stars or clone counts into active-user claims.
 
+## Three field notes
+
+[Read the series and its real documentation-PR example](FIELD-NOTES.md).
+These are short sharing drafts; the three fixture examples are synthetic.
+No post is automatically published. Each note links the source and limits.
+
+1. **The verifier failed; the summary finished.** The synthetic demo has
+   verifier exit 1, summarizer exit 0 and receipt FAIL. Keep the check's own
+   result. [Note and runnable example](FIELD-NOTES.md#1-the-verifier-failed-the-summary-finished).
+2. **The test result is historical; the inputs changed.** A successful captured
+   command remains exit 0 while the reporter detects different selected bytes.
+   This detects stale evidence, not a proven regression.
+   [Note and scope](FIELD-NOTES.md#2-a-successful-check-can-become-stale).
+3. **The copy finished; was it the intended artifact?** The synthetic delivery
+   demo separates completed copy, reviewed bytes and JSON parsing.
+   [Note and runnable example](FIELD-NOTES.md#3-a-completed-copy-can-contain-the-wrong-artifact).
+
+For a real author-owned example, link the
+[documentation PR receipt](FIELD-NOTES.md#a-real-pr-with-a-bounded-receipt).
+It records historical hosted checks without claiming independent adoption.
+
 ## Try one boundary
 
 Start with the [entry skill](../skills/using-done-is-a-claim/SKILL.md) for a whole

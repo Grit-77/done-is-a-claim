@@ -166,6 +166,8 @@ belirtir; gerçek bir teslimin başarılı olduğunu değil.
 
 ## Komutun sonucunu kaydedin
 
+[Üç kısa örnek ve gerçek bir PR: kontrol neyi kanıtladı? (İngilizce) →](docs/FIELD-NOTES.md)
+
 **Mevcut bir projeniz ve test komutunuz var mı?** [Kontrolü kaydedip bir sonraki
 PR'ınıza Markdown kanıt özeti ekleyin →](docs/REPORTS.md). Rapor, komutun geçmiş
 sonucunu kanıtın bugünkü durumundan ayrı gösterir. Argümanlar, ham günlük ve dosya
