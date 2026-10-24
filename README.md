@@ -165,10 +165,12 @@ not that a real delivery succeeded.
 [Three field notes and a real PR: what did the check actually prove? →](docs/FIELD-NOTES.md)
 
 **Already have a project and a test command?** [Capture your check and bring a
-Markdown evidence summary to your next PR →](docs/REPORTS.md). The report
+Markdown or JSON evidence summary to your next PR →](docs/REPORTS.md). The report
 separates the command's historical result from current evidence freshness.
 Arguments, raw logs and filenames are omitted by default; it does not publish
 anything or declare your task complete.
+For CI consumers, `--format json` emits a minimal v1 projection with the same
+reporter exit status. The guide lists its exact fields and disclosure limits.
 
 Capture a command's own exit, full output and Git state with the optional local tool:
 

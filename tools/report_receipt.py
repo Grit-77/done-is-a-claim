@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Emit scoped, shareable Markdown from editable local receipt evidence.
+"""Emit scoped, shareable Markdown or JSON from editable local receipt evidence.
 
 Usage: python tools/report_receipt.py RECEIPT --project EXISTING_ROOT
-       [--include-command]
+       [--format markdown|json] [--include-command]
 Python 3.10+, standard library only. No files are written and recorded argv
 is never executed. Exit codes match check_receipt: 0 matches, 1 different,
 2 invalid, 3 recorded_failure, 4 incomplete. This is not a test verdict.
@@ -105,6 +105,40 @@ def render(report, metadata=None, include_command=False):
     return "\n".join(lines) + "\n"
 
 
+def render_json(report):
+    """Serialize the public v1 projection, never local diagnostic text."""
+    state = report["state"]
+    if state == "different":
+        reason = ("selected_input_missing" if any(
+            item["state"] == "missing" for item in report["inputs"].values()
+        ) else "observations_differ")
+    elif state == "incomplete":
+        components = [report["log"], report["git"], *report["inputs"].values()]
+        reason = ("observation_unavailable" if any(
+            item["state"] == "unavailable" for item in components
+        ) else "evidence_incomplete")
+    else:
+        reason = {
+            "matches": "observations_match",
+            "recorded_failure": "historical_failure",
+            "invalid": "invalid_evidence_or_context",
+        }[state]
+    recorded = report["recorded"] if state != "invalid" else {}
+    child = recorded.get("exit_code")
+    if type(child) is not int or not -(2 ** 31) <= child <= 2 ** 32 - 1:
+        child = None
+    summary = {
+        "schema_version": 1,
+        "historical_command_status": recorded.get("command_status"),
+        "historical_child_exit": child,
+        "recheck_state": state,
+        "freshness": "changed" if state == "different" else (
+            "unverifiable" if state in {"invalid", "incomplete"} else "matches"),
+        "reason_code": reason,
+    }
+    return json.dumps(summary, indent=2, sort_keys=True) + "\n"
+
+
 class PrivateArgumentParser(argparse.ArgumentParser):
     def error(self, message):
         # argparse's error text can echo unknown CLI arguments or local paths.
@@ -117,7 +151,11 @@ def main(argv=None):
     parser.add_argument("receipt", type=Path)
     parser.add_argument("--project", type=Path, required=True, help="explicit existing project root")
     parser.add_argument("--include-command", action="store_true", help="disclose escaped arguments, which may contain secrets")
+    parser.add_argument("--format", choices=("markdown", "json"), default="markdown",
+                        help="public summary format (default: markdown)")
     args = parser.parse_args(argv)
+    if args.format == "json" and args.include_command:
+        parser.error("include-command is not available for JSON summaries")
     metadata = None
     try:
         validated = check_receipt.load_receipt(args.receipt.absolute())
@@ -125,7 +163,10 @@ def main(argv=None):
         report = check_receipt._check_loaded(args.receipt, args.project, validated)
     except (check_receipt.InvalidReceipt, OSError, UnicodeError, ValueError, RuntimeError, RecursionError):
         report = {"state": "invalid"}
-    print(render(report, metadata, args.include_command), end="")
+    if args.format == "json":
+        print(render_json(report), end="")
+    else:
+        print(render(report, metadata, args.include_command), end="")
     return check_receipt.EXITS[report["state"]]
 
 

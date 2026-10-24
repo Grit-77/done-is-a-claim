@@ -30,7 +30,8 @@ class ReportReceiptTests(unittest.TestCase):
         if inputs:
             argv += ["--input", self.input.name]
         child = subprocess.run(argv + ["--", sys.executable, "-c", code],
-                               capture_output=True, text=True)
+                               capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=120,
+                               creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
         self.assertEqual(child.returncode, expected_exit, child.stderr)
         self.path = next(self.output.glob("*/receipt.json"))
         self.data = json.loads(self.path.read_text(encoding="utf-8"))
@@ -41,7 +42,8 @@ class ReportReceiptTests(unittest.TestCase):
     def report(self, *options, project=None):
         result = subprocess.run([sys.executable, str(TOOLS / "report_receipt.py"),
                                  str(self.path), "--project", str(project or self.project),
-                                 *options], capture_output=True, text=True)
+                                 *options], capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=120,
+                               creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
         self.assertNotIn("Traceback", result.stderr)
         return result
 
@@ -316,6 +318,248 @@ class ReportReceiptTests(unittest.TestCase):
         self.assert_state(report, "different", 1)
         self.assertIn(before, report.stdout)
         self.assertIn(after, report.stdout)
+
+    def json_report(self, expected_state, expected_exit, expected_reason, result=None):
+        result = self.report("--format", "json") if result is None else result
+        self.assertEqual(result.returncode, expected_exit, result.stdout + result.stderr)
+        self.assertEqual(result.stderr, "")
+        data = json.loads(result.stdout)
+        self.assertEqual(set(data), {
+            "schema_version", "historical_command_status", "historical_child_exit",
+            "recheck_state", "freshness", "reason_code",
+        })
+        self.assertIs(type(data["schema_version"]), int)
+        self.assertEqual(data["schema_version"], 1)
+        self.assertEqual(data["recheck_state"], expected_state)
+        self.assertEqual(data["reason_code"], expected_reason)
+        self.assertIn(data["historical_command_status"], {
+            "command_succeeded", "command_failed", "not_run", None,
+        })
+        self.assertTrue(data["historical_child_exit"] is None
+                        or type(data["historical_child_exit"]) is int)
+        if data["historical_child_exit"] is not None:
+            self.assertGreaterEqual(data["historical_child_exit"], -(2 ** 31))
+            self.assertLessEqual(data["historical_child_exit"], 2 ** 32 - 1)
+        self.assertIn(data["reason_code"], {
+            "observations_match", "observations_differ", "selected_input_missing",
+            "invalid_evidence_or_context", "observation_unavailable",
+            "historical_failure", "evidence_incomplete",
+        })
+        expected_freshness = "changed" if expected_state == "different" else (
+            "unverifiable" if expected_state in {"invalid", "incomplete"} else "matches")
+        self.assertEqual(data["freshness"], expected_freshness)
+        return data
+
+    def json_driver(self, body):
+        driver = "\n".join([
+            "import sys",
+            "sys.dont_write_bytecode = True",
+            "sys.path.insert(0, sys.argv[1])",
+            "import report_receipt",
+            body,
+            "raise SystemExit(report_receipt.main(sys.argv[2:]))",
+        ])
+        return subprocess.run(
+            [sys.executable, "-c", driver, str(TOOLS), str(self.path),
+             "--project", str(self.project), "--format", "json"],
+            stdin=subprocess.DEVNULL, capture_output=True, text=True,
+            timeout=120, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+
+    def json_unavailable_log(self):
+        return self.json_driver("\n".join([
+            "original = report_receipt.check_receipt.hash_regular",
+            "def unavailable(path, *args, **kwargs):",
+            "    if path.name == 'command.log':",
+            "        raise PermissionError('PRIVATE_IO_SENTINEL')",
+            "    return original(path, *args, **kwargs)",
+            "report_receipt.check_receipt.hash_regular = unavailable",
+        ]))
+
+    def test_json_success_and_default_markdown_preservation(self):
+        self.emit()
+        default = self.report()
+        explicit = self.report("--format", "markdown")
+        self.assertEqual(default.returncode, explicit.returncode)
+        self.assertEqual(default.stdout, explicit.stdout)
+        self.assertEqual(default.stderr, explicit.stderr)
+        data = self.json_report("matches", 0, "observations_match")
+        self.assertEqual(data["historical_command_status"], "command_succeeded")
+        self.assertEqual(data["historical_child_exit"], 0)
+
+    def test_json_historical_failure_and_not_run_remain_distinct(self):
+        self.emit("print('PRIVATE_LOG_SENTINEL'); raise SystemExit(7)", expected_exit=7)
+        failed = self.json_report("recorded_failure", 3, "historical_failure")
+        self.assertEqual(failed["historical_command_status"], "command_failed")
+        self.assertEqual(failed["historical_child_exit"], 7)
+        self.data["status"] = "not_run"
+        self.data["command"].update(status="not_run", exit_code=None)
+        self.save()
+        not_run = self.json_report("recorded_failure", 3, "historical_failure")
+        self.assertEqual(not_run["historical_command_status"], "not_run")
+        self.assertIsNone(not_run["historical_child_exit"])
+
+    def test_json_changed_missing_inputs_and_log_keep_historical_zero(self):
+        self.emit()
+        self.input.write_bytes(b"changed")
+        changed = self.json_report("different", 1, "observations_differ")
+        self.assertEqual(changed["historical_child_exit"], 0)
+        self.input.unlink()
+        missing = self.json_report("different", 1, "selected_input_missing")
+        self.assertEqual(missing["historical_command_status"], "command_succeeded")
+        self.input.write_bytes(b"selected\x00\xff\n")
+        log = self.path.with_name("command.log")
+        log.write_bytes(b"changed")
+        self.json_report("different", 1, "observations_differ")
+        log.unlink()
+        self.json_report("different", 1, "observations_differ")
+
+    def test_json_invalid_evidence_and_project_withhold_history(self):
+        self.emit()
+        valid = json.dumps(self.data)
+        hostile_command = json.loads(valid)
+        hostile_command["command"]["status"] = "PRIVATE_STATUS_SENTINEL"
+        hostile_receipt = json.loads(valid)
+        hostile_receipt["status"] = "PRIVATE_RECEIPT_STATUS_SENTINEL"
+        payloads = [
+            json.dumps(hostile_command), json.dumps(hostile_receipt),
+            "{PRIVATE_INVALID_SENTINEL", "[]",
+            valid[:-1] + ',"PRIVATE_DUPLICATE_SENTINEL":0,"PRIVATE_DUPLICATE_SENTINEL":1}',
+            valid.replace('"schema_version": 1', '"schema_version": 2'),
+            valid[:-1] + ',"unknown":NaN}',
+        ]
+        for payload in payloads:
+            with self.subTest(payload_kind=payload[:20]):
+                self.path.write_text(payload, encoding="utf-8")
+                result = self.report("--format", "json")
+                data = self.json_report("invalid", 2, "invalid_evidence_or_context", result)
+                self.assertIsNone(data["historical_command_status"])
+                self.assertIsNone(data["historical_child_exit"])
+                self.assertNotIn("PRIVATE_", result.stdout + result.stderr)
+        self.path.write_text(valid, encoding="utf-8")
+        result = self.report("--format", "json", project=self.root / "PRIVATE_MISSING_SENTINEL")
+        self.json_report("invalid", 2, "invalid_evidence_or_context", result)
+        self.assertNotIn("PRIVATE_", result.stdout + result.stderr)
+
+    def test_json_incomplete_binding_and_scope_are_not_success(self):
+        self.emit()
+        del self.data["log_sha256"]
+        self.save()
+        data = self.json_report("incomplete", 4, "evidence_incomplete")
+        self.assertEqual(data["historical_child_exit"], 0)
+        self.data["log_sha256"] = hashlib.sha256(self.path.with_name("command.log").read_bytes()).hexdigest()
+        self.data.update(inputs_before={}, inputs_after={}, input_scope="no_inputs_selected")
+        self.save()
+        self.json_report("incomplete", 4, "evidence_incomplete")
+
+    def test_json_unavailable_observation_and_difference_precedence(self):
+        self.emit()
+        unavailable = self.json_unavailable_log()
+        data = self.json_report("incomplete", 4, "observation_unavailable", unavailable)
+        self.assertEqual(data["historical_child_exit"], 0)
+        self.assertNotIn("PRIVATE_IO_SENTINEL", unavailable.stdout + unavailable.stderr)
+        self.input.write_bytes(b"changed")
+        self.json_report("different", 1, "observations_differ", self.json_unavailable_log())
+        self.input.unlink()
+        self.json_report("different", 1, "selected_input_missing", self.json_unavailable_log())
+
+    def test_json_failure_and_incomplete_mixed_conditions(self):
+        self.emit("raise SystemExit(7)", expected_exit=7)
+        del self.data["log_sha256"]
+        self.save()
+        self.input.write_bytes(b"changed")
+        changed = self.json_report("different", 1, "observations_differ")
+        self.assertEqual(changed["historical_child_exit"], 7)
+        self.input.write_bytes(b"selected\x00\xff\n")
+        incomplete = self.json_report("incomplete", 4, "evidence_incomplete")
+        self.assertEqual(incomplete["historical_command_status"], "command_failed")
+
+    def test_json_recorded_mutation_is_not_a_successful_recheck(self):
+        self.emit("from pathlib import Path; Path('PRIVATE_INPUT_SENTINEL.txt').write_text('changed')", expected_exit=3)
+        data = self.json_report("recorded_failure", 3, "historical_failure")
+        self.assertEqual(data["historical_command_status"], "command_succeeded")
+        self.assertEqual(data["historical_child_exit"], 0)
+
+    def test_json_omits_private_metadata_and_digests(self):
+        self.emit()
+        self.data["command"]["argv"] = ["PRIVATE_ARGV_SENTINEL", "<script>private</script>"]
+        self.data["command"]["cwd"] = "PRIVATE_CWD_SENTINEL"
+        self.data["error"] = "PRIVATE_ERROR_SENTINEL"
+        self.data.update(started_at="PRIVATE_DATE_SENTINEL", finished_at="<img src=x>")
+        for side in ["git_before", "git_after"]:
+            self.data[side].update(root="PRIVATE_ROOT_SENTINEL", porcelain="PRIVATE_DIRTY_SENTINEL")
+        for side in ["inputs_before", "inputs_after"]:
+            self.data[side][self.input.name].update(resolved_path="PRIVATE_RESOLVED_SENTINEL")
+        self.save()
+        result = self.report("--format", "json")
+        self.json_report("recorded_failure", 3, "historical_failure", result)
+        for secret in ["PRIVATE_", "<script>", "<img", str(self.root),
+                       json.dumps(str(self.root))[1:-1], self.data["log_sha256"],
+                       self.data["inputs_after"][self.input.name]["sha256"]]:
+            self.assertNotIn(secret, result.stdout + result.stderr)
+
+    def test_json_private_cli_errors_and_include_command_conflict(self):
+        self.emit()
+        options = [
+            ("--format", "json", "--include-command"),
+            ("--format", "PRIVATE_FORMAT_SENTINEL"),
+            ("--format", "json", "--PRIVATE_ARG_SENTINEL"),
+        ]
+        for args in options:
+            with self.subTest(options=args):
+                result = self.report(*args)
+                self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.stdout, "")
+                self.assertNotIn("PRIVATE_", result.stderr)
+                self.assertNotIn(str(self.root), result.stderr)
+                self.assertNotIn("Traceback", result.stderr)
+
+    def test_json_child_exit_uses_existing_portable_disclosure_range(self):
+        self.emit("raise SystemExit(7)", expected_exit=7)
+        for value, expected in [(-(2 ** 31), -(2 ** 31)),
+                                (2 ** 32 - 1, 2 ** 32 - 1),
+                                (-(2 ** 31) - 1, None), (2 ** 32, None)]:
+            with self.subTest(child_exit=value):
+                self.data["command"]["exit_code"] = value
+                self.save()
+                data = self.json_report("recorded_failure", 3, "historical_failure")
+                self.assertEqual(data["historical_child_exit"], expected)
+
+    def test_json_report_is_read_only_and_never_replays_command(self):
+        self.emit()
+        marker = self.root / "PRIVATE_EXECUTED_SENTINEL"
+        self.data["command"]["argv"] = [
+            sys.executable, "-c", "from pathlib import Path; Path(" + repr(str(marker)) + ").touch()",
+        ]
+        self.save()
+        before = {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
+                  for p in self.root.rglob("*") if p.is_file()}
+        self.json_report("matches", 0, "observations_match")
+        after = {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
+                 for p in self.root.rglob("*") if p.is_file()}
+        self.assertEqual(before, after)
+        self.assertFalse(marker.exists())
+
+    def test_json_uses_single_loaded_metadata_snapshot(self):
+        self.emit()
+        result = self.json_driver("\n".join([
+            "import json",
+            "original = report_receipt.check_receipt.load_receipt",
+            "def replaced(path):",
+            "    loaded = original(path)",
+            "    replacement = json.loads(path.read_text())",
+            "    replacement['status'] = 'command_failed'",
+            "    replacement['command'].update(status='command_failed', exit_code=7)",
+            "    replacement['wrapper_exit_code'] = 7",
+            "    path.write_text(json.dumps(replacement))",
+            "    return loaded",
+            "report_receipt.check_receipt.load_receipt = replaced",
+        ]))
+        data = self.json_report("matches", 0, "observations_match", result)
+        self.assertEqual(data["historical_command_status"], "command_succeeded")
+        self.assertEqual(data["historical_child_exit"], 0)
+        self.assertEqual(json.loads(self.path.read_text())["command"]["exit_code"], 7)
+
 
 
 if __name__ == "__main__":

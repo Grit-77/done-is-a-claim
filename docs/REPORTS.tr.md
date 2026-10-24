@@ -1,6 +1,6 @@
 # Bir sonraki PR'ınıza kanıt kaydı ekleyin
 
-Projenizin gerçek kontrolünü çalıştırın, ardından yerel kayıt belgesini Markdown özetine dönüştürün. Bu isteğe bağlı araçlar için eklenti veya sağlayıcı hesabı gerekmez; Python 3.10+ ve bu araç setinin bir klonu yeterlidir. Yalnızca skill'leri kurmak Python araçlarını projenize eklemez.
+Projenizin gerçek kontrolünü çalıştırın, ardından yerel kayıt belgesini Markdown veya küçük bir JSON özetine dönüştürün. Bu isteğe bağlı araçlar için eklenti veya sağlayıcı hesabı gerekmez; Python 3.10+ ve bu araç setinin bir klonu yeterlidir. Yalnızca skill'leri kurmak Python araçlarını projenize eklemez.
 
 [English](REPORTS.md) · **Türkçe**
 
@@ -20,7 +20,74 @@ Yazdırılan kayıt yolunu sonraki komutta kullanın. `run-EXAMPLE` yerine gerç
 python tools/report_receipt.py ../my-project/.local/receipts/run-EXAMPLE/receipt.json --project ../my-project
 ```
 
-Raporlayıcı terminale Markdown yazar. İnceleyin, sonra kabul koşulunuz ve çalıştırmadığınız kontrollerle birlikte bunu PR açıklamasına veya yorumuna kopyalayın. Araç hiçbir şey yayımlamaz veya kaydedilen komutu yeniden çalıştırmaz. Ham kayıtlar ve günlükler yerel kalmalıdır; henüz yoksa projenizin ignore kurallarına `.local/` ekleyin.
+Raporlayıcı varsayılan olarak terminale Markdown yazar. İnceleyin, sonra kabul koşulunuz ve çalıştırmadığınız kontrollerle birlikte bunu PR açıklamasına veya yorumuna kopyalayın. Araç hiçbir şey yayımlamaz veya kaydedilen komutu yeniden çalıştırmaz. Ham kayıtlar ve günlükler yerel kalmalıdır; henüz yoksa projenizin ignore kurallarına `.local/` ekleyin.
+
+## CI tüketicileri için isteğe bağlı JSON
+
+Makine tarafından okunabilen paylaşılabilir özet için aynı kayıt ve proje ile
+`--format json` kullanın:
+
+```bash
+python tools/report_receipt.py ../my-project/.local/receipts/run-EXAMPLE/receipt.json --project ../my-project --format json
+```
+
+Bu, ham kayıt veya yerel yeniden denetleyicinin tanı JSON'u değil, ayrı bir
+**paylaşılabilir özet v1** biçimidir. Tam olarak altı alan içerir:
+
+```json
+{
+  "schema_version": 1,
+  "historical_command_status": "command_succeeded",
+  "historical_child_exit": 0,
+  "recheck_state": "different",
+  "freshness": "changed",
+  "reason_code": "observations_differ"
+}
+```
+
+Örnek, kaydedilmiş sıfır çıkışından sonra seçilen baytların değişmesini gösterir;
+geçmiş komut sonucunu bugünkü başarı iddiasına dönüştürmez.
+`historical_command_status`; `command_succeeded`, `command_failed`, `not_run`
+veya `null` olur. Kaydedilmiş `not_run`, geçmiş sonucun bilinmemesinden ayrılır.
+Alt süreç çıkışı tamsayı veya `null` olur; mevcut Markdown'ın taşınabilir aralığı,
+`-2147483648` ile `4294967295`, korunur. Daha büyük veya küçük değerler `null`
+olarak saklı tutulur; yeniden kontrol durumu ve raporlayıcı çıkışı değişmez.
+Genel durum `invalid` ise iki geçmiş alanı da `null` olur.
+
+`freshness`; `different` için `changed`, `invalid` veya `incomplete` için
+`unverifiable`, diğer durumlarda `matches` olur. Eşleşen gözlemler yine de
+kaydedilmiş başarısızlık içerebilir. Bu değerler yalnızca seçilen gözlem kapsamını
+anlatır.
+
+| Yeniden kontrol durumu | Sabit `reason_code` |
+| --- | --- |
+| `matches` | `observations_match` |
+| `different` | Önceden yakalanmış seçili girdi eksikse `selected_input_missing`; değilse `observations_differ` |
+| `invalid` | `invalid_evidence_or_context` |
+| `recorded_failure` | Kayıt sırasında oluşan hata veya girdi/HEAD değişimi dahil `historical_failure` |
+| `incomplete` | Yapılandırılmış bir bileşen kullanılamıyorsa `observation_unavailable`; değilse `evidence_incomplete` |
+
+Neden seçilmeden önce mevcut genel durum ve çıkış önceliği uygulanır. Tek neden,
+tüm gözlemleri değil, baskın koşulu anlatır. Neden kodları dosya adı veya istisna
+metni içermez.
+
+JSON; argümanları, günlük içeriğini, yolları, dosya adlarını, karmaları, HEAD
+değerlerini, zaman damgalarını, sayıları ve serbest biçimli tanıları çıkarır.
+`--include-command` ile birleştirilemez; bu birleşim çıkış `2` ile özel verileri
+göstermeyen bir CLI hatası verir ve özet üretmez. Diğer CLI ayrıştırma hatalarında
+da stdout boş olabilir. Geçersiz kanıt veya bağlam ise altı alanlı `invalid`
+özetini üretir. Bunun yerine `tools/check_receipt.py --json` kullanmayın: o yerel
+tanı biçimi yolları gösterebilir.
+
+JSON'u ayrıştırırken veya paylaşırken raporlayıcının kendi sıfır olmayan çıkışını
+görünür tutun; sonraki ayrıştırıcının başarısı onun yerine geçmez. Markdown,
+bilerek seçilen `--include-command` seçeneğiyle birlikte varsayılan olmaya devam
+eder. İki biçim de kaydedilmiş komutu yeniden çalıştırmaz veya ileri sürülen
+geçmiş sonucun özgünlüğünü kanıtlamaz.
+
+Şema ve test planı tasarım katkısı:
+[sacravenger / NaN Mesh](https://github.com/Grit-77/done-is-a-claim/issues/14#issuecomment-6389322903).
+
 
 ## İki sonucu ayrı okuyun
 

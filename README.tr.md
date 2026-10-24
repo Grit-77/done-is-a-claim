@@ -169,10 +169,12 @@ belirtir; gerçek bir teslimin başarılı olduğunu değil.
 [Üç kısa örnek ve gerçek bir PR: kontrol neyi kanıtladı? (İngilizce) →](docs/FIELD-NOTES.md)
 
 **Mevcut bir projeniz ve test komutunuz var mı?** [Kontrolü kaydedip bir sonraki
-PR'ınıza Markdown kanıt özeti ekleyin →](docs/REPORTS.tr.md). Rapor, komutun geçmiş
+PR'ınıza Markdown veya JSON kanıt özeti ekleyin →](docs/REPORTS.tr.md). Rapor, komutun geçmiş
 sonucunu kanıtın bugünkü durumundan ayrı gösterir. Argümanlar, ham günlük ve dosya
 adları varsayılan olarak gizlenir; araç hiçbir şey yayımlamaz ve işin bittiğine
 karar vermez.
+CI tüketicileri için `--format json`, aynı raporlayıcı çıkış koduyla küçük bir v1
+özeti üretir. Alanlar ve paylaşım sınırları rehberde açıklanır.
 
 İsteğe bağlı yerel araçla komutun kendi çıkış kodunu, tam çıktısını ve Git durumunu
 kaydedin:

@@ -3,7 +3,7 @@
 **English** · [Türkçe](REPORTS.tr.md)
 
 Run your project's real check, then turn its local receipt into a Markdown
-summary. No plugin or provider account is required for these optional tools;
+summary or minimal JSON projection. No plugin or provider account is required for these optional tools;
 you need Python 3.10+ and a clone of this toolkit. Installing the skills alone
 does not put the Python tools in your project.
 
@@ -31,11 +31,75 @@ with the actual directory, keeping the same project root:
 python tools/report_receipt.py ../my-project/.local/receipts/run-EXAMPLE/receipt.json --project ../my-project
 ```
 
-The reporter prints Markdown to your terminal. Review it, then copy it into a
+The reporter prints Markdown to your terminal by default. Review it, then copy it into a
 PR description or comment alongside your acceptance condition and any checks
 you did not run. It does not publish anything or rerun the recorded command.
 Raw receipts and logs should remain local; add `.local/` to your project's
 ignore rules if it is not already ignored.
+
+## Optional JSON for CI consumers
+
+For a machine-readable public summary, use the same receipt and project with
+`--format json`:
+
+```bash
+python tools/report_receipt.py ../my-project/.local/receipts/run-EXAMPLE/receipt.json --project ../my-project --format json
+```
+
+This is a separate **public-summary v1** projection, not the raw receipt or
+the local rechecker's diagnostic JSON. It has exactly these six fields:
+
+```json
+{
+  "schema_version": 1,
+  "historical_command_status": "command_succeeded",
+  "historical_child_exit": 0,
+  "recheck_state": "different",
+  "freshness": "changed",
+  "reason_code": "observations_differ"
+}
+```
+
+The example represents a recorded zero followed by changed selected bytes; it
+does not turn the historical command result into a current success claim.
+`historical_command_status` is `command_succeeded`, `command_failed`, `not_run`
+or `null`. A recorded `not_run` remains distinct from an unavailable historical
+result. The child exit is an integer or `null`; the existing Markdown portable
+range, `-2147483648` through `4294967295`, is retained. Larger or smaller values
+are withheld as `null` without changing the recheck state or reporter exit.
+For an overall `invalid` report, both historical fields are `null`.
+
+`freshness` is `changed` for `different`, `unverifiable` for `invalid` or
+`incomplete`, and `matches` otherwise. Matching observations can still retain a
+recorded failure. These values describe only the selected observation scope.
+
+| Recheck state | Fixed `reason_code` |
+| --- | --- |
+| `matches` | `observations_match` |
+| `different` | `selected_input_missing` if a previously captured selected input is missing; otherwise `observations_differ` |
+| `invalid` | `invalid_evidence_or_context` |
+| `recorded_failure` | `historical_failure`, including a recorded capture failure or input/HEAD mutation |
+| `incomplete` | `observation_unavailable` if a structured component is unavailable; otherwise `evidence_incomplete` |
+
+The existing overall state and exit precedence still applies before choosing a
+reason. One reason describes the dominant condition, not every observation.
+Reason codes never contain filenames or exception text.
+
+JSON omits arguments, log contents, paths, filenames, hashes, HEADs, timestamps,
+counts and freeform diagnostics. It cannot be combined with `--include-command`;
+that combination is a private CLI error with exit `2` and no summary. Other CLI
+parsing errors can also have empty stdout. Invalid evidence or context produces
+the six-field `invalid` summary instead. Do not substitute
+`tools/check_receipt.py --json`: that local diagnostic format can disclose paths.
+
+Keep the reporter's own nonzero exit visible when parsing or publishing JSON;
+a downstream parser succeeding does not replace it. Markdown remains the
+default, including its deliberate `--include-command` option. Neither format
+reruns the recorded command or authenticates an asserted historical result.
+
+Schema and test-plan design input:
+[sacravenger / NaN Mesh](https://github.com/Grit-77/done-is-a-claim/issues/14#issuecomment-6389322903).
+
 
 ## Read the two results separately
 
