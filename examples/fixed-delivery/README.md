@@ -49,7 +49,7 @@ digest and relative destination. Main `attempts` and the control `observation`
 record copy completion, destination existence and digest, digest match, JSON
 parse result, local `accepted` and bounded error-class labels. Copy completion
 means `shutil.copyfile` returned, not that a child process exited or delivery was
-accepted. Missing or unreadable artifacts remain failed observations; symbolic
+accepted. Missing, non-regular or unreadable artifacts remain failed observations; symbolic
 links along the checked workspace/destination path are refused.
 Parsing checks JSON syntax, not a business schema; non-finite constants are
 rejected. No raw artifact contents or absolute machine paths are reported.

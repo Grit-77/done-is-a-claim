@@ -7,6 +7,7 @@ import json
 from pathlib import Path, PurePosixPath
 import re
 import shutil
+import stat
 import sys
 
 
@@ -97,7 +98,9 @@ def observe_destination(contract, root, *, copy_completed=None):
     }
     try:
         destination = _path(root, contract.destination)
-        result["destination_exists"] = destination.is_file()
+        if not stat.S_ISREG(destination.stat().st_mode):
+            raise ValueError("nonregular_destination")
+        result["destination_exists"] = True
         content = destination.read_bytes()
     except (OSError, ValueError) as error:
         result["readback_error"] = type(error).__name__

@@ -190,6 +190,42 @@ class FixedDeliveryTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.module.freeze_contract(path)
 
+    def test_nonregular_destination_is_rejected_without_opening(self):
+        contract = self.module.freeze_contract(SPECS / "task-spec.json")
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / contract.destination).mkdir(parents=True)
+            with patch.object(Path, "read_bytes", side_effect=AssertionError("nonregular destination opened")):
+                observed = self.module.observe_destination(contract, root)
+            self.assertFalse(observed["destination_exists"])
+            self.assertFalse(observed["accepted"])
+            self.assertEqual(observed["readback_error"], "ValueError")
+
+    @unittest.skipUnless(hasattr(os, "mkfifo"), "FIFO fixture requires os.mkfifo")
+    def test_fifo_destination_returns_failed_observation_without_blocking(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            destination = root / "delivered" / "artifact.json"
+            destination.parent.mkdir()
+            os.mkfifo(destination)
+            program = (
+                "import json, runpy, sys; "
+                "api = runpy.run_path(sys.argv[1]); "
+                "contract = api['freeze_contract'](sys.argv[2]); "
+                "print(json.dumps(api['observe_destination'](contract, sys.argv[3])))"
+            )
+            result = subprocess.run(
+                [sys.executable, "-B", "-c", program, str(SCRIPT), str(SPECS / "task-spec.json"), str(root)],
+                cwd=ROOT, stdin=subprocess.DEVNULL, capture_output=True,
+                text=True, encoding="utf-8", timeout=3,
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            observed = json.loads(result.stdout)
+            self.assertFalse(observed["accepted"])
+            self.assertFalse(observed["destination_exists"])
+            self.assertEqual(observed["readback_error"], "ValueError")
+
 
 if __name__ == "__main__":
     unittest.main()
