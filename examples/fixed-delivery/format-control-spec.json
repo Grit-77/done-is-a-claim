@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "task_id": "matching-invalid-format-control",
+  "task": "Separate format control: deliver these approved bytes, still requiring valid JSON.",
+  "approved_artifact": "inputs/invalid/artifact.json",
+  "approved_sha256": "2e044dcc5155ab581b202025c582fa1584a15717bbd466001339a2a5f586255e",
+  "destination": "format-control/artifact.json",
+  "required_checks": ["destination_exists", "sha256_matches_approved", "json_parse_ok"]
+}
