@@ -37,7 +37,7 @@ are synthetic, not additional production incidents.
 ## Publicly inspectable structure
 
 The README's **18 rules** can be counted as numbered entries in [AGENTS.md](AGENTS.md).
-Its **13 skills** are the thirteen `skills/*/SKILL.md` files. These are inventory counts,
+Its **15 skills** are the fifteen `skills/*/SKILL.md` files. These are inventory counts,
 not quality or effectiveness scores. The repository checker validates structure;
 the behavioral evaluation pack separately describes what an agent should do.
 
