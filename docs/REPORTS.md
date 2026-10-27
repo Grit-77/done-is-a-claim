@@ -100,6 +100,34 @@ reruns the recorded command or authenticates an asserted historical result.
 Schema and test-plan design input:
 [sacravenger / NaN Mesh](https://github.com/Grit-77/done-is-a-claim/issues/14#issuecomment-6389322903).
 
+### Consumer example: preserve the reporter exit
+
+The standard-library [consumer example](../examples/consume_report.py) runs the
+local reporter once, saves its return code before parsing JSON, and prints the
+parsed summary:
+
+```bash
+python examples/consume_report.py ../my-project/.local/receipts/run-EXAMPLE/receipt.json --project ../my-project
+```
+
+With successful parsing and output, its exit is the reporter's own `0`–`4`,
+never `historical_child_exit` or the parser's success. A historical zero followed
+by changed selected bytes still yields `different` / `changed` and exit `1`.
+The [synthetic regression](../tests/test_consume_report.py) contrasts this with
+an unsafe consumer that parses and prints the same summary but exits `0`.
+This is a consumer failure mode, not a reporter defect; see the
+[scoped contribution request](https://github.com/Grit-77/done-is-a-claim/issues/14#issuecomment-6400428209).
+
+Startup, 120-second reporter timeout, parse and output errors produce a fixed
+diagnostic. Consumer errors retain an available nonzero reporter code; otherwise
+they return `5` (including consumer CLI errors). Raw reporter stderr is withheld.
+Only successfully parsed JSON is printed; an output failure can leave partial
+stdout. The example parses the trusted local reporter's output; it is not an
+independent schema validator, publisher, service integration or security sandbox.
+It does not rerun recorded argv, authenticate history or decide task completion.
+If you pipe the example into another process, preserve the example's own exit
+too; a successful downstream process can mask it again.
+
 
 ## Read the two results separately
 
