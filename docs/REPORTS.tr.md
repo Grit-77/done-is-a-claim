@@ -88,6 +88,34 @@ geçmiş sonucun özgünlüğünü kanıtlamaz.
 Şema ve test planı tasarım katkısı:
 [sacravenger / NaN Mesh](https://github.com/Grit-77/done-is-a-claim/issues/14#issuecomment-6389322903).
 
+### Tüketici örneği: raporlayıcının çıkışını koruyun
+
+Standart kitaplıkla çalışan [tüketici örneği](../examples/consume_report.py), yerel
+raporlayıcıyı bir kez çalıştırır, JSON'u ayrıştırmadan önce dönüş kodunu kaydeder
+ve ayrıştırılan özeti yazdırır:
+
+```bash
+python examples/consume_report.py ../my-project/.local/receipts/run-EXAMPLE/receipt.json --project ../my-project
+```
+
+Ayrıştırma ve çıktı başarılıysa örnek, raporlayıcının kendi `0`–`4` çıkışını
+korur; `historical_child_exit` veya ayrıştırıcının başarısını kullanmaz.
+Geçmişteki sıfırdan sonra seçilen baytlar değişirse sonuç yine `different` /
+`changed` ve çıkış `1` olur. [Sentetik regresyon](../tests/test_consume_report.py),
+aynı özeti ayrıştırıp yazdırdıktan sonra `0` ile çıkan güvensiz tüketiciyle bunu
+karşılaştırır. Bu, raporlayıcı kusuru değil, tüketicide oluşabilen bir hatadır;
+[kapsamı belirlenmiş katkı isteğine](https://github.com/Grit-77/done-is-a-claim/issues/14#issuecomment-6400428209) bakın.
+
+Başlatma, raporlayıcının 120 saniyelik zaman aşımı, ayrıştırma ve çıktı hataları
+sabit bir tanı üretir. Tüketici hataları, varsa raporlayıcının sıfır olmayan
+kodunu korur; aksi halde `5` döner (tüketicinin CLI hataları dahil). Raporlayıcının
+ham stderr çıktısı gösterilmez. Yalnızca ayrıştırılmış JSON yazdırılır; çıktı
+hatası stdout'u kısmi bırakabilir. Örnek, güvenilen yerel raporlayıcının çıktısını
+ayrıştırır; bağımsız şema doğrulayıcısı, yayımlayıcı, servis entegrasyonu veya
+güvenlik sanal alanı değildir. Kaydedilen argv'yi yeniden çalıştırmaz, geçmişi
+doğrulamaz veya işin tamamlandığına karar vermez. Örneği başka bir sürece
+borularsanız kendi çıkışını da koruyun; sonraki sürecin başarısı onu yine gizleyebilir.
+
 
 ## İki sonucu ayrı okuyun
 
